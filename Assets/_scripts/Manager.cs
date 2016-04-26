@@ -6,6 +6,7 @@ using System.Collections;
 public class Manager : Singleton<Manager> {
 
     public Game game;
+    public Advertising adverts;
     public Text highScore, title;
     public Animator titleAnimator;
     public float padding;
@@ -43,6 +44,9 @@ public class Manager : Singleton<Manager> {
         SceneManager.UnloadScene("Game");
         titleAnimator.SetTrigger("fade");
         Destroy(game);
+
+        // Show an ad at regular intervals
+        adverts.RegularAd();
         StartCoroutine(LoadGame());
     }
 }

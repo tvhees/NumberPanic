@@ -17,6 +17,8 @@ public class Score : MonoBehaviour {
         Preferences.Instance.UpdateHighScore(value);
         display.text = value.ToString();
 
+        GetComponent<Animator>().SetTrigger("expand");
+
         if (value == 1)
         {
             Manager.Instance.titleAnimator.SetTrigger("fade");
