@@ -7,6 +7,7 @@ public class Manager : Singleton<Manager> {
 
     public Game game;
     public Advertising adverts;
+    public Modes modes;
     public Text highScore, title;
     public Animator titleAnimator;
     public float padding;

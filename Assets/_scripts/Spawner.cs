@@ -53,11 +53,8 @@ public class Spawner : MonoBehaviour
 
         if (!real)
         {
-            while (Mathf.Abs(value - current) < 3)
-                value = Random.Range(Mathf.Max(current - 50, 0), current + 50);
+            value = (int)Random.Range(0.5f * current, 1.5f * current);
         }
-//        else
-  //          current++;
 
         GameObject obj = Instantiate(number, position, Quaternion.identity) as GameObject;
         obj.GetComponent<Number>().Init(value, speed, this);

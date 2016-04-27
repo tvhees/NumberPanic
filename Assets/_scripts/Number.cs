@@ -19,7 +19,7 @@ public class Number : MonoBehaviour, IPointerDownHandler {
         spawner = scriptIn;
 
         value = valueIn;
-        text.text = valueIn.ToString();
+        text.text = Manager.Instance.modes.GetNumber(value).ToString();
         speed = speedIn/randomFactor;
         transform.localScale = randomFactor * Vector3.one;
 

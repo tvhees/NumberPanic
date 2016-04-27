@@ -15,7 +15,7 @@ public class Score : MonoBehaviour {
     {
         value++;
         Preferences.Instance.UpdateHighScore(value);
-        display.text = value.ToString();
+        display.text = Manager.Instance.modes.GetNumber(value).ToString();
 
         GetComponent<Animator>().SetTrigger("expand");
 

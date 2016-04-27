@@ -67,6 +67,9 @@
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Cecil">
+      <HintPath>Library\UnityAssemblies\Mono.Cecil.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\_scripts\Advertising.cs" />
@@ -75,6 +78,7 @@
     <Compile Include="Assets\_scripts\Game.cs" />
     <Compile Include="Assets\_scripts\HighScore.cs" />
     <Compile Include="Assets\_scripts\Manager.cs" />
+    <Compile Include="Assets\_scripts\Modes.cs" />
     <Compile Include="Assets\_scripts\Number.cs" />
     <Compile Include="Assets\_scripts\ObjectPool.cs" />
     <Compile Include="Assets\_scripts\Preferences.cs" />
