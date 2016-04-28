@@ -7,27 +7,45 @@ public class Game : ScriptableObject {
     public float buffer;
     public enum State
     {
+        ATTRACT,
         PLAY,
         END
     }
     public State state;
 
     // Store references to loaded gameobjects here
-    public Score score;
     public Spawner spawner;
 
     private int oldHS;
 
     void Awake() {
-        state = State.PLAY;
-        oldHS = Preferences.Instance.highScore;
+        state = State.ATTRACT;
+        oldHS = Preferences.highScore;
+    }
+
+    public int GetNumber(int current)
+    {
+        int value = 0;
+        switch (Manager.mode)
+        {
+            case Manager.Mode.linear:
+                value = current * (Manager.subValue + 1);
+                break;
+            case Manager.Mode.power:
+                value = (int)Mathf.Pow(current, (Manager.subValue + 1));
+                break;
+            case Manager.Mode.sequence:
+                value = Manager.Instance.data.numberArrays.primes[current];
+                break;
+        }
+        return value;
     }
 
     public Color ResolveNumber(int value, bool touched = false)
     {
         if (touched)
         {
-            if (value == score.value)
+            if (value == Manager.current)
             {
                 Progress();
                 if (value == oldHS)
@@ -43,7 +61,7 @@ public class Game : ScriptableObject {
         }
         else
         {
-            if (value == score.value && value > 0)
+            if (value == Manager.current && Manager.current > 0)
             {
                 EndGame();
                 return Color.red;
@@ -55,14 +73,14 @@ public class Game : ScriptableObject {
 
     void Progress()
     {
-        score.Increment();
-        spawner.current++;
+        state = State.PLAY;
+        Manager.current++;
     }
 
     void EndGame()
     {
         state = State.END;
-        spawner.spawn = false;
+        Manager.Instance.spawner.spawn = false;
         Time.timeScale = 0.2f;
         Manager.Instance.Restart();
     }

@@ -5,19 +5,20 @@ using System.Collections;
 public class Spawner : MonoBehaviour
 {
 
-    public int current;
-    public float padding, waitFactor, speedFactor;
     public GameObject number;
     public Camera gameCam;
-    public Score score;
-    public bool spawn;
-    public float leftBound, rightBound;
+    [HideInInspector] public bool spawn;
+    [HideInInspector] public float leftBound, rightBound;
+
+    private float padding, waitFactor, speedFactor;
 
     void Awake() {
-        Manager.Instance.game.spawner = this;
+        Manager.Instance.spawner = this;
         leftBound = 0.2f;
         rightBound = 0.95f;
-        padding = Manager.Instance.padding;
+        padding = Manager.padding;
+        waitFactor = Manager.waitFactor;
+        speedFactor = Manager.speedFactor;
         spawn = true;
         StartCoroutine(RegularSpawn());
     }
@@ -27,11 +28,11 @@ public class Spawner : MonoBehaviour
 
         while (spawn)
         {
-            float waitTime = Mathf.Pow(padding/(current + padding), 2f) * waitFactor;
+            float waitTime = Mathf.Pow(padding/(Manager.current + padding), 2f) * waitFactor;
 
             if (counter == 0)
             {
-                counter = Mathf.Min(Random.Range(0, current - 1), 8);
+                counter = Mathf.Min(Random.Range(0, Manager.current - 1), 8);
                 SpawnNumber();
             }
             else
@@ -47,19 +48,21 @@ public class Spawner : MonoBehaviour
 
     void SpawnNumber(bool real = true) {
         Vector3 position = gameCam.ViewportToWorldPoint(new Vector3(Random.Range(leftBound, rightBound), 1f, 20f));
-        float speed = (current + padding) * speedFactor / padding;
+        float speed = (Manager.current + Manager.padding) * speedFactor / Manager.padding;
 
-        int value = current;
+        int value = Manager.current;
 
         if (!real)
         {
-            while (Mathf.Abs(value - current) < 3)
-                value = Random.Range(Mathf.Max(current - 50, 0), current + 50);
+            for (int i = 0; i < 20; i++)
+            {
+                value = (int)Random.Range(0.3f * Manager.current, 1.7f * Manager.current);
+                if (Mathf.Abs(value - Manager.current) > 1)
+                    break;
+            }
         }
-//        else
-  //          current++;
 
         GameObject obj = Instantiate(number, position, Quaternion.identity) as GameObject;
-        obj.GetComponent<Number>().Init(value, speed, this);
+        obj.GetComponent<Number>().Init(value, speed, real, this);
     }
 }
