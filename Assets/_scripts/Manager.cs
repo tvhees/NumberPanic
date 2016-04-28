@@ -15,9 +15,12 @@ public class Manager : Singleton<Manager> {
     [HideInInspector] public Animator titleAnimator;
 
     // Variables used to control pace of the game - set in inspector while testing
-    [SerializeField]
-    private float setPadding = 25;
+    [SerializeField] private float setPadding = 20f;
+    [SerializeField] private float setWait = 1f;
+    [SerializeField] private float setSpeed = 3f;
     public static float padding;
+    public static float waitFactor;
+    public static float speedFactor;
 
     // Data holders
     public Data data = new Data();
@@ -47,6 +50,8 @@ public class Manager : Singleton<Manager> {
 
     void Awake() {
         padding = setPadding;
+        waitFactor = setWait;
+        speedFactor = setSpeed;
 
         data.AssignArrays();
 
@@ -81,7 +86,6 @@ public class Manager : Singleton<Manager> {
         yield return new WaitForSeconds(1.2f);
         Time.timeScale = 1f;
         SceneManager.UnloadScene("Game");
-        //titleAnimator.SetTrigger("fade");
         Destroy(game);
 
         // Show an ad at regular intervals

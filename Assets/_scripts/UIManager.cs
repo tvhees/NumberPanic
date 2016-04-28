@@ -20,10 +20,12 @@ public class UIManager : Singleton<UIManager> {
     void Update() {
         if (Manager.current > current)
         {
-            if (current == 0)
-                FadeUI();
-
             UpdateScore();
+        }
+
+        if (current > Manager.current)
+        {
+            current = Manager.current;
         }
     }
 
@@ -40,9 +42,9 @@ public class UIManager : Singleton<UIManager> {
         }
     }
 
-    public void FadeUI() {
+    public void FadeUI(bool visible) {
         title.Fade();
-        modes.Fade();
-        subModes.Fade();
+        modes.Fade(visible);
+        subModes.Fade(visible);
     }
 }

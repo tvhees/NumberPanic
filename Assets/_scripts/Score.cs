@@ -9,20 +9,25 @@ public class Score : MonoBehaviour {
 
     void Awake() {
         UIManager.Instance.score = this;
+        UpdateDisplay();
+        UIManager.Instance.FadeUI(true);
+    }
+
+    public void UpdateDisplay() {
+        value = Manager.Instance.game.GetNumber(current);
+        display.text = value.ToString();
     }
 
     public void Increment()
     {
         current++;
-        value = Manager.Instance.game.GetNumber(current);
+        UpdateDisplay();
         Preferences.Instance.UpdateHighScore(value);
-        display.text = value.ToString();
-
         GetComponent<Animator>().SetTrigger("expand");
 
         if (current == 1)
         {
-            UIManager.Instance.FadeUI();
+            UIManager.Instance.FadeUI(false);
             spawner.leftBound = 0.05f;
         }
     }

@@ -5,19 +5,20 @@ using System.Collections;
 public class Spawner : MonoBehaviour
 {
 
-    public int current;
-    public float padding, waitFactor, speedFactor;
     public GameObject number;
     public Camera gameCam;
-    public Score score;
-    public bool spawn;
-    public float leftBound, rightBound;
+    [HideInInspector] public bool spawn;
+    [HideInInspector] public float leftBound, rightBound;
+
+    private float padding, waitFactor, speedFactor;
 
     void Awake() {
         Manager.Instance.spawner = this;
         leftBound = 0.2f;
         rightBound = 0.95f;
         padding = Manager.padding;
+        waitFactor = Manager.waitFactor;
+        speedFactor = Manager.speedFactor;
         spawn = true;
         StartCoroutine(RegularSpawn());
     }

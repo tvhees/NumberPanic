@@ -19,6 +19,8 @@ public class MainMode : MonoBehaviour {
 
         dropDown.value = Preferences.mainMode;
         dropDown.RefreshShownValue();
+        GetSubList(dropDown.value);
+        UIManager.Instance.subModes.Init();
     }
 
 
@@ -38,7 +40,7 @@ public class MainMode : MonoBehaviour {
         }
     }
 
-    public void Fade() {
-        dropDown.interactable = false;
+    public void Fade(bool active) {
+        dropDown.interactable = active;
     }
 }

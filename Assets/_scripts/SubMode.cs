@@ -12,6 +12,10 @@ public class SubMode : MonoBehaviour {
         UIManager.Instance.subModes = this;
     }
 
+    public void Init() {
+        SetSubValue(dropDown.value);
+    }
+
     public void GetOptionList()
     {
         dropDown.ClearOptions();
@@ -33,14 +37,17 @@ public class SubMode : MonoBehaviour {
         }
 
         dropDown.RefreshShownValue();
+        SetSubValue(dropDown.value);
     }
 
     void SetSubValue(int value) {
         Manager.subValue = value;
+        if (UIManager.Instance.score != null)
+            UIManager.Instance.score.UpdateDisplay();
     }
 
-    public void Fade()
+    public void Fade(bool active)
     {
-        dropDown.interactable = false;
+        dropDown.interactable = active;
     }
 }
