@@ -7,6 +7,7 @@ public class Advertising : MonoBehaviour
 
     void Awake()
     {
+        Manager.Instance.adverts = this;
         counter = 3;
     }
 

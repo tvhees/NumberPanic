@@ -10,17 +10,23 @@ public class Number : MonoBehaviour, IPointerDownHandler {
     public GameObject explosion;
     public ParticleSystem trail;
 
+    bool real;
+
+    private Game game;
     private ParticleSystem.EmissionModule em;
     private ParticleSystem.ShapeModule sh;
     private Spawner spawner;
 
-    public void Init(int valueIn, float speedIn, Spawner scriptIn) {
+    public void Init(int currentIn, float speedIn, bool realIn, Spawner scriptIn) {
+        game = Manager.Instance.game;
+
         float randomFactor = Random.Range(0.8f, 1.2f);
         spawner = scriptIn;
 
-        value = valueIn;
-        text.text = Manager.Instance.modes.GetNumber(value).ToString();
+        value = currentIn;
+        text.text = game.GetNumber(value).ToString();
         speed = speedIn/randomFactor;
+        real = realIn;
         transform.localScale = randomFactor * Vector3.one;
 
         // Modifying particle trail
@@ -32,7 +38,7 @@ public class Number : MonoBehaviour, IPointerDownHandler {
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Color colour = Manager.Instance.game.ResolveNumber(value, true);
+        Color colour = game.ResolveNumber(value, true);
         DestroyThis(colour);
     }
 
@@ -48,8 +54,11 @@ public class Number : MonoBehaviour, IPointerDownHandler {
 
         if (transform.position.y < spawner.gameCam.ViewportToWorldPoint(Vector3.zero).y)
         {
-            Color colour = Manager.Instance.game.ResolveNumber(value);
+            Color colour = game.ResolveNumber(value);
             DestroyThis(colour);
         }
+
+        if (!real && value == Manager.current)
+            DestroyThis(Color.cyan);
     }
 }
