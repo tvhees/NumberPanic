@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberPanic.CSharp", "NumberPanic.CSharp.csproj", "{A742FB89-A7C5-8352-C533-B660E070720C}"
 EndProject
 Global
@@ -13,6 +15,7 @@ Global
 		{A742FB89-A7C5-8352-C533-B660E070720C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A742FB89-A7C5-8352-C533-B660E070720C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A742FB89-A7C5-8352-C533-B660E070720C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A742FB89-A7C5-8352-C533-B660E070720C}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

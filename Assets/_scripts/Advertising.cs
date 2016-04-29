@@ -3,6 +3,7 @@ using UnityEngine.Advertisements;
 
 public class Advertising : MonoBehaviour
 {
+
     private int counter;
 
     void Awake()
@@ -24,9 +25,11 @@ public class Advertising : MonoBehaviour
 
     public void ShowAd()
     {
+#if UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR
         if (Advertisement.IsReady())
         {
             Advertisement.Show();
         }
+#endif
     }
 }
