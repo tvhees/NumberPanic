@@ -3,14 +3,15 @@ using UnityEngine.Advertisements;
 
 public class Advertising : MonoBehaviour
 {
-
     private int counter;
 
+#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
     void Awake()
     {
         Manager.Instance.adverts = this;
         counter = 3;
     }
+#endif
 
     public void RegularAd()
     {
@@ -25,7 +26,7 @@ public class Advertising : MonoBehaviour
 
     public void ShowAd()
     {
-#if UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR
+#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
         if (Advertisement.IsReady())
         {
             Advertisement.Show();

@@ -57,7 +57,8 @@ public class Spawner : MonoBehaviour
             for (int i = 0; i < 20; i++)
             {
                 value = (int)Random.Range(0.3f * Manager.current, 1.7f * Manager.current);
-                if (Mathf.Abs(value - Manager.current) > 1)
+
+                if (Mathf.Abs(value - Manager.current) > 1 && value > 0)
                     break;
             }
         }

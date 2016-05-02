@@ -22,7 +22,6 @@ public class Score : MonoBehaviour {
     {
         current++;
         UpdateDisplay();
-        Preferences.Instance.UpdateHighScore(value);
         GetComponent<Animator>().SetTrigger("expand");
 
         if (current == 1)

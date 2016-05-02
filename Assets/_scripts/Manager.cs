@@ -54,19 +54,22 @@ public class Manager : Singleton<Manager> {
         speedFactor = setSpeed;
 
         data.AssignArrays();
-
-        Preferences.Instance.Load();
         StartCoroutine(LoadGame());
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
-            Application.Quit();
+            Restart();
+            //Application.Quit();
+
+        if (game != null)
+            game.RunTimers();
     }
 
     public void Restart() {
-        StartCoroutine(DestroyGame());
+        DestroyGame();
+        StartCoroutine(LoadGame());
     }
 
     IEnumerator LoadGame() {
@@ -82,14 +85,14 @@ public class Manager : Singleton<Manager> {
         SceneManager.SetActiveScene(SceneManager.GetSceneByName("Game"));
     }
 
-    IEnumerator DestroyGame() {
-        yield return new WaitForSeconds(1.2f);
+    void DestroyGame() {
+        Preferences.Instance.Save();
         Time.timeScale = 1f;
         SceneManager.UnloadScene("Game");
         Destroy(game);
 
         // Show an ad at regular intervals
-        adverts.RegularAd();
-        StartCoroutine(LoadGame());
+		if(adverts != null)
+	        adverts.RegularAd();
     }
 }

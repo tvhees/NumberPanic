@@ -4,7 +4,7 @@ using System.Collections;
 
 public class Title : MonoBehaviour {
 
-    [HideInInspector] private Animator animator;
+    private Animator animator;
 
     void Awake()
     {

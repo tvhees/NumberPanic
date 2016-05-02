@@ -8,6 +8,7 @@ public class UIManager : Singleton<UIManager> {
     [HideInInspector] public MainMode modes;
     [HideInInspector] public SubMode subModes;
     [HideInInspector] public Score score;
+    [HideInInspector] public GameObject gameEndPanel, scorePanel;
 
     private float current;
 
@@ -27,6 +28,20 @@ public class UIManager : Singleton<UIManager> {
         {
             current = Manager.current;
         }
+
+        if (Manager.Instance.game.state == Game.State.END)
+        {
+            gameEndPanel.SetActive(true);
+        }
+        else
+        {
+            gameEndPanel.SetActive(false);
+        }
+
+        if (Manager.Instance.game.state == Game.State.SCORE)
+            scorePanel.SetActive(true);
+        else
+            scorePanel.SetActive(false);
     }
 
     void UpdateScore()
@@ -44,6 +59,7 @@ public class UIManager : Singleton<UIManager> {
 
     public void FadeUI(bool visible) {
         title.Fade();
+        highScore.Fade();
         modes.Fade(visible);
         subModes.Fade(visible);
     }
