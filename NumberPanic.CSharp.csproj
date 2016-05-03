@@ -84,6 +84,7 @@
     <Compile Include="Assets\_scripts\HighScore.cs" />
     <Compile Include="Assets\_scripts\MainMode.cs" />
     <Compile Include="Assets\_scripts\Manager.cs" />
+    <Compile Include="Assets\_scripts\NewGameButton.cs" />
     <Compile Include="Assets\_scripts\Number.cs" />
     <Compile Include="Assets\_scripts\ObjectPool.cs" />
     <Compile Include="Assets\_scripts\Preferences.cs" />

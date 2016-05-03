@@ -60,8 +60,7 @@ public class Manager : Singleton<Manager> {
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
-            Restart();
-            //Application.Quit();
+            Application.Quit();
 
         if (game != null)
             game.RunTimers();

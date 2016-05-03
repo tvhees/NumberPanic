@@ -8,7 +8,7 @@ public class UIManager : Singleton<UIManager> {
     [HideInInspector] public MainMode modes;
     [HideInInspector] public SubMode subModes;
     [HideInInspector] public Score score;
-    [HideInInspector] public GameObject gameEndPanel, scorePanel;
+    [HideInInspector] public GameObject gameEndPanel, scorePanel, menuPanel;
 
     private float current;
 
@@ -29,19 +29,24 @@ public class UIManager : Singleton<UIManager> {
             current = Manager.current;
         }
 
-        if (Manager.Instance.game.state == Game.State.END)
+        switch (Manager.Instance.game.state)
         {
-            gameEndPanel.SetActive(true);
+            case Game.State.END:
+                gameEndPanel.SetActive(true);
+                scorePanel.SetActive(false);
+                menuPanel.SetActive(true);
+                break;
+            case Game.State.SCORE:
+                gameEndPanel.SetActive(false);
+                scorePanel.SetActive(true);
+                menuPanel.SetActive(true);
+                break;
+            default:
+                gameEndPanel.SetActive(false);
+                scorePanel.SetActive(false);
+                menuPanel.SetActive(false);
+                break;
         }
-        else
-        {
-            gameEndPanel.SetActive(false);
-        }
-
-        if (Manager.Instance.game.state == Game.State.SCORE)
-            scorePanel.SetActive(true);
-        else
-            scorePanel.SetActive(false);
     }
 
     void UpdateScore()
