@@ -59,9 +59,6 @@ public class SubMode : MonoBehaviour {
         // mostly required for odd sequences like primes that don't start at 0
         if (UIManager.Instance.score != null)
             UIManager.Instance.score.UpdateDisplay();
-
-        // Update the high score desplay to reflect the choice
-        UIManager.Instance.highScore.SwitchHighScore();
     }
 
     public void Fade(bool active)

@@ -17,8 +17,10 @@ public class Number : MonoBehaviour, IPointerDownHandler {
     private ParticleSystem.ShapeModule sh;
     private Spawner spawner;
 
-    public void Init(int currentIn, float speedIn, bool realIn, Spawner scriptIn) {
+    public void Init(int currentIn, Vector3 startPos, float speedIn, bool realIn, Spawner scriptIn) {
         game = Manager.Instance.game;
+
+        transform.position = startPos;
 
         float randomFactor = Random.Range(0.8f, 1.2f);
         spawner = scriptIn;
@@ -28,9 +30,9 @@ public class Number : MonoBehaviour, IPointerDownHandler {
 
         int offset = 0;
         if (!real)
-            offset = (int)Random.Range(-0.1f, 0.1f) * game.GetNumber(value);
+            offset = (int)Random.Range(-0.1f, 0.1f) * game.GetNumber(value, Manager.mode, Manager.subValue);
 
-        text.text = (game.GetNumber(value) + offset).ToString();
+        text.text = (game.GetNumber(value, Manager.mode, Manager.subValue) + offset).ToString();
         speed = speedIn/randomFactor;
         transform.localScale = randomFactor * Vector3.one;
 
@@ -43,7 +45,7 @@ public class Number : MonoBehaviour, IPointerDownHandler {
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (game.state != Game.State.END)
+        if (game.state == Game.State.ATTRACT || game.state == Game.State.PLAY)
         {
             Color colour = game.ResolveNumber(value, true);
             DestroyThis(colour);
@@ -52,9 +54,14 @@ public class Number : MonoBehaviour, IPointerDownHandler {
 
     void DestroyThis(Color colour)
     {
-        GameObject expl = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
-        expl.GetComponent<Explosion>().Init(speed, colour);
-        Destroy(gameObject);
+        GameObject expl = Manager.explosionPool.GetObject();
+
+        if (expl != null)
+            expl.GetComponent<Explosion>().Init(transform.position, speed, colour);
+        else
+            Debug.Log("No explosions left, returning null");
+
+        Manager.numberPool.ReturnObject(gameObject);
     }
 
     void Update() {
@@ -65,8 +72,5 @@ public class Number : MonoBehaviour, IPointerDownHandler {
             Color colour = game.ResolveNumber(value);
             DestroyThis(colour);
         }
-
-        //if (!real && value == Manager.current)
-        //    DestroyThis(Color.cyan);
     }
 }

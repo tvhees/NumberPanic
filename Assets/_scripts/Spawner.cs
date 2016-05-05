@@ -14,6 +14,10 @@ public class Spawner : MonoBehaviour
 
     void Awake() {
         Manager.Instance.spawner = this;
+    }
+
+    public void Init()
+    {
         leftBound = 0.2f;
         rightBound = 0.95f;
         padding = Manager.padding;
@@ -32,13 +36,15 @@ public class Spawner : MonoBehaviour
 
             if (counter == 0)
             {
-                counter = Mathf.Min(Random.Range(0, Manager.current - 1), 8);
-                SpawnNumber();
+                // Get a new 'true' number from the pool. Reset the counter only if this works.
+                if(SpawnNumber())
+                    counter = Mathf.Min(Random.Range(0, Manager.current - 1), 8);
             }
             else
             {
-                counter--;
-                SpawnNumber(false);
+                // Get a new 'false' number from the pool. Decrement the counter only if this works.
+                if (SpawnNumber(false))
+                    counter--;
             }
 
             yield return new WaitForSeconds(waitTime);
@@ -46,12 +52,17 @@ public class Spawner : MonoBehaviour
 
     }
 
-    void SpawnNumber(bool real = true) {
+    private bool SpawnNumber(bool real = true) {
+        // Spawn from the top of the screen - recalculate every time in case orientation changes
         Vector3 position = gameCam.ViewportToWorldPoint(new Vector3(Random.Range(leftBound, rightBound), 1f, 20f));
+
+        // Speed to travel downwards, damped increase as numbers increase
         float speed = (Manager.current + Manager.padding) * speedFactor / Manager.padding;
 
+        // Default value is the next one player needs to collect
         int value = Manager.current;
 
+        // For 'fake' numbers we want to vary the value a little bit
         if (!real)
         {
             for (int i = 0; i < 20; i++)
@@ -63,7 +74,16 @@ public class Spawner : MonoBehaviour
             }
         }
 
-        GameObject obj = Instantiate(number, position, Quaternion.identity) as GameObject;
-        obj.GetComponent<Number>().Init(value, speed, real, this);
+        GameObject obj = Manager.numberPool.GetObject();
+        if (obj != null)
+        {
+            obj.GetComponent<Number>().Init(value, position, speed, real, this);
+            return true;
+        }
+        else
+        {
+            Debug.Log("No numbers left to use, returning false");
+            return false;
+        }
     }
 }

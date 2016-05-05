@@ -3,18 +3,19 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class Score : MonoBehaviour {
-    public int current, value;
-    public Text display;
-    public Spawner spawner;
+    [HideInInspector] public int value;
+
+    private Text display;
+    private int current;
 
     void Awake() {
+        display = GetComponent<Text>();
         UIManager.Instance.score = this;
         UpdateDisplay();
-        UIManager.Instance.FadeUI(true);
     }
 
     public void UpdateDisplay() {
-        value = Manager.Instance.game.GetNumber(current);
+        value = Manager.Instance.game.GetNumber(current, Manager.mode, Manager.subValue);
         display.text = value.ToString();
     }
 
@@ -23,11 +24,5 @@ public class Score : MonoBehaviour {
         current++;
         UpdateDisplay();
         GetComponent<Animator>().SetTrigger("expand");
-
-        if (current == 1)
-        {
-            UIManager.Instance.FadeUI(false);
-            spawner.leftBound = 0.05f;
-        }
     }
 }

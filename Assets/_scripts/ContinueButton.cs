@@ -4,7 +4,7 @@ using System.Collections;
 public class ContinueButton : MonoBehaviour {
 
     public void ContinueGame() {
-        Manager.Instance.game.Play();
+        Manager.Instance.adverts.ShowAd();
     }
 
 }

@@ -17,6 +17,7 @@ public class MainMode : MonoBehaviour {
 
         // Link to UI manager
         UIManager.Instance.modes = this;
+        UIManager.Instance.modePanel = transform.parent.gameObject;
 
         // Create the list of options for this dropdown
         // and tell it which function to call when an option is chosen

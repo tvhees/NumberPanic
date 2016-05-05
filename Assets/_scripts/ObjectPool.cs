@@ -4,28 +4,41 @@ using System.Collections.Generic;
 
 public abstract class ObjectPool : MonoBehaviour {
 
-    public int poolSize;
-	public Vector3 homePosition;
+    public GameObject prefab;
+    protected int poolSize;
+	protected Vector3 homePosition;
+	protected List<GameObject> pool, checkedOut;
 
-	protected List<GameObject> pool;
+    void Awake() {
+        Init();
+    }
 
-	protected void CreatePool(int size, GameObject prefab){
+    protected virtual void Init() {
+
+    }
+
+	public void CreatePool(){
 		pool = new List<GameObject>();
+        checkedOut = new List<GameObject>();
 
-		for(int i = 0; i < size; i++){
-			GameObject obj = (GameObject)Instantiate(prefab);
+        for (int i = 0; i < poolSize; i++){
+			GameObject obj = Instantiate(prefab);
+            obj.transform.SetParent(transform);
 			obj.transform.position = homePosition;
 			obj.SetActive (false);
 			pool.Add(obj);
 		}
-	}
+    }
 
-	protected GameObject GetObject(){
+	public GameObject GetObject()
+    {
         if(pool.Count > 0){
 			GameObject obj = pool [0];
-			pool.RemoveAt(0);
+            pool.Remove(obj);
+            checkedOut.Add(obj);
 
             poolSize = pool.Count;
+            obj.SetActive(true);
 
             return obj;
 		}
@@ -33,25 +46,24 @@ public abstract class ObjectPool : MonoBehaviour {
 		return null;
 	}
 
-	public void ReturnObject(GameObject obj){
+	public void ReturnObject(GameObject obj)
+    {
 		pool.Add(obj);
-        obj.transform.SetParent(null);
+        checkedOut.Remove(obj);
+        obj.transform.SetParent(transform);
         obj.transform.position = homePosition;
         obj.transform.localScale = Vector3.one;
         obj.SetActive(false);
 	}
 
-	public int GetValueIndex(int[] value){
-		int index = 0;
-		int incrementer = 1;
-		for (int i = 0; i < value.Length; i++) {
-			if (value [i] > 0) {
-				index += i + incrementer;
-				incrementer++;
-			}
-		}
-		return index;
-	}
+    public void Reset()
+    {
+        while(checkedOut.Count > 0)
+        {
+            ReturnObject(checkedOut[0]);
+        }
 
-	public abstract void SendToPool(GameObject obj);
+        if (Manager.Instance.debugMode)
+            Debug.Log(this.name + " reset");
+    }
 }

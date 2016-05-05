@@ -16,14 +16,14 @@ public class Game : ScriptableObject {
     }
     [HideInInspector] public State state;
 
-    // Store references to loaded gameobjects here
-    [HideInInspector] public Spawner spawner;
-
     // Timers for end-game continuation and critical recovery
     [HideInInspector] public float timer;
-    private float endMax, critMax;
+    private float endMax, critMax, scaleTimer;
+    private float[] timeScales;
 
     void OnEnable() {
+        Debug.Log("Instance of Game created");
+        NewTimeScale(1.0f);
         critMax = 3.0f;
         endMax = 5.0f;
         state = State.ATTRACT;
@@ -43,6 +43,10 @@ public class Game : ScriptableObject {
             ShowScore();
         else if (state == State.CRITICAL && timer > critMax)
             EndGame();
+
+        // Now we smoothly move towards the appropriate timescale
+        scaleTimer += Time.unscaledDeltaTime;
+        Time.timeScale = Mathf.Lerp(timeScales[0], timeScales[1], scaleTimer);
     }
 
     // Calculates the time left for UI purposes
@@ -59,19 +63,19 @@ public class Game : ScriptableObject {
         return t;
     }
 
-    public int GetNumber(int current)
+    public int GetNumber(int current, Manager.Mode mode, int subValue)
     {
         int value = 0;
-        switch (Manager.mode)
+        switch (mode)
         {
             case Manager.Mode.linear:
-                value = current * (Manager.subValue + 1);
+                value = current * (subValue + 1);
                 break;
             case Manager.Mode.power:
-                value = (int)Mathf.Pow(current, (Manager.subValue + 2));
+                value = (int)Mathf.Pow(current, (subValue + 2));
                 break;
             case Manager.Mode.sequence:
-                switch (Manager.subValue)
+                switch (subValue)
                 {
                     case (int)Manager.Sequence.primes:
                         value = Manager.Instance.data.numberArrays.primes[current];
@@ -137,29 +141,41 @@ public class Game : ScriptableObject {
     public void Play()
     {
         state = State.PLAY;
-        Time.timeScale = 1.0f;
+        NewTimeScale(1.0f);
     }
 
     void Critical()
     {
         timer = 0;
         state = State.CRITICAL;
-        Time.timeScale = 0.2f;
+        NewTimeScale(0.2f);
     }
 
     void EndGame()
     {
-        Time.timeScale = 0;
         timer = 0;
         state = State.END;
     }
 
     void ShowScore()
     {
+        NewTimeScale(1.0f);
         state = State.SCORE;
     }
 
-    void OnDestroy() {
-        state = State.END;
+    void OnDisable()
+    {
+        if (Manager.Instance != null)
+        {
+            if (Manager.Instance.debugMode)
+                Debug.Log("Instance of Game destroyed");
+
+            state = State.END;
+        }
+    }
+
+    void NewTimeScale(float newScale) {
+        scaleTimer = 0f;
+        timeScales = new float[2] { Time.timeScale, newScale };
     }
 }
