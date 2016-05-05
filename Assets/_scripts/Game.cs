@@ -124,18 +124,13 @@ public class Game : ScriptableObject {
 
     Color Progress(int value)
     {
-        if (state != State.END)
-        {
-            Play();
-            Manager.current++;
+        Play();
+        Manager.current++;
 
-            if (value == oldHS)
-                return Color.green;
-            else
-                return Color.yellow;
-        }
+        if (value == oldHS)
+            return Color.green;
         else
-            return Color.white;
+            return Color.yellow;
     }
 
     public void Play()

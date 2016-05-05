@@ -45,10 +45,15 @@ public class Number : MonoBehaviour, IPointerDownHandler {
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (game.state == Game.State.ATTRACT || game.state == Game.State.PLAY)
+
+        switch (game.state)
         {
-            Color colour = game.ResolveNumber(value, true);
-            DestroyThis(colour);
+            case Game.State.ATTRACT:
+            case Game.State.PLAY:
+            case Game.State.CRITICAL:
+                Color colour = game.ResolveNumber(value, true);
+                DestroyThis(colour);
+                break;
         }
     }
 
