@@ -6,7 +6,7 @@ public class TitleAnimator : MonoBehaviour {
     public Animator[] animators;
     private float delay = 0.1f;
 
-    void Awake()
+    void Start()
     {
         animators = GetComponentsInChildren<Animator>();
 

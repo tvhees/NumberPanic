@@ -50,7 +50,7 @@ public class Manager : Singleton<Manager> {
         NumberOfTypes
     }
 
-    void Awake() {
+    void Start() {
         padding = setPadding;
         waitFactor = setWait;
         speedFactor = setSpeed;

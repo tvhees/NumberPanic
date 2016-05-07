@@ -11,7 +11,7 @@ public class UIManager : Singleton<UIManager> {
 
     private float current;
 
-    void Awake()
+    void Start()
     {
         Manager.Instance.ui = this;
         current = Manager.current;
