@@ -6,6 +6,7 @@ public class FinalScore : MonoBehaviour {
 
     public Text label;
     [HideInInspector] public int current;
+    [HideInInspector] public FaceValue fV;
 
     private float counter, countTime;
     private Manager.Mode mode;
@@ -28,8 +29,8 @@ public class FinalScore : MonoBehaviour {
         current = Mathf.CeilToInt(Manager.current * Mathf.Clamp01(counter / countTime));
         // Important! We are using STORED values of mode and subValue here
         // This prevents final scores changing if mode choice is update in settings post-game
-        current = Manager.Instance.game.GetNumber(current, mode, subValue);
-        label.text = current.ToString();
+        fV = Manager.Instance.game.GetFaceValue(current, mode, subValue);
+        label.text = fV.text;
     }
 
 }

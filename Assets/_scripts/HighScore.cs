@@ -19,20 +19,8 @@ public class HighScore : MonoBehaviour {
         animator.SetTrigger("fade");
     }
 
-    public void SwitchHighScore() {
-        int hs = Preferences.Instance.GetHighScore();
-        if(Manager.Instance.game != null)
-            Manager.Instance.game.oldHS = hs;
-        ChangeText(hs);
-    }
-
-    public void ChangeText(int value)
+    public void ChangeText(FaceValue fV)
     {
-        text.text = value.ToString();
-    }
-
-    public void ChangeText(string value)
-    {
-        text.text = value;
+        text.text = fV.text;
     }
 }

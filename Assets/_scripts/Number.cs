@@ -10,8 +10,6 @@ public class Number : MonoBehaviour, IPointerDownHandler {
     public GameObject explosion;
     public ParticleSystem trail;
 
-    bool real;
-
     private Game game;
     private ParticleSystem.EmissionModule em;
     private ParticleSystem.ShapeModule sh;
@@ -24,15 +22,13 @@ public class Number : MonoBehaviour, IPointerDownHandler {
 
         float randomFactor = Random.Range(0.8f, 1.2f);
         spawner = scriptIn;
-
         value = currentIn;
-        real = realIn;
 
-        int offset = 0;
-        if (!real)
-            offset = (int)Random.Range(-0.1f, 0.1f) * game.GetNumber(value, Manager.mode, Manager.subValue);
+        // Call the game function to create a FaceValue class, get the appropriate return
+        FaceValue fV = game.GetFaceValue(value, Manager.mode, Manager.subValue);
+        if(fV.text != null)
+            text.text = fV.text;
 
-        text.text = (game.GetNumber(value, Manager.mode, Manager.subValue) + offset).ToString();
         speed = speedIn/randomFactor;
         transform.localScale = randomFactor * Vector3.one;
 

@@ -4,7 +4,7 @@ using System.Collections;
 
 public class Preferences : Singleton<Preferences> {
 
-    public static int highScore;
+    public static FaceValue highScore = new FaceValue();
     public static int mainMode;
     public static int subMode;
 
@@ -19,23 +19,35 @@ public class Preferences : Singleton<Preferences> {
         Load();
     }
 
-    public int GetHighScore() {
+    public FaceValue GetHighScore() {
         string scoreName = ((Manager.Mode)mainMode).ToString() + "_" + subMode.ToString();
-        highScore = PlayerPrefs.GetInt(scoreName, 0);
+        highScore.value = PlayerPrefs.GetInt(scoreName + "_value", 0);
+        highScore.text = PlayerPrefs.GetString(scoreName + "_text", null);
+        Debug.Log(scoreName + " " + highScore.value + " GET");
         return highScore;
     }
 
-    public void UpdateHighScore(int score) {
-        highScore = score;
+    private void SaveHighScore()
+    {
+        string scoreName = ((Manager.Mode)mainMode).ToString() + "_" + subMode.ToString();
+        Debug.Log(scoreName + " " + highScore.value + " SAVE");
+
+        PlayerPrefs.SetInt(scoreName + "_value", highScore.value);
+        PlayerPrefs.SetString(scoreName + "_text", highScore.text);
         PlayerPrefs.Save();
     }
 
+    public void UpdateHighScore(FaceValue fV) {
+        Debug.Log("UpdatingHighScore");
+        highScore = fV;
+        SaveHighScore();
+    }
+
     public void Save(){
-        string scoreName = ((Manager.Mode)mainMode).ToString() + "_" + subMode.ToString();
-        PlayerPrefs.SetInt(scoreName, highScore);
+        Debug.Log("Saving regular preferences");
+
         PlayerPrefs.SetInt("mainMode", mainMode);
         PlayerPrefs.SetInt("subMode", subMode);
-
         PlayerPrefs.Save ();
 	}
 

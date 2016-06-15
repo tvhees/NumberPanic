@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.Advertisements;
+using System.Collections;
 
 public class Advertising : MonoBehaviour
 {
     public string zoneID;
     private int counter;
 
-#if UNITY_ANDROID || UNITY_IOS
     void Awake()
     {
         Manager.Instance.adverts = this;
         counter = 3;
     }
-#endif
 
     public void RegularAd()
     {
@@ -27,7 +26,7 @@ public class Advertising : MonoBehaviour
 
     public void ShowAd()
     {
-#if UNITY_ANDROID || UNITY_IOS
+        #if UNITY_IOS || UNITY_ANDROID
         if (Advertisement.IsReady())
         {
             if (string.IsNullOrEmpty(zoneID)) zoneID = null;
@@ -40,19 +39,19 @@ public class Advertising : MonoBehaviour
 #endif
     }
 
+#if UNITY_IOS || UNITY_ANDROID
     private void HandleShowResult(ShowResult result)
     {
         switch (result)
         {
             case ShowResult.Finished:
-                Manager.Instance.game.Play();
+                StartCoroutine(AnimationManager.Instance.Continue(true));
                 break;
             case ShowResult.Skipped:
-                Debug.LogWarning("Video was skipped.");
-                break;
             case ShowResult.Failed:
-                Debug.LogError("Video failed to show.");
+                StartCoroutine(AnimationManager.Instance.Continue(false));
                 break;
         }
     }
+#endif
 }

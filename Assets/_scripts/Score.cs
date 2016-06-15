@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class Score : MonoBehaviour {
-    [HideInInspector] public int value;
+    [HideInInspector] public FaceValue fV;
 
     private Text display;
     private int current;
@@ -15,8 +15,8 @@ public class Score : MonoBehaviour {
     }
 
     public void UpdateDisplay() {
-        value = Manager.Instance.game.GetNumber(current, Manager.mode, Manager.subValue);
-        display.text = value.ToString();
+        fV = Manager.Instance.game.GetFaceValue(current, Manager.mode, Manager.subValue);
+        display.text = fV.text;
     }
 
     public void Increment()

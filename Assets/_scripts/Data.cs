@@ -4,6 +4,7 @@ using System.Collections;
 
 public class Data {
    public NumberArrays numberArrays = new NumberArrays();
+    public TextArrays textArrays = new TextArrays();
 
     public void AssignArrays()
     {
@@ -15,6 +16,9 @@ public class Data {
         {
             numberArrays.fibbonaci[i] = numberArrays.fibbonaci[i - 2] + numberArrays.fibbonaci[i - 1];
         }
+
+        textArrays.englishWords = new string[56] { "the", "be", "and", "of", "a", "in", "to", "have", "it", "I", "that", "for", "you", "he", "with", "on", "do", "say", "this", "they", "at", "but", "we", "his", "from", "not", "by", "she", "or", "as", "what", "go", "their", "can", "who", "get", "if", "would", "her", "all", "my", "make", "about", "know", "will", "up", "one", "time", "there", "year", "so", "think", "when", "which", "them", "some" };
+        textArrays.ausAnthem = new string[24] { "australians", "all", "let", "us", "rejoice", "for", "we", "are", "young", "and", "free", "we've", "golden", "soil", "and", "wealth", "for", "toil", "our", "home", "is", "girt", "by", "sea" };
     }
 }
 
@@ -23,4 +27,11 @@ public class NumberArrays
 {
     public int[] primes;
     public int[] fibbonaci;
+}
+
+[Serializable]
+public class TextArrays
+{
+    public string[] englishWords;
+    public string[] ausAnthem;
 }

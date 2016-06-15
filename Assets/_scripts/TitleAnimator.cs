@@ -3,41 +3,36 @@ using System.Collections;
 
 public class TitleAnimator : MonoBehaviour {
 
+    [HideInInspector] public bool animating;
     public Animator[] animators;
     private float delay = 0.1f;
 
-    void Start()
+    void Awake()
     {
         animators = GetComponentsInChildren<Animator>();
-
-        StartCoroutine(DropTitle());
+        AnimationManager.Instance.titleAnimator = this;
     }
 
-    IEnumerator DropTitle()
+    public IEnumerator DropTitle()
     {
-        // Start from 1 because we don't want to drop the background here
-        for (int i = 1; i < animators.Length; i++)
+        for (int i = 0; i < animators.Length; i++)
         {
             animators[i].SetTrigger("drop");
             yield return new WaitForSeconds(delay);
         }
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(delay);
 
-        yield return StartCoroutine(LeaveTitle());
+        Manager.Instance.game.state = Game.State.TITLE;
     }
 
-    IEnumerator LeaveTitle()
+    public void LeaveTitle()
     {
-        // Start from 1 because we don't want to drop the background here
-        for (int i = 1; i < animators.Length; i++)
+        Manager.Instance.game.state = Game.State.TITLE;
+
+        for (int i = 0; i < animators.Length; i++)
         {
             animators[i].SetTrigger("drop");
-            yield return new WaitForSeconds(delay);
         }
-
-        // Drop the background
-        animators[0].SetTrigger("drop");
     }
-
 }

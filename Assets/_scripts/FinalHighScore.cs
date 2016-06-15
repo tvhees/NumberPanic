@@ -13,7 +13,7 @@ public class FinalHighScore : MonoBehaviour {
     }
 
     void Update() {
-            if (finalScore.current > Manager.Instance.game.oldHS)
+            if (finalScore.fV.value > Manager.Instance.game.oldHS)
                 label.text = finalScore.label.text;
             else
                 label.text = Manager.Instance.game.oldHS.ToString();

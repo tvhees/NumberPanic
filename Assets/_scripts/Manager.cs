@@ -38,6 +38,7 @@ public class Manager : Singleton<Manager> {
         linear,
         power,
         sequence,
+        english,
         NumberOfTypes
     }
 
@@ -47,6 +48,13 @@ public class Manager : Singleton<Manager> {
     {
         primes,
         fibbonaci,
+        NumberOfTypes
+    }
+
+    public enum English
+    {
+        common,
+        aus_anthem,
         NumberOfTypes
     }
 

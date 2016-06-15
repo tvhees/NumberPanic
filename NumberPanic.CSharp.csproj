@@ -73,8 +73,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\_scripts\Advertising.cs" />
+    <Compile Include="Assets\_scripts\AnimationManager.cs" />
     <Compile Include="Assets\_scripts\ContinueButton.cs" />
     <Compile Include="Assets\_scripts\ContinueCountdown.cs" />
+    <Compile Include="Assets\_scripts\ContinuePanel.cs" />
     <Compile Include="Assets\_scripts\Data.cs" />
     <Compile Include="Assets\_scripts\Explosion.cs" />
     <Compile Include="Assets\_scripts\ExplosionPool.cs" />
@@ -83,14 +85,18 @@
     <Compile Include="Assets\_scripts\FinalScore.cs" />
     <Compile Include="Assets\_scripts\Game.cs" />
     <Compile Include="Assets\_scripts\HighScore.cs" />
+    <Compile Include="Assets\_scripts\LoadingCover.cs" />
     <Compile Include="Assets\_scripts\MainMode.cs" />
     <Compile Include="Assets\_scripts\Manager.cs" />
+    <Compile Include="Assets\_scripts\MenuPanel.cs" />
+    <Compile Include="Assets\_scripts\ModePanel.cs" />
     <Compile Include="Assets\_scripts\NewGameButton.cs" />
     <Compile Include="Assets\_scripts\Number.cs" />
     <Compile Include="Assets\_scripts\NumberPool.cs" />
     <Compile Include="Assets\_scripts\ObjectPool.cs" />
     <Compile Include="Assets\_scripts\Preferences.cs" />
     <Compile Include="Assets\_scripts\Score.cs" />
+    <Compile Include="Assets\_scripts\ScorePanel.cs" />
     <Compile Include="Assets\_scripts\SettingsButton.cs" />
     <Compile Include="Assets\_scripts\Singleton.cs" />
     <Compile Include="Assets\_scripts\Spawner.cs" />

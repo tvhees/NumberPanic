@@ -42,6 +42,10 @@ public class SubMode : MonoBehaviour {
                 for (int i = 0; i < (int)Manager.Sequence.NumberOfTypes; i++)
                     dropDown.options.Add(new Dropdown.OptionData() { text = ((Manager.Sequence)i).ToString() });
                 break;
+            case Manager.Mode.english:
+                for (int i = 0; i < (int)Manager.English.NumberOfTypes; i++)
+                    dropDown.options.Add(new Dropdown.OptionData() { text = ((Manager.English)i).ToString() });
+                break;
         }
 
         dropDown.RefreshShownValue();

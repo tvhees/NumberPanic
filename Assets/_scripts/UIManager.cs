@@ -7,9 +7,11 @@ public class UIManager : Singleton<UIManager> {
     [HideInInspector] public MainMode modes;
     [HideInInspector] public SubMode subModes;
     [HideInInspector] public Score score;
-    [HideInInspector] public GameObject gameEndPanel, scorePanel, menuPanel, modePanel;
+    [HideInInspector] public GameObject continuePanel, scorePanel, menuPanel, modePanel;
+    [HideInInspector] public TitleAnimator titleAnimator;
 
     private float current;
+    private Game.State lastState;
 
     void Start()
     {
@@ -28,26 +30,43 @@ public class UIManager : Singleton<UIManager> {
             current = Manager.current;
         }
 
-        switch (Manager.Instance.game.state)
+        if (Manager.Instance.game.state != lastState)
         {
-            case Game.State.END:
-                gameEndPanel.SetActive(true);
-                break;
-            case Game.State.SCORE:
-                score.gameObject.SetActive(false);
-                gameEndPanel.SetActive(false);
-                scorePanel.SetActive(true);
-                menuPanel.SetActive(true);
-                break;
-            default:
-                if(score != null)
-                    score.gameObject.SetActive(true);
-                gameEndPanel.SetActive(false);
-                scorePanel.SetActive(false);
-                menuPanel.SetActive(false);
-                modePanel.SetActive(false);
-                break;
+            switch (Manager.Instance.game.state)
+            {
+                case Game.State.TITLE:
+                    menuPanel.SetActive(true);
+                    break;
+                case Game.State.ATTRACT:
+                    if (score != null)
+                        score.gameObject.SetActive(true);
+                    scorePanel.SetActive(false);
+                    menuPanel.SetActive(false);
+                    continuePanel.SetActive(false);
+                    break;
+                case Game.State.END:
+                    continuePanel.SetActive(true);
+                    break;
+                case Game.State.SCORE:
+                    StartCoroutine(LoadScore());
+                    break;
+                default:
+                    if (score != null)
+                        score.gameObject.SetActive(true);
+                    scorePanel.SetActive(false);
+                    menuPanel.SetActive(false);
+                    break;
+            }
+            lastState = Manager.Instance.game.state;
         }
+    }
+
+    IEnumerator LoadScore()
+    {
+        if(continuePanel.activeSelf)
+            yield return StartCoroutine(AnimationManager.Instance.Continue(false));
+        scorePanel.SetActive(true);
+        menuPanel.SetActive(true);
     }
 
     void UpdateScore()
@@ -56,9 +75,14 @@ public class UIManager : Singleton<UIManager> {
 
         score.Increment();
 
-        if (score.value >= Preferences.highScore)
+        if (score.fV.value >= Preferences.highScore.value)
         {
-            Preferences.Instance.UpdateHighScore(score.value);
+            Preferences.Instance.UpdateHighScore(score.fV);
         }
+    }
+
+    public void Reset()
+    {
+        Preferences.Instance.Reset();
     }
 }

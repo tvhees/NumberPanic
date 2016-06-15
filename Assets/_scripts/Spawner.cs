@@ -32,22 +32,35 @@ public class Spawner : MonoBehaviour
 
         while (spawn)
         {
-            float waitTime = Mathf.Pow(padding/(Manager.current + padding), 2f) * waitFactor;
-
-            if (counter == 0)
+            switch (Manager.Instance.game.state)
             {
-                // Get a new 'true' number from the pool. Reset the counter only if this works.
-                if(SpawnNumber())
-                    counter = Mathf.Min(Random.Range(0, Manager.current - 1), 8);
-            }
-            else
-            {
-                // Get a new 'false' number from the pool. Decrement the counter only if this works.
-                if (SpawnNumber(false))
-                    counter--;
+                case Game.State.ATTRACT:
+                case Game.State.PLAY:
+                case Game.State.CRITICAL:
+                case Game.State.END:
+                case Game.State.SCORE:
+                    float waitTime = Mathf.Pow(padding / (Manager.current + padding), 2f) * waitFactor;
+
+                    if (counter == 0)
+                    {
+                        // Get a new 'true' number from the pool. Reset the counter only if this works.
+                        if (SpawnNumber())
+                            counter = Mathf.Min(Random.Range(0, Manager.current - 1), 8);
+                    }
+                    else
+                    {
+                        // Get a new 'false' number from the pool. Decrement the counter only if this works.
+                        if (SpawnNumber(false))
+                            counter--;
+                    }
+
+                    yield return new WaitForSeconds(waitTime);
+
+                    break;
             }
 
-            yield return new WaitForSeconds(waitTime);
+            yield return null;
+
         }
 
     }

@@ -8,6 +8,7 @@ public class Game : ScriptableObject {
     [HideInInspector] public float buffer;
     public enum State
     {
+        TITLE,
         ATTRACT,
         PLAY,
         CRITICAL,
@@ -20,29 +21,44 @@ public class Game : ScriptableObject {
     [HideInInspector] public float timer;
     private float endMax, critMax, scaleTimer;
     private float[] timeScales;
+    private int continuesLeft;
 
-    void OnEnable() {
-        Debug.Log("Instance of Game created");
+    void OnEnable()
+    {
+        //if (Manager.Instance.debugMode)
+            Debug.Log("Instance of Game created");
         NewTimeScale(1.0f);
         critMax = 3.0f;
         endMax = 5.0f;
+        continuesLeft = 1;
         state = State.ATTRACT;
-        oldHS = Preferences.highScore;
+        oldHS = Preferences.Instance.GetHighScore().value;
     }
 
     // Called by Manager.Update every frame because scriptable objects don't get Update calls
     // Timer is reset along with state change. Uses unscaledDeltaTime to prevent inflation from
     // slowmotion effects.
-    public void RunTimers() {
+    public void RunTimers()
+    {
         if (state == State.CRITICAL || state == State.END)
         {
             timer += Time.unscaledDeltaTime;
         }
 
         if (state == State.END && timer > endMax)
+        {
+            if (Manager.Instance.debugMode)
+                Debug.Log("Continue Timer Ran Out");
             ShowScore();
+
+        }
         else if (state == State.CRITICAL && timer > critMax)
+        {
+            if(Manager.Instance.debugMode)
+                Debug.Log("Critical Timer Ran Out");
+
             EndGame();
+        }
 
         // Now we smoothly move towards the appropriate timescale
         scaleTimer += Time.unscaledDeltaTime;
@@ -63,30 +79,53 @@ public class Game : ScriptableObject {
         return t;
     }
 
-    public int GetNumber(int current, Manager.Mode mode, int subValue)
+    public FaceValue GetFaceValue(int current, Manager.Mode mode, int subValue)
     {
-        int value = 0;
+        FaceValue fV = new FaceValue();
+        int[] intArray = null;
+        string[] stringArray = null;
         switch (mode)
         {
             case Manager.Mode.linear:
-                value = current * (subValue + 1);
+                fV.value = current * (subValue + 1);
+                fV.text = fV.value.ToString();
                 break;
             case Manager.Mode.power:
-                value = (int)Mathf.Pow(current, (subValue + 2));
+                fV.value = (int)Mathf.Pow(current, (subValue + 2));
+                fV.text = fV.value.ToString();
                 break;
             case Manager.Mode.sequence:
                 switch (subValue)
                 {
                     case (int)Manager.Sequence.primes:
-                        value = Manager.Instance.data.numberArrays.primes[current];
+                        intArray = Manager.Instance.data.numberArrays.primes;
+                        fV.value = intArray[(int)Mathf.Repeat(current, intArray.Length)];
+                        fV.text = fV.value.ToString();
                         break;
                     case (int)Manager.Sequence.fibbonaci:
-                        value = Manager.Instance.data.numberArrays.fibbonaci[current];
+                        intArray = Manager.Instance.data.numberArrays.fibbonaci;
+                        fV.value = intArray[(int)Mathf.Repeat(current, intArray.Length)];
+                        fV.text = fV.value.ToString();
+                        break;
+                }
+                break;
+            case Manager.Mode.english:
+                switch (subValue)
+                {
+                    case (int)Manager.English.common:
+                        stringArray = Manager.Instance.data.textArrays.englishWords;
+                        fV.value = current;
+                        fV.text = stringArray[(int)Mathf.Repeat(current, stringArray.Length)];
+                        break;
+                    case (int)Manager.English.aus_anthem:
+                        stringArray = Manager.Instance.data.textArrays.ausAnthem;
+                        fV.value = current;
+                        fV.text = stringArray[(int)Mathf.Repeat(current, stringArray.Length)];
                         break;
                 }
                 break;
         }
-        return value;
+        return fV;
     }
 
     public Color ResolveNumber(int value, bool touched = false)
@@ -127,7 +166,7 @@ public class Game : ScriptableObject {
         Play();
         Manager.current++;
 
-        if (value == oldHS)
+        if (GetFaceValue(value, Manager.mode, Manager.subValue).value == oldHS)
             return Color.green;
         else
             return Color.yellow;
@@ -135,6 +174,8 @@ public class Game : ScriptableObject {
 
     public void Play()
     {
+        if (Manager.Instance.debugMode)
+            Debug.Log("State: Play");
         state = State.PLAY;
         NewTimeScale(1.0f);
     }
@@ -148,8 +189,14 @@ public class Game : ScriptableObject {
 
     void EndGame()
     {
-        timer = 0;
-        state = State.END;
+        if (continuesLeft > 0)
+        {
+            continuesLeft--;
+            timer = 0;
+            state = State.END;
+        }
+        else
+            ShowScore();
     }
 
     void ShowScore()
@@ -173,4 +220,10 @@ public class Game : ScriptableObject {
         scaleTimer = 0f;
         timeScales = new float[2] { Time.timeScale, newScale };
     }
+}
+
+public class FaceValue
+{
+    public int value = 0;
+    public string text = null;
 }
