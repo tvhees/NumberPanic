@@ -13,7 +13,11 @@ public class ContinueButton : MonoBehaviour {
     
     public void ContinueGame() {
 #if UNITY_ANDROID || UNITY_IOS
-        Manager.Instance.adverts.ShowAd();
+        if(Preferences.advertisements)
+            Manager.Instance.adverts.ShowAd();
+        else
+            StartCoroutine(AnimationManager.Instance.Continue(true));
+
 #endif
 
 #if !UNITY_ANDROID && !UNITY_IOS

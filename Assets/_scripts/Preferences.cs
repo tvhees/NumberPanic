@@ -7,22 +7,35 @@ public class Preferences : Singleton<Preferences> {
     public static FaceValue highScore = new FaceValue();
     public static int mainMode;
     public static int subMode;
+    public static bool advertisements;
+
+    void Awake()
+    {
+        ZPlayerPrefs.Initialize("NK6KzW8Tz9rpANca", SystemInfo.deviceUniqueIdentifier);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+            Reset();
+    }
 
 	public void Load(){
-        mainMode = PlayerPrefs.GetInt("mainMode", 0);
-        subMode = PlayerPrefs.GetInt("subMode", 0);
+        mainMode = ZPlayerPrefs.GetInt("mainMode", 0);
+        subMode = ZPlayerPrefs.GetInt("subMode", 0);
+        advertisements = ExtensionMethods.GetBool("advertisements", true);
         GetHighScore();
     }
 
     public void Reset() {
-        PlayerPrefs.DeleteAll();
+        ZPlayerPrefs.DeleteAll();
         Load();
     }
 
     public FaceValue GetHighScore() {
         string scoreName = ((Manager.Mode)mainMode).ToString() + "_" + subMode.ToString();
-        highScore.value = PlayerPrefs.GetInt(scoreName + "_value", 0);
-        highScore.text = PlayerPrefs.GetString(scoreName + "_text", null);
+        highScore.value = ZPlayerPrefs.GetInt(scoreName + "_value", 0);
+        highScore.text = ZPlayerPrefs.GetString(scoreName + "_text", null);
         Debug.Log(scoreName + " " + highScore.value + " GET");
         return highScore;
     }
@@ -32,9 +45,9 @@ public class Preferences : Singleton<Preferences> {
         string scoreName = ((Manager.Mode)mainMode).ToString() + "_" + subMode.ToString();
         Debug.Log(scoreName + " " + highScore.value + " SAVE");
 
-        PlayerPrefs.SetInt(scoreName + "_value", highScore.value);
-        PlayerPrefs.SetString(scoreName + "_text", highScore.text);
-        PlayerPrefs.Save();
+        ZPlayerPrefs.SetInt(scoreName + "_value", highScore.value);
+        ZPlayerPrefs.SetString(scoreName + "_text", highScore.text);
+        ZPlayerPrefs.Save();
     }
 
     public void UpdateHighScore(FaceValue fV) {
@@ -46,10 +59,17 @@ public class Preferences : Singleton<Preferences> {
     public void Save(){
         Debug.Log("Saving regular preferences");
 
-        PlayerPrefs.SetInt("mainMode", mainMode);
-        PlayerPrefs.SetInt("subMode", subMode);
-        PlayerPrefs.Save ();
+        ZPlayerPrefs.SetInt("mainMode", mainMode);
+        ZPlayerPrefs.SetInt("subMode", subMode);
+        ExtensionMethods.SetBool("advertisements", advertisements);
+        ZPlayerPrefs.Save ();
 	}
+
+    public void BuyNoAds()
+    {
+        advertisements = false;
+        Save();
+    }
 
 	void OnDisable(){
 		Save ();

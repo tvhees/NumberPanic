@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AnimationManager : Singleton<AnimationManager> {
 
     [HideInInspector] public TitleAnimator titleAnimator;
     [HideInInspector] public MenuPanel menuPanel;
-    [HideInInspector] public ModePanel modePanel;
+    [HideInInspector] public List<SubPanel> subPanels = new List<SubPanel>();
     [HideInInspector] public LoadingCover loadingCover;
     [HideInInspector] public ContinuePanel continuePanel;
     [HideInInspector] public ScorePanel scorePanel;
@@ -25,7 +26,7 @@ public class AnimationManager : Singleton<AnimationManager> {
             StartCoroutine(scorePanel.Drop());
         }
 
-        modePanel.anim.SetBool("open", false);
+        CloseSubPanels();
         yield return StartCoroutine(menuPanel.DropMenu());
 
         if (firstGame)
@@ -38,6 +39,14 @@ public class AnimationManager : Singleton<AnimationManager> {
         loadingCover.anim.SetBool("open", false);
 
         Manager.Instance.Restart();
+    }
+
+    public void CloseSubPanels()
+    {
+        for (int i = 0; i < subPanels.Count; i++)
+        {
+            subPanels[i].anim.SetBool("open", false);
+        }
     }
 
     public IEnumerator Continue(bool use)

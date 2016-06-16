@@ -1,14 +1,25 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class UIManager : Singleton<UIManager> {
 
+    // Score displays
+    [HideInInspector] public Score score;
     [HideInInspector] public HighScore highScore;
+
+    // Game mode dropdowns
     [HideInInspector] public MainMode modes;
     [HideInInspector] public SubMode subModes;
-    [HideInInspector] public Score score;
-    [HideInInspector] public GameObject continuePanel, scorePanel, menuPanel, modePanel;
-    [HideInInspector] public TitleAnimator titleAnimator;
+
+    // UI panels
+    [HideInInspector] public GameObject continuePanel;
+    [HideInInspector] public GameObject scorePanel;
+    [HideInInspector] public GameObject menuPanel;
+
+    // UI Buttons
+    [HideInInspector]
+    public Button noAdsButton;
 
     private float current;
     private Game.State lastState;
