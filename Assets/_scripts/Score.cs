@@ -3,24 +3,26 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class Score : MonoBehaviour {
-    public int value;
-    public Text display;
-    public Spawner spawner;
+    [HideInInspector] public FaceValue fV;
+
+    private Text display;
+    private int current;
 
     void Awake() {
-        Manager.Instance.game.score = this;
+        display = GetComponent<Text>();
+        UIManager.Instance.score = this;
+        UpdateDisplay();
+    }
+
+    public void UpdateDisplay() {
+        fV = Manager.Instance.game.GetFaceValue(current, Manager.mode, Manager.subValue);
+        display.text = fV.text;
     }
 
     public void Increment()
     {
-        value++;
-        Preferences.Instance.UpdateHighScore(value);
-        display.text = value.ToString();
-
-        if (value == 1)
-        {
-            Manager.Instance.titleAnimator.SetTrigger("fade");
-            spawner.leftBound = 0.05f;
-        }
+        current++;
+        UpdateDisplay();
+        GetComponent<Animator>().SetTrigger("expand");
     }
 }

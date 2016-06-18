@@ -10,16 +10,25 @@ public class Number : MonoBehaviour, IPointerDownHandler {
     public GameObject explosion;
     public ParticleSystem trail;
 
+    private Game game;
     private ParticleSystem.EmissionModule em;
     private ParticleSystem.ShapeModule sh;
     private Spawner spawner;
 
-    public void Init(int valueIn, float speedIn, Spawner scriptIn) {
+    public void Init(int currentIn, Vector3 startPos, float speedIn, bool realIn, Spawner scriptIn) {
+        game = Manager.Instance.game;
+
+        transform.position = startPos;
+
         float randomFactor = Random.Range(0.8f, 1.2f);
         spawner = scriptIn;
+        value = currentIn;
 
-        value = valueIn;
-        text.text = valueIn.ToString();
+        // Call the game function to create a FaceValue class, get the appropriate return
+        FaceValue fV = game.GetFaceValue(value, Manager.mode, Manager.subValue);
+        if(fV.text != null)
+            text.text = fV.text;
+
         speed = speedIn/randomFactor;
         transform.localScale = randomFactor * Vector3.one;
 
@@ -32,15 +41,28 @@ public class Number : MonoBehaviour, IPointerDownHandler {
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Color colour = Manager.Instance.game.ResolveNumber(value, true);
-        DestroyThis(colour);
+
+        switch (game.state)
+        {
+            case Game.State.ATTRACT:
+            case Game.State.PLAY:
+            case Game.State.CRITICAL:
+                Color colour = game.ResolveNumber(value, true);
+                DestroyThis(colour);
+                break;
+        }
     }
 
     void DestroyThis(Color colour)
     {
-        GameObject expl = Instantiate(explosion, transform.position, Quaternion.identity) as GameObject;
-        expl.GetComponent<Explosion>().Init(speed, colour);
-        Destroy(gameObject);
+        GameObject expl = Manager.explosionPool.GetObject();
+
+        if (expl != null)
+            expl.GetComponent<Explosion>().Init(transform.position, speed, colour);
+        else
+            Debug.Log("No explosions left, returning null");
+
+        Manager.numberPool.ReturnObject(gameObject);
     }
 
     void Update() {
@@ -48,7 +70,7 @@ public class Number : MonoBehaviour, IPointerDownHandler {
 
         if (transform.position.y < spawner.gameCam.ViewportToWorldPoint(Vector3.zero).y)
         {
-            Color colour = Manager.Instance.game.ResolveNumber(value);
+            Color colour = game.ResolveNumber(value);
             DestroyThis(colour);
         }
     }
