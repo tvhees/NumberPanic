@@ -91,9 +91,4 @@ public class UIManager : Singleton<UIManager> {
             Preferences.Instance.UpdateHighScore(score.fV);
         }
     }
-
-    public void Reset()
-    {
-        Preferences.Instance.Reset();
-    }
 }

@@ -11,25 +11,37 @@ public class Preferences : Singleton<Preferences> {
 
     void Awake()
     {
-        ZPlayerPrefs.Initialize("NK6KzW8Tz9rpANca", SystemInfo.deviceUniqueIdentifier);
+        string salt = PlayerPrefs.GetString("salt");
+        if (string.IsNullOrEmpty(salt))
+        {
+            salt = ExtensionMethods.Md5Sum(Random.Range(0, 100000000).ToString());
+            PlayerPrefs.SetString("salt", salt);
+        }
+
+        Debug.Log(salt);
+
+        ZPlayerPrefs.Initialize("NK6KzW8Tz9rpANca", salt);
     }
 
+#if UNITY_EDITOR
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
             Reset();
     }
 
-	public void Load(){
+    void Reset()
+    {
+        ZPlayerPrefs.DeleteAll();
+        Load();
+    }
+#endif
+
+    public void Load(){
         mainMode = ZPlayerPrefs.GetInt("mainMode", 0);
         subMode = ZPlayerPrefs.GetInt("subMode", 0);
         advertisements = ExtensionMethods.GetBool("advertisements", true);
         GetHighScore();
-    }
-
-    public void Reset() {
-        ZPlayerPrefs.DeleteAll();
-        Load();
     }
 
     public FaceValue GetHighScore() {
