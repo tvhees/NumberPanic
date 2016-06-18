@@ -1,4 +1,4 @@
-5.3.2f1:2.1.0.0
+5.3.4f1:2.2.0.0
 Android
 C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll
 C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll
@@ -7,5 +7,4 @@ C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.
 C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll
 C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll
 C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll
-C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll
-C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport\UnityEditor.iOS.Extensions.Common.dll
+C:/Program Files/Unity/Editor/Data\Managed/Mono.Cecil.dll
