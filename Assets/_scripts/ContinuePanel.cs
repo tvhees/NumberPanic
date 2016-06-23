@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class ContinuePanel : MonoBehaviour {
 
+    public Text continueText;
+    public Image continueImage;
+    public Sprite playImage;
     public Animator anim;
     private bool animating;
 
@@ -10,6 +14,20 @@ public class ContinuePanel : MonoBehaviour {
     {
         AnimationManager.Instance.continuePanel = this;
         UIManager.Instance.continuePanel = gameObject;
+    }
+
+    void OnEnable()
+    {
+        if (!Preferences.advertisements)
+        {
+            continueText.text = "continue?";
+            continueImage.overrideSprite = playImage;
+        }
+        else
+        {
+            continueText.text = "continue (and watch advertisement)?";
+            continueImage.overrideSprite = null;
+        }
     }
 
     public IEnumerator Leave(bool use)
