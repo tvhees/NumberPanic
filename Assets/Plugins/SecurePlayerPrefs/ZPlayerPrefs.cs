@@ -243,7 +243,7 @@ public static class ZPlayerPrefs
         }
         catch (Exception e)
         {
-    
+            Debug.LogWarning("Decrypt Exception: " + e);
             return strEncript;
         }
 

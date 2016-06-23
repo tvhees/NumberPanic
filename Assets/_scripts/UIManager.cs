@@ -74,7 +74,8 @@ public class UIManager : Singleton<UIManager> {
 
     IEnumerator LoadScore()
     {
-        if(continuePanel.activeSelf)
+        Preferences.Instance.Save();
+        if (continuePanel.activeSelf)
             yield return StartCoroutine(AnimationManager.Instance.Continue(false));
         scorePanel.SetActive(true);
         menuPanel.SetActive(true);

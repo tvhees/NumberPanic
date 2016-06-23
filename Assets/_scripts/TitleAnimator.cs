@@ -6,9 +6,11 @@ public class TitleAnimator : MonoBehaviour {
     [HideInInspector] public bool animating;
     public Animator[] animators;
     private float delay = 0.1f;
+    private int letters;
 
     void Awake()
     {
+        animating = false;
         animators = GetComponentsInChildren<Animator>();
         AnimationManager.Instance.titleAnimator = this;
     }
@@ -26,13 +28,26 @@ public class TitleAnimator : MonoBehaviour {
         Manager.Instance.game.state = Game.State.TITLE;
     }
 
-    public void LeaveTitle()
+    public IEnumerator LeaveTitle()
     {
+        animating = true;
+        letters = animators.Length;
         Manager.Instance.game.state = Game.State.TITLE;
 
         for (int i = 0; i < animators.Length; i++)
         {
             animators[i].SetTrigger("drop");
         }
+
+        while (animating)
+            yield return null;
+    }
+
+    public void Callback()
+    {
+        letters--;
+        Debug.Log(letters);
+        if(letters <= 0)
+            animating = false;
     }
 }
