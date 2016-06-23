@@ -93,8 +93,4 @@ public class Preferences : Singleton<Preferences> {
         advertisements = false;
         Save();
     }
-
-	void OnDisable(){
-		Save ();
-	}
 }
