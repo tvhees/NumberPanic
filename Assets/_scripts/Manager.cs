@@ -108,7 +108,6 @@ public class Manager : Singleton<Manager> {
     }
 
     void DestroyGame() {
-        Preferences.Instance.Save();
         Time.timeScale = 1f;
         numberPool.Reset();
         explosionPool.Reset();

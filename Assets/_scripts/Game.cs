@@ -25,7 +25,7 @@ public class Game : ScriptableObject {
 
     void OnEnable()
     {
-        //if (Manager.Instance.debugMode)
+        if (Manager.Instance.debugMode)
             Debug.Log("Instance of Game created");
         NewTimeScale(1.0f);
         critMax = 3.0f;

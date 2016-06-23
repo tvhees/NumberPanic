@@ -31,9 +31,8 @@ public class AnimationManager : Singleton<AnimationManager> {
 
         if (firstGame)
         {
-            titleAnimator.LeaveTitle();
+            yield return StartCoroutine(titleAnimator.LeaveTitle());
             firstGame = false;
-            yield return new WaitForSeconds(0.5f);
         }
 
         loadingCover.anim.SetBool("open", false);
