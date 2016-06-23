@@ -12,25 +12,26 @@ public class ContinuePanel : MonoBehaviour {
         UIManager.Instance.continuePanel = gameObject;
     }
 
-    public void Enter()
-    {
-    }
-
     public IEnumerator Leave(bool use)
     {
         animating = true;
 
+        // Different animations are triggered if the player uses the continue
+        // than if they choose not to
         if (use)
             anim.SetTrigger("use");
         else
             anim.SetTrigger("drop");
 
+        // Wait for the animation callback to occur
+        // i.e. the animation to finish
         while (animating)
             yield return null;
 
         gameObject.SetActive(false);
     }
 
+    // Called by animations when they complete
     public void Callback()
     {
         animating = false;
