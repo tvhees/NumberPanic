@@ -46,7 +46,8 @@ public class TitleAnimator : MonoBehaviour {
     public void Callback()
     {
         letters--;
-        Debug.Log(letters);
+		if(Manager.Instance.debugMode)
+	        Debug.Log(letters);
         if(letters <= 0)
             animating = false;
     }
