@@ -45,9 +45,9 @@ public class Advertising : MonoBehaviour
         switch (result)
         {
             case ShowResult.Finished:
-                StartCoroutine(AnimationManager.Instance.Continue(true));
-                break;
             case ShowResult.Skipped:
+				StartCoroutine(AnimationManager.Instance.Continue(true));
+				break;
             case ShowResult.Failed:
                 StartCoroutine(AnimationManager.Instance.Continue(false));
                 break;

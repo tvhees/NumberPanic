@@ -62,8 +62,8 @@ public class Preferences : Singleton<Preferences> {
         if(Manager.Instance.debugMode)
             Debug.Log(scoreName + " " + highScore.value + " SAVE");
 
-        ZPlayerPrefs.SetInt(scoreName + "_value", highScore.value);
-        ZPlayerPrefs.SetString(scoreName + "_text", highScore.text);
+        PlayerPrefs.SetInt(scoreName + "_value", highScore.value);
+        PlayerPrefs.SetString(scoreName + "_text", highScore.text);
     }
 
     public void UpdateHighScore(FaceValue fV) {
@@ -78,11 +78,11 @@ public class Preferences : Singleton<Preferences> {
         PlayerPrefs.SetInt("mainMode", mainMode);
         PlayerPrefs.SetInt("subMode", subMode);
 
-        // Save Noads purchase flag with encryption
-        ExtensionMethods.SetBool("advertisements", advertisements);
+		// Save high score without encryption
+		SaveHighScore();
 
-        // Save high score with encryption
-        SaveHighScore();
+        // Save Noads purchase flag with encryption
+		ExtensionMethods.SetBool("advertisements", advertisements);
 
         // Save all preferences
         ZPlayerPrefs.Save ();

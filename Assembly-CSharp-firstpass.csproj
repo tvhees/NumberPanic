@@ -64,23 +64,23 @@
  <Reference Include="UnityEngine.Advertisements">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
  </Reference>
- <Reference Include="Security">
- <HintPath>/Users/torbjorndevelopment/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Security.dll</HintPath>
- </Reference>
- <Reference Include="Apple">
- <HintPath>/Users/torbjorndevelopment/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Apple/Apple.dll</HintPath>
- </Reference>
  <Reference Include="Common">
  <HintPath>/Users/torbjorndevelopment/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Common.dll</HintPath>
+ </Reference>
+ <Reference Include="Editor">
+ <HintPath>/Users/torbjorndevelopment/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="Security">
+ <HintPath>/Users/torbjorndevelopment/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Security.dll</HintPath>
  </Reference>
  <Reference Include="Stores">
  <HintPath>/Users/torbjorndevelopment/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Stores.dll</HintPath>
  </Reference>
+ <Reference Include="Apple">
+ <HintPath>/Users/torbjorndevelopment/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Apple/Apple.dll</HintPath>
+ </Reference>
  <Reference Include="winrt">
  <HintPath>/Users/torbjorndevelopment/NumberPanic/Assets/Plugins/UnityPurchasing/winrt/winrt.dll</HintPath>
- </Reference>
- <Reference Include="Editor">
- <HintPath>/Users/torbjorndevelopment/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Editor.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
