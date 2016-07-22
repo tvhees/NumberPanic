@@ -18,7 +18,6 @@
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.3.5f1</UnityVersion>
     <RootNamespace></RootNamespace>
-    <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -70,30 +69,27 @@
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
-    <Reference Include="Common">
-      <HintPath>Assets\Plugins\UnityPurchasing\Bin\Common.dll</HintPath>
+    <Reference Include="Stores">
+      <HintPath>Assets\thirdparty\UnityPurchasing\Bin\Stores.dll</HintPath>
     </Reference>
     <Reference Include="Editor">
-      <HintPath>Assets\Plugins\UnityPurchasing\Bin\Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Security">
-      <HintPath>Assets\Plugins\UnityPurchasing\Bin\Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Stores">
-      <HintPath>Assets\Plugins\UnityPurchasing\Bin\Stores.dll</HintPath>
-    </Reference>
-    <Reference Include="Apple">
-      <HintPath>Assets\Plugins\UnityPurchasing\Bin\Apple\Apple.dll</HintPath>
+      <HintPath>Assets\thirdparty\UnityPurchasing\Bin\Editor.dll</HintPath>
     </Reference>
     <Reference Include="winrt">
-      <HintPath>Assets\Plugins\UnityPurchasing\winrt\winrt.dll</HintPath>
+      <HintPath>Assets\thirdparty\UnityPurchasing\winrt\winrt.dll</HintPath>
+    </Reference>
+    <Reference Include="Apple">
+      <HintPath>Assets\thirdparty\UnityPurchasing\Bin\Apple\Apple.dll</HintPath>
+    </Reference>
+    <Reference Include="Common">
+      <HintPath>Assets\thirdparty\UnityPurchasing\Bin\Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Security">
+      <HintPath>Assets\thirdparty\UnityPurchasing\Bin\Security.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Plugins\SecurePlayerPrefs\ZPlayerPrefs.cs" />
-    <Compile Include="Assets\Plugins\UnityPurchasing\script\ComboBox.cs" />
-    <Compile Include="Assets\Plugins\UnityPurchasing\script\IAPDemo.cs" />
-    <Compile Include="Assets\Plugins\UnityPurchasing\script\UnibillDemo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
