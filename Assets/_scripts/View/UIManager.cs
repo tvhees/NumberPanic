@@ -1,0 +1,114 @@
+﻿using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+
+public class UIManager : Singleton<UIManager> {
+
+    public PanelButton settingsButton;
+
+    // Score displays
+    [HideInInspector] public Score score;
+    [HideInInspector] public HighScore highScore;
+
+    // Timer display
+    [HideInInspector] public TimerDisplay timerDisplay;
+
+    // Game mode dropdowns
+    [HideInInspector] public MainMode modes;
+    [HideInInspector] public SubMode subModes;
+
+    // UI panels
+    [HideInInspector] public GameObject continuePanel;
+    [HideInInspector] public GameObject scorePanel;
+    [HideInInspector] public GameObject menuPanel;
+
+    // UI Buttons
+    [HideInInspector]
+    public Button noAdsButton;
+
+    private float current;
+    private Game.State lastState;
+
+    void Start()
+    {
+        Manager.Instance.ui = this;
+        current = Manager.current;
+    }
+
+    void Update() {
+        if (Manager.Instance.gameTimer != null)
+        {
+            float timeRemaining = Manager.Instance.gameTimer.UpdateTimer(-Time.unscaledDeltaTime);
+            UpdateTimer(timeRemaining);
+        }
+
+        if (Manager.current > current)
+        {
+            UpdateScore();
+        }
+
+        if (current > Manager.current)
+        {
+            current = Manager.current;
+        }
+
+        // Process changes in state here
+        if (Manager.Instance.game.state != lastState)
+        {
+            switch (Manager.Instance.game.state)
+            {
+                case Game.State.TITLE:
+                    menuPanel.SetActive(true);
+                    break;
+                case Game.State.ATTRACT:
+                    if (score != null)
+                        score.gameObject.SetActive(true);
+                    scorePanel.SetActive(false);
+                    menuPanel.SetActive(false);
+                    continuePanel.SetActive(false);
+                    break;
+                case Game.State.END:
+                    continuePanel.SetActive(true);
+                    break;
+                case Game.State.SCORE:
+                    StartCoroutine(LoadScore());
+                    break;
+                default:
+                    if (score != null)
+                        score.gameObject.SetActive(true);
+                    scorePanel.SetActive(false);
+                    menuPanel.SetActive(false);
+                    break;
+            }
+            lastState = Manager.Instance.game.state;
+        }
+    }
+
+    IEnumerator LoadScore()
+    {
+        Preferences.Instance.Save();
+        if (continuePanel.activeSelf)
+            yield return StartCoroutine(AnimationManager.Instance.Continue(false));
+        scorePanel.SetActive(true);
+        menuPanel.SetActive(true);
+        settingsButton.TogglePanel();
+    }
+
+    void UpdateScore()
+    {
+        current = Manager.current;
+
+        score.Increment();
+
+        if (score.fV.value >= Preferences.highScore.value)
+        {
+            Preferences.Instance.UpdateHighScore(score.fV);
+        }
+    }
+
+    public void UpdateTimer(float remainingTime)
+    {
+        string remainingTimeString = string.Format("{0:0.0}", remainingTime);
+        timerDisplay.SetRemainingTime(remainingTime, remainingTimeString);
+    }
+}
