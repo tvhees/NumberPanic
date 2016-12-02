@@ -1,29 +1,33 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
+using _scripts.Controller;
 
-public class LoadingCover : MonoBehaviour {
+namespace _scripts.View
+{
+    public class LoadingCover : MonoBehaviour {
 
-    public Animator anim;
-    private bool animating;
+        public Animator anim;
+        private bool animating;
 
-    void Awake()
-    {
-        AnimationManager.Instance.loadingCover = this;
-    }
+        void Awake()
+        {
+            AnimationManager.Instance.loadingCover = this;
+        }
 
-    public IEnumerator Enter()
-    {
-        animating = true;
+        public IEnumerator Enter()
+        {
+            animating = true;
 
-        anim.SetBool("open", true);
+            anim.SetBool("open", true);
 
-        while (animating)
-            yield return null;
-    }
+            while (animating)
+                yield return null;
+        }
 
-    // Callback function for background animation.
-    public void Callback()
-    {
-        animating = false;
+        // Callback function for background animation.
+        public void Callback()
+        {
+            animating = false;
+        }
     }
 }

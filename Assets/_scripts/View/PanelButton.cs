@@ -1,18 +1,20 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
+using _scripts.Controller;
 
-public class PanelButton : MonoBehaviour {
+namespace _scripts.View
+{
+    public class PanelButton : MonoBehaviour {
     
-    public Animator panelAnim;
+        public Animator panelAnim;
 
-    public void TogglePanel()
-    {
-        bool open = panelAnim.GetBool("open");
-        AnimationManager.Instance.CloseSubPanels();
+        public void TogglePanel()
+        {
+            bool open = panelAnim.GetBool("open");
+            AnimationManager.Instance.CloseSubPanels();
 
-        if(!open)
-            panelAnim.SetBool("open", true);
-    }	
+            if(!open)
+                panelAnim.SetBool("open", true);
+        }	
+    }
 }
 

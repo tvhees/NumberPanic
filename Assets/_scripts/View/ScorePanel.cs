@@ -1,25 +1,29 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
+using _scripts.Controller;
 
-public class ScorePanel : MonoBehaviour {
-    public Animator anim;
-    private bool animating;
+namespace _scripts.View
+{
+    public class ScorePanel : MonoBehaviour {
+        public Animator anim;
+        private bool animating;
 
-    void Awake() {
-        AnimationManager.Instance.scorePanel = this;
-    }
+        void Awake() {
+            AnimationManager.Instance.scorePanel = this;
+        }
 
-    public IEnumerator Drop()
-    {
-        animating = true;
-        anim.SetTrigger("drop");
+        public IEnumerator Drop()
+        {
+            animating = true;
+            anim.SetTrigger("drop");
 
-        while (animating)
-            yield return null;
-    }
+            while (animating)
+                yield return null;
+        }
 
-    public void Callback()
-    {
-        animating = false;
+        public void Callback()
+        {
+            animating = false;
+        }
     }
 }

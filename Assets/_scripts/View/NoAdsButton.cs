@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using _scripts.Controller;
 
-public class NoAdsButton : MonoBehaviour {
+namespace _scripts.View
+{
+    public class NoAdsButton : MonoBehaviour {
 
-    public Button button;
+        public Button button;
 
-    void Update()
-    {
-            button.interactable = Preferences.advertisements;
+        void Update()
+        {
+            button.interactable = Preferences.ShowAdvertisements;
+        }
+
     }
-
 }

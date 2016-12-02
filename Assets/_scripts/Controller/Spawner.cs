@@ -1,100 +1,103 @@
-﻿using UnityEngine;
-using UnityEngine.EventSystems;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
+using _scripts.Model;
 
-public class Spawner : MonoBehaviour
+namespace _scripts.Controller
 {
-
-    public GameObject number;
-    public Camera gameCam;
-    [HideInInspector] public bool spawn;
-    [HideInInspector] public float leftBound, rightBound;
-
-    private float padding, waitFactor, speedFactor;
-
-    void Awake() {
-        Manager.Instance.spawner = this;
-    }
-
-    public void Init()
+    public class Spawner : MonoBehaviour
     {
-        leftBound = 0.2f;
-        rightBound = 0.95f;
-        padding = Manager.padding;
-        waitFactor = Manager.waitFactor;
-        speedFactor = Manager.speedFactor;
-        spawn = true;
-        StartCoroutine(RegularSpawn());
-    }
 
-    IEnumerator RegularSpawn() {
-        int counter = 0;
+        public GameObject number;
+        public Camera gameCam;
+        [HideInInspector] public bool spawn;
+        [HideInInspector] public float leftBound, rightBound;
 
-        while (spawn)
+        private float padding, waitFactor, speedFactor;
+
+        void Awake() {
+            Manager.Instance.spawner = this;
+        }
+
+        public void Init()
         {
-            switch (Manager.Instance.game.state)
+            leftBound = 0.2f;
+            rightBound = 0.95f;
+            padding = Manager.Padding;
+            waitFactor = Manager.WaitFactor;
+            speedFactor = Manager.SpeedFactor;
+            spawn = true;
+            StartCoroutine(RegularSpawn());
+        }
+
+        IEnumerator RegularSpawn() {
+            int counter = 0;
+
+            while (spawn)
             {
-                case Game.State.ATTRACT:
-                case Game.State.PLAY:
-                case Game.State.CRITICAL:
-                case Game.State.END:
-                case Game.State.SCORE:
-                    float waitTime = Mathf.Pow(padding / (Manager.current + padding), 2f) * waitFactor;
+                switch (Manager.Instance.game.state)
+                {
+                    case Game.State.ATTRACT:
+                    case Game.State.PLAY:
+                    case Game.State.CRITICAL:
+                    case Game.State.END:
+                    case Game.State.SCORE:
+                        float waitTime = Mathf.Pow(padding / (Manager.Current + padding), 2f) * waitFactor;
 
-                    if (counter == 0)
-                    {
-                        // Get a new 'true' number from the pool. Reset the counter only if this works.
-                        if (SpawnNumber())
-                            counter = Mathf.Min(Random.Range(0, Manager.current - 1), 8);
-                    }
-                    else
-                    {
-                        // Get a new 'false' number from the pool. Decrement the counter only if this works.
-                        if (SpawnNumber(false))
-                            counter--;
-                    }
+                        if (counter == 0)
+                        {
+                            // Get a new 'true' number from the pool. Reset the counter only if this works.
+                            if (SpawnNumber())
+                                counter = Mathf.Min(Random.Range(0, Manager.Current - 1), 8);
+                        }
+                        else
+                        {
+                            // Get a new 'false' number from the pool. Decrement the counter only if this works.
+                            if (SpawnNumber(false))
+                                counter--;
+                        }
 
-                    yield return new WaitForSeconds(waitTime);
+                        yield return new WaitForSeconds(waitTime);
 
-                    break;
+                        break;
+                }
+
+                yield return null;
+
             }
 
-            yield return null;
-
         }
 
-    }
+        private bool SpawnNumber(bool real = true) {
+            // Spawn from the top of the screen - recalculate every time in case orientation changes
+            Vector3 position = gameCam.ViewportToWorldPoint(new Vector3(Random.Range(leftBound, rightBound), 1f, 20f));
 
-    private bool SpawnNumber(bool real = true) {
-        // Spawn from the top of the screen - recalculate every time in case orientation changes
-        Vector3 position = gameCam.ViewportToWorldPoint(new Vector3(Random.Range(leftBound, rightBound), 1f, 20f));
+            // Speed to travel downwards, damped increase as numbers increase
+            float speed = (Manager.Current + Manager.Padding) * speedFactor / Manager.Padding;
 
-        // Speed to travel downwards, damped increase as numbers increase
-        float speed = (Manager.current + Manager.padding) * speedFactor / Manager.padding;
+            // Default value is the next one player needs to collect
+            int value = Manager.Current;
 
-        // Default value is the next one player needs to collect
-        int value = Manager.current;
-
-        // For 'fake' numbers we want to vary the value a little bit
-        if (!real)
-        {
-            for (int i = 0; i < 20; i++)
+            // For 'fake' numbers we want to vary the value a little bit
+            if (!real)
             {
-                value = (int)Random.Range(0.3f * Manager.current, 1.7f * Manager.current);
+                for (int i = 0; i < 20; i++)
+                {
+                    value = (int)Random.Range(0.3f * Manager.Current, 1.7f * Manager.Current);
 
-                if (Mathf.Abs(value - Manager.current) > 1 && value > 0)
-                    break;
+                    if (Mathf.Abs(value - Manager.Current) > 1 && value > 0)
+                        break;
+                }
             }
-        }
 
-        GameObject obj = Manager.numberPool.GetObject();
-        if (obj != null)
-        {
-            obj.GetComponent<Number>().Init(value, position, speed, this);
-            return true;
-        }
+            var obj = Manager.numberPool.GetObject();
+            if (obj)
+            {
+                obj.GetComponent<Number>().Init(value, position, speed, this);
+                return true;
+            }
 
-        Debug.Log("No numbers left to use, returning false");
-        return false;
+            Debug.Log("No numbers left to use, returning false");
+            return false;
+        }
     }
 }

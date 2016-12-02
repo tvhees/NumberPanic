@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
+using _scripts.Controller;
 using UnityEngine.Advertisements;
-using System.Collections;
 
 public class Advertising : MonoBehaviour
 {
@@ -26,7 +26,7 @@ public class Advertising : MonoBehaviour
 
     public void ShowAd()
     {
-        #if UNITY_IOS || UNITY_ANDROID
+#if UNITY_IOS || UNITY_ANDROID
         if (Advertisement.IsReady())
         {
             if (string.IsNullOrEmpty(zoneID)) zoneID = null;
@@ -46,8 +46,8 @@ public class Advertising : MonoBehaviour
         {
             case ShowResult.Finished:
             case ShowResult.Skipped:
-				StartCoroutine(AnimationManager.Instance.Continue(true));
-				break;
+                StartCoroutine(AnimationManager.Instance.Continue(true));
+                break;
             case ShowResult.Failed:
                 StartCoroutine(AnimationManager.Instance.Continue(false));
                 break;

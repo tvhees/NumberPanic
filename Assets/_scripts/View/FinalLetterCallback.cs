@@ -1,17 +1,19 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class FinalLetterCallback : MonoBehaviour {
+namespace _scripts.View
+{
+    public class FinalLetterCallback : MonoBehaviour {
 
-    TitleAnimator titleAnim;
+        TitleAnimator titleAnim;
 
-    void Awake()
-    {
-        titleAnim = GetComponentInParent<TitleAnimator>();
-    }
+        void Awake()
+        {
+            titleAnim = GetComponentInParent<TitleAnimator>();
+        }
 
-    public void Callback()
-    {
-        titleAnim.Callback();
+        public void Callback()
+        {
+            titleAnim.Callback();
+        }
     }
 }

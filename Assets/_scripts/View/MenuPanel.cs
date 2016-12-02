@@ -1,28 +1,32 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
+using _scripts.Controller;
 
-public class MenuPanel : MonoBehaviour {
+namespace _scripts.View
+{
+    public class MenuPanel : MonoBehaviour {
 
-    public Animator anim;
-    [HideInInspector] public bool animating;
+        public Animator anim;
+        [HideInInspector] public bool animating;
 
-    void Awake()
-    {
-        UIManager.Instance.menuPanel = gameObject;
-        AnimationManager.Instance.menuPanel = this;
-    }
+        void Awake()
+        {
+            UiManager.Instance.menuPanel = gameObject;
+            AnimationManager.Instance.menuPanel = this;
+        }
 
-    public IEnumerator DropMenu()
-    {
-        animating = true;
-        anim.SetTrigger("drop");
+        public IEnumerator DropMenu()
+        {
+            animating = true;
+            anim.SetTrigger("drop");
 
-        while (animating)
-            yield return null;
-    }
+            while (animating)
+                yield return null;
+        }
 
-    public void MenuCallback()
-    {
-        animating = false;
+        public void MenuCallback()
+        {
+            animating = false;
+        }
     }
 }

@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
-using System.Collections;
+using _scripts.Controller;
 
-public class ExplosionPool : ObjectPool {
+namespace _scripts.Model
+{
+    public class ExplosionPool : ObjectPool {
 
-    protected override void Init()
-    {
-        Manager.explosionPool = this;
-        poolSize = 30;
-        homePosition = Vector3.zero;
+        protected override void Init()
+        {
+            Manager.explosionPool = this;
+            poolSize = 30;
+            homePosition = Vector3.zero;
+        }
+
     }
-
 }

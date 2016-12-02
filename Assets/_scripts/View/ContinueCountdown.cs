@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using _scripts.Controller;
 
-public class ContinueCountdown : MonoBehaviour {
+namespace _scripts.View
+{
+    public class ContinueCountdown : MonoBehaviour {
 
-    public Text label;
+        public Text label;
 
-    void Update() {
-        label.text = Manager.Instance.game.TimeRemaining.ToString();
+        void Update() {
+            label.text = Manager.Instance.game.TimeRemaining.ToString();
+        }
+
     }
-
 }

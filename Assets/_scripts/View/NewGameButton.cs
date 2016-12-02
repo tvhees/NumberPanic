@@ -1,22 +1,25 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using _scripts.Controller;
 
-public class NewGameButton : MonoBehaviour {
+namespace _scripts.View
+{
+    public class NewGameButton : MonoBehaviour {
 
-    public Button button;
+        public Button button;
 
-    void Awake() {
-        UIManager.Instance.menuPanel = transform.parent.gameObject;
-    }
+        void Awake() {
+            UiManager.Instance.menuPanel = transform.parent.gameObject;
+        }
 
-    void OnEnable()
-    {
-        button.interactable = true;
-    }
+        void OnEnable()
+        {
+            button.interactable = true;
+        }
 
-    public void NewGame()
-    {
-        StartCoroutine(AnimationManager.Instance.NewGame());
+        public void NewGame()
+        {
+            StartCoroutine(AnimationManager.Instance.NewGame());
+        }
     }
 }

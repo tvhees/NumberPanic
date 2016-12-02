@@ -1,60 +1,58 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using _scripts.Controller;
 
-public class UIManager : Singleton<UIManager> {
+namespace _scripts.View
+{
+    public class UiManager : Singleton<UiManager> {
 
-    public PanelButton settingsButton;
+        public PanelButton settingsButton;
 
-    // Score displays
-    [HideInInspector] public Score score;
-    [HideInInspector] public HighScore highScore;
+        // Score displays
+        [HideInInspector] public Score score;
+        [HideInInspector] public HighScore highScore;
 
-    // Timer display
-    [HideInInspector] public TimerDisplay timerDisplay;
+        // Timer display
+        [HideInInspector] public TimerDisplay timerDisplay;
 
-    // Game mode dropdowns
-    [HideInInspector] public MainMode modes;
-    [HideInInspector] public SubMode subModes;
+        // Game mode dropdowns
+        [HideInInspector] public MainMode modes;
+        [HideInInspector] public SubMode subModes;
 
-    // UI panels
-    [HideInInspector] public GameObject continuePanel;
-    [HideInInspector] public GameObject scorePanel;
-    [HideInInspector] public GameObject menuPanel;
+        // UI panels
+        [HideInInspector] public GameObject continuePanel;
+        [HideInInspector] public GameObject scorePanel;
+        [HideInInspector] public GameObject menuPanel;
 
-    // UI Buttons
-    [HideInInspector]
-    public Button noAdsButton;
+        private float current;
+        private Game.State lastState;
 
-    private float current;
-    private Game.State lastState;
-
-    void Start()
-    {
-        Manager.Instance.ui = this;
-        current = Manager.current;
-    }
-
-    void Update() {
-        if (Manager.Instance.gameTimer != null)
+        private void Start()
         {
-            float timeRemaining = Manager.Instance.gameTimer.UpdateTimer(-Time.unscaledDeltaTime);
-            UpdateTimer(timeRemaining);
+            Manager.Instance.ui = this;
+            current = Manager.Current;
         }
 
-        if (Manager.current > current)
-        {
-            UpdateScore();
-        }
+        public void Update() {
+            if (Manager.Instance.gameTimer != null)
+            {
+                var timeRemaining = Manager.Instance.gameTimer.UpdateTimer(-Time.unscaledDeltaTime);
+                UpdateTimer(timeRemaining);
+            }
 
-        if (current > Manager.current)
-        {
-            current = Manager.current;
-        }
+            if (Manager.Current > current)
+            {
+                UpdateScore();
+            }
 
-        // Process changes in state here
-        if (Manager.Instance.game.state != lastState)
-        {
+            if (current > Manager.Current)
+            {
+                current = Manager.Current;
+            }
+
+            // Process changes in state here
+            if (Manager.Instance.game.state == lastState) return;
             switch (Manager.Instance.game.state)
             {
                 case Game.State.TITLE:
@@ -82,33 +80,33 @@ public class UIManager : Singleton<UIManager> {
             }
             lastState = Manager.Instance.game.state;
         }
-    }
 
-    IEnumerator LoadScore()
-    {
-        Preferences.Instance.Save();
-        if (continuePanel.activeSelf)
-            yield return StartCoroutine(AnimationManager.Instance.Continue(false));
-        scorePanel.SetActive(true);
-        menuPanel.SetActive(true);
-        settingsButton.TogglePanel();
-    }
-
-    void UpdateScore()
-    {
-        current = Manager.current;
-
-        score.Increment();
-
-        if (score.fV.value >= Preferences.highScore.value)
+        private IEnumerator LoadScore()
         {
-            Preferences.Instance.UpdateHighScore(score.fV);
+            Preferences.Instance.Save();
+            if (continuePanel.activeSelf)
+                yield return StartCoroutine(AnimationManager.Instance.Continue(false));
+            scorePanel.SetActive(true);
+            menuPanel.SetActive(true);
+            settingsButton.TogglePanel();
         }
-    }
 
-    public void UpdateTimer(float remainingTime)
-    {
-        string remainingTimeString = string.Format("{0:0.0}", remainingTime);
-        timerDisplay.SetRemainingTime(remainingTime, remainingTimeString);
+        private void UpdateScore()
+        {
+            current = Manager.Current;
+
+            score.Increment();
+
+            if (score.fV.Value >= Preferences.HighScore.Value)
+            {
+                Preferences.Instance.UpdateHighScore(score.fV);
+            }
+        }
+
+        public void UpdateTimer(float remainingTime)
+        {
+            var remainingTimeString = string.Format("{0:0.0}", remainingTime);
+            timerDisplay.SetRemainingTime(remainingTime, remainingTimeString);
+        }
     }
 }

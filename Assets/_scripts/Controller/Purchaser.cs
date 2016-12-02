@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Purchasing;
+using _scripts.Controller;
 
 // Deriving the Purchaser class from IStoreListener enables it to receive messages from Unity Purchasing.
 public class Purchaser : MonoBehaviour, IStoreListener
@@ -47,7 +48,7 @@ public class Purchaser : MonoBehaviour, IStoreListener
         // with its store-specific identifiers.
         builder.AddProduct(kProductIDNoAds, ProductType.NonConsumable);
 
-        // Kick off the remainder of the set-up with an asynchrounous call, passing the configuration 
+        // Kick off the remainder of the set-up with an asynchrounous call, passing the configuration
         // and this class' instance. Expect a response either in OnInitialized or OnInitializeFailed.
         UnityPurchasing.Initialize(this, builder);
     }

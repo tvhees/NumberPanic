@@ -1,84 +1,89 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 
-public class Preferences : Singleton<Preferences> {
+namespace _scripts.Controller
+{
+    public class Preferences : Singleton<Preferences> {
 
-    public static FaceValue highScore = new FaceValue();
-    public static int mainMode;
-    public static int subMode;
-    public static bool advertisements;
+        public static FaceValue HighScore = new FaceValue();
+        public static int MainMode;
+        public static int SubMode;
+        public static bool ShowAdvertisements;
 
-    void Awake()
-    {
-        string salt = PlayerPrefs.GetString("salt");
-        if (string.IsNullOrEmpty(salt))
+        private void Awake()
         {
-            salt = ExtensionMethods.Md5Sum(Random.Range(0, 100000000).ToString());
-            PlayerPrefs.SetString("salt", salt);
+            var salt = PlayerPrefs.GetString("salt");
+            if (string.IsNullOrEmpty(salt))
+            {
+                salt = ExtensionMethods.Md5Sum(Random.Range(0, 100000000).ToString());
+                PlayerPrefs.SetString("salt", salt);
+            }
+
+            ZPlayerPrefs.Initialize("NK6KzW8Tz9rpANca", salt);
         }
 
-        ZPlayerPrefs.Initialize("NK6KzW8Tz9rpANca", salt);
-    }
-
 #if UNITY_EDITOR
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-            Reset();
-    }
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+                Reset();
+        }
 
-    void Reset()
-    {
-        ZPlayerPrefs.DeleteAll();
-        Load();
-    }
+        private void Reset()
+        {
+            ZPlayerPrefs.DeleteAll();
+            Load();
+        }
 #endif
 
-    public void Load(){
-        mainMode = PlayerPrefs.GetInt("mainMode", 0);
-        subMode = PlayerPrefs.GetInt("subMode", 0);
-        advertisements = ExtensionMethods.GetBool("advertisements", true);
-        GetHighScore();
-    }
+        public void Load(){
+            MainMode = PlayerPrefs.GetInt("mainMode", 0);
+            SubMode = PlayerPrefs.GetInt("subMode", 0);
+            ShowAdvertisements = ExtensionMethods.GetBool("ShowAdvertisements", true);
+            GetHighScore();
+        }
 
-    public FaceValue GetHighScore() {
-        string scoreName = ((Manager.Mode)mainMode).ToString() + "_" + subMode.ToString();
-        highScore.value = ZPlayerPrefs.GetInt(scoreName + "_value", 0);
-        highScore.text = ZPlayerPrefs.GetString(scoreName + "_text", "");
+        public FaceValue GetHighScore() {
+            var scoreName = ((Manager.Mode)MainMode).ToString() + "_" + SubMode.ToString();
+            HighScore.Value = PlayerPrefs.GetInt(scoreName + "_value", 0);
+            HighScore.Text = PlayerPrefs.GetString(scoreName + "_text", "");
+            Debug.Log("Getting high score " + scoreName + " " + HighScore.Value);
 
-        return highScore;
-    }
+            return HighScore;
+        }
 
-    private void SaveHighScore()
-    {
-        string scoreName = ((Manager.Mode)mainMode).ToString() + "_" + subMode.ToString();
-        PlayerPrefs.SetInt(scoreName + "_value", highScore.value);
-        PlayerPrefs.SetString(scoreName + "_text", highScore.text);
-    }
+        private static void SaveHighScore()
+        {
+            var scoreName = ((Manager.Mode)MainMode).ToString() + "_" + SubMode.ToString();
+            Debug.Log("Setting high score " + scoreName + " " + HighScore.Value);
+            PlayerPrefs.SetInt(scoreName + "_value", HighScore.Value);
+            PlayerPrefs.SetString(scoreName + "_text", HighScore.Text);
+        }
 
-    public void UpdateHighScore(FaceValue fV) {
-        highScore = fV;
-    }
+        public void UpdateHighScore(FaceValue fV) {
+            Debug.Log("Updating high score");
+            HighScore = fV;
+        }
 
-    public void Save(){
-        // Save mode choices without encryption
-        PlayerPrefs.SetInt("mainMode", mainMode);
-        PlayerPrefs.SetInt("subMode", subMode);
+        public void Save(){
+            Debug.Log("Saving preferences and score");
+            // Save mode choices without encryption
+            PlayerPrefs.SetInt("mainMode", MainMode);
+            PlayerPrefs.SetInt("subMode", SubMode);
 
-		// Save high score without encryption
-		SaveHighScore();
+            // Save high score without encryption
+            SaveHighScore();
 
-        // Save Noads purchase flag with encryption
-		ExtensionMethods.SetBool("advertisements", advertisements);
+            // Save Noads purchase flag with encryption
+            ExtensionMethods.SetBool("ShowAdvertisements", ShowAdvertisements);
 
-        // Save all preferences
-        ZPlayerPrefs.Save ();
-	}
+            // Save all preferences
+            ZPlayerPrefs.Save ();
+        }
 
-    public void BuyNoAds()
-    {
-        advertisements = false;
-        Save();
+        public void BuyNoAds()
+        {
+            ShowAdvertisements = false;
+            Save();
+        }
     }
 }

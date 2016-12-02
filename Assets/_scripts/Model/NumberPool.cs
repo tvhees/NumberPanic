@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
-using System.Collections;
+using _scripts.Controller;
 
-public class NumberPool : ObjectPool {
+namespace _scripts.Model
+{
+    public class NumberPool : ObjectPool {
 
-    protected override void Init()
-    {
-        Manager.numberPool = this;
-        poolSize = 20;
-        homePosition = Vector3.zero;
+        protected override void Init()
+        {
+            Manager.numberPool = this;
+            poolSize = 20;
+            homePosition = Vector3.zero;
+        }
+
     }
-
 }

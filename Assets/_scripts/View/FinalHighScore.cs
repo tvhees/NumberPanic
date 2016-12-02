@@ -1,22 +1,25 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using _scripts.Controller;
 
-public class FinalHighScore : MonoBehaviour {
+namespace _scripts.View
+{
+    public class FinalHighScore : MonoBehaviour {
 
-    public Text label;
+        public Text label;
 
-    private FinalScore finalScore;
+        private FinalScore finalScore;
 
-    void OnEnable() {
-        finalScore = transform.parent.GetComponentInChildren<FinalScore>();
-    }
+        void OnEnable() {
+            finalScore = transform.parent.GetComponentInChildren<FinalScore>();
+        }
 
-    void Update() {
-            if (finalScore.fV.value > Manager.Instance.game.oldHS)
+        void Update() {
+            if (finalScore.fV.Value > Manager.Instance.game.oldHS)
                 label.text = finalScore.label.text;
             else
                 label.text = Manager.Instance.game.oldHS.ToString();
+        }
     }
 }
 

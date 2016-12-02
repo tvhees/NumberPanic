@@ -1,73 +1,76 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using _scripts.Controller;
 
-public class SubMode : MonoBehaviour {
+namespace _scripts.View
+{
+    public class SubMode : MonoBehaviour {
 
-    private Dropdown dropDown;
-	private Animator animator;
+        private Dropdown dropDown;
+        private Animator animator;
 
-    void Awake() {
-        dropDown = GetComponent<Dropdown>();
-		animator = GetComponent<Animator> ();
-        dropDown.onValueChanged.AddListener(SetSubValue);
-        UIManager.Instance.subModes = this;
-    }
-
-    // Called after the main modes are initially generated
-    public void Init() {
-        // Load any previously saved submode (default: 0) and use it
-        dropDown.value = Preferences.subMode;
-        SetSubValue(dropDown.value);
-    }
-
-    // Get a new list of options any time we pick a different main mode
-    public void GetOptionList()
-    {
-        dropDown.ClearOptions();
-
-        switch (Manager.mode)
-        {
-            case Manager.Mode.linear:
-                // We just need numbers for these options
-                for (int i = 0; i < 10; i++)
-                    dropDown.options.Add(new Dropdown.OptionData() { text = (i + 1).ToString() });
-                break;
-            case Manager.Mode.power:
-                for (int i = 1; i < 3; i++)
-                    dropDown.options.Add(new Dropdown.OptionData() { text = (i + 1).ToString() });
-                break;
-            case Manager.Mode.sequence:
-                // Create an option for each sequence defined in the Manager
-                for (int i = 0; i < (int)Manager.Sequence.NumberOfTypes; i++)
-                    dropDown.options.Add(new Dropdown.OptionData() { text = ((Manager.Sequence)i).ToString() });
-                break;
-            case Manager.Mode.english:
-                for (int i = 0; i < (int)Manager.English.NumberOfTypes; i++)
-                    dropDown.options.Add(new Dropdown.OptionData() { text = ((Manager.English)i).ToString() });
-                break;
+        void Awake() {
+            dropDown = GetComponent<Dropdown>();
+            animator = GetComponent<Animator> ();
+            dropDown.onValueChanged.AddListener(SetSubValue);
+            UiManager.Instance.subModes = this;
         }
 
-        dropDown.RefreshShownValue();
-        SetSubValue(dropDown.value);
-    }
+        // Called after the main modes are initially generated
+        public void Init() {
+            // Load any previously saved submode (default: 0) and use it
+            dropDown.value = Preferences.SubMode;
+            SetSubValue(dropDown.value);
+        }
 
-    // Called on initialisation and every time we choose a new submode
-    // or new main mode
-    void SetSubValue(int value) {
-        // Tell player prefs and manager what submode we're on
-        Preferences.subMode = value;
-        Manager.subValue = value;
+        // Get a new list of options any time we pick a different main mode
+        public void GetOptionList()
+        {
+            dropDown.ClearOptions();
 
-        // Update the main score display to reflect the choice
-        // mostly required for odd sequences like primes that don't start at 0
-        if (UIManager.Instance.score != null)
-            UIManager.Instance.score.UpdateDisplay();
-    }
+            switch (Manager.MainMode)
+            {
+                case Manager.Mode.Linear:
+                    // We just need numbers for these options
+                    for (int i = 0; i < 10; i++)
+                        dropDown.options.Add(new Dropdown.OptionData() { text = (i + 1).ToString() });
+                    break;
+                case Manager.Mode.Power:
+                    for (int i = 1; i < 3; i++)
+                        dropDown.options.Add(new Dropdown.OptionData() { text = (i + 1).ToString() });
+                    break;
+                case Manager.Mode.Sequence:
+                    // Create an option for each sequence defined in the Manager
+                    for (int i = 0; i < (int)Manager.Sequence.NumberOfTypes; i++)
+                        dropDown.options.Add(new Dropdown.OptionData() { text = ((Manager.Sequence)i).ToString() });
+                    break;
+                case Manager.Mode.English:
+                    for (int i = 0; i < (int)Manager.English.NumberOfTypes; i++)
+                        dropDown.options.Add(new Dropdown.OptionData() { text = ((Manager.English)i).ToString() });
+                    break;
+            }
 
-    public void Fade(bool active)
-    {
-        dropDown.interactable = active;
-		animator.SetTrigger ("fade");
+            dropDown.RefreshShownValue();
+            SetSubValue(dropDown.value);
+        }
+
+        // Called on initialisation and every time we choose a new submode
+        // or new main mode
+        void SetSubValue(int value) {
+            // Tell player prefs and manager what submode we're on
+            Preferences.SubMode = value;
+            Manager.SubMode = value;
+
+            // Update the main score display to reflect the choice
+            // mostly required for odd sequences like primes that don't start at 0
+            if (UiManager.Instance.score != null)
+                UiManager.Instance.score.UpdateDisplay();
+        }
+
+        public void Fade(bool active)
+        {
+            dropDown.interactable = active;
+            animator.SetTrigger ("fade");
+        }
     }
 }
