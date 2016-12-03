@@ -9,29 +9,22 @@ namespace _scripts.View
 
         public PanelButton settingsButton;
 
-        // Score displays
         [HideInInspector] public Score score;
         [HideInInspector] public HighScore highScore;
-
-        // Timer display
         [HideInInspector] public TimerDisplay timerDisplay;
-
-        // Game mode dropdowns
-        [HideInInspector] public MainMode modes;
-        [HideInInspector] public SubMode subModes;
-
-        // UI panels
-        [HideInInspector] public GameObject continuePanel;
-        [HideInInspector] public GameObject scorePanel;
-        [HideInInspector] public GameObject menuPanel;
+        public MainMode modes;
+        public SubMode subModes;
+        public GameObject continuePanel;
+        public GameObject scorePanel;
+        public GameObject menuPanel;
 
         private float current;
-        private Game.State lastState;
 
         private void Start()
         {
             Manager.Instance.ui = this;
             current = Manager.Current;
+            EventManager.onStateChanged.AddListener((OnStateChanged));
         }
 
         public void Update() {
@@ -50,25 +43,27 @@ namespace _scripts.View
             {
                 current = Manager.Current;
             }
+        }
 
-            // Process changes in state here
-            if (Manager.Instance.game.state == lastState) return;
-            switch (Manager.Instance.game.state)
+        private void OnStateChanged(Game.State state)
+        {
+            Debug.Log(state);
+            switch (state)
             {
-                case Game.State.TITLE:
+                case Game.State.Title:
                     menuPanel.SetActive(true);
                     break;
-                case Game.State.ATTRACT:
+                case Game.State.Attract:
                     if (score != null)
                         score.gameObject.SetActive(true);
                     scorePanel.SetActive(false);
                     menuPanel.SetActive(false);
                     continuePanel.SetActive(false);
                     break;
-                case Game.State.END:
+                case Game.State.End:
                     continuePanel.SetActive(true);
                     break;
-                case Game.State.SCORE:
+                case Game.State.Score:
                     StartCoroutine(LoadScore());
                     break;
                 default:
@@ -78,7 +73,6 @@ namespace _scripts.View
                     menuPanel.SetActive(false);
                     break;
             }
-            lastState = Manager.Instance.game.state;
         }
 
         private IEnumerator LoadScore()

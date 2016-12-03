@@ -79,17 +79,20 @@
     <Reference Include="UnityEngine.VR">
       <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
     </Reference>
-    <Reference Include="Security">
-      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Apple">
-      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Apple/Apple.dll</HintPath>
-    </Reference>
     <Reference Include="Common">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Common.dll</HintPath>
     </Reference>
+    <Reference Include="Editor">
+      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Security">
+      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Security.dll</HintPath>
+    </Reference>
     <Reference Include="Stores">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Stores.dll</HintPath>
+    </Reference>
+    <Reference Include="Apple">
+      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Apple/Apple.dll</HintPath>
     </Reference>
     <Reference Include="Tizen">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Tizen/Tizen.dll</HintPath>
@@ -97,8 +100,8 @@
     <Reference Include="winrt">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/winrt/winrt.dll</HintPath>
     </Reference>
-    <Reference Include="Editor">
-      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Editor.dll</HintPath>
+    <Reference Include="RSG.Promise">
+      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/packages/RSG.Promise.1.2.0.0/lib/net35/RSG.Promise.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

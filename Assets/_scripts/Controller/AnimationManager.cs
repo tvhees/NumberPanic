@@ -7,15 +7,15 @@ namespace _scripts.Controller
 {
     public class AnimationManager : Singleton<AnimationManager> {
 
-        [HideInInspector] public TitleAnimator titleAnimator;
-        [HideInInspector] public MenuPanel menuPanel;
+        public TitleAnimator titleAnimator;
+        public MenuPanel menuPanel;
         [HideInInspector] public List<SubPanel> subPanels = new List<SubPanel>();
-        [HideInInspector] public LoadingCover loadingCover;
-        [HideInInspector] public ContinuePanel continuePanel;
-        [HideInInspector] public ScorePanel scorePanel;
+        public LoadingCover loadingCover;
+        public ContinuePanel continuePanel;
+        public ScorePanel scorePanel;
         private bool firstGame;
 
-        void Start()
+        private void Start()
         {
             StartCoroutine(titleAnimator.DropTitle());
             firstGame = true;

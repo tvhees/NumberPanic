@@ -8,11 +8,7 @@ namespace _scripts.View
 
         public Button button;
 
-        void Awake() {
-            UiManager.Instance.menuPanel = transform.parent.gameObject;
-        }
-
-        void OnEnable()
+        private void OnEnable()
         {
             button.interactable = true;
         }

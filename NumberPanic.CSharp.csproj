@@ -1,102 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>4</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
@@ -107,15 +11,13 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>Android:13</UnityBuildTarget>
     <UnityVersion>5.5.0f3</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -178,30 +80,40 @@
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
     <Reference Include="Common">
-      <HintPath>Assets\thirdparty\UnityPurchasing\Bin\Common.dll</HintPath>
+      <HintPath>Assets\Plugins\UnityPurchasing\Bin\Common.dll</HintPath>
     </Reference>
     <Reference Include="Editor">
-      <HintPath>Assets\thirdparty\UnityPurchasing\Bin\Editor.dll</HintPath>
+      <HintPath>Assets\Plugins\UnityPurchasing\Bin\Editor.dll</HintPath>
     </Reference>
     <Reference Include="Security">
-      <HintPath>Assets\thirdparty\UnityPurchasing\Bin\Security.dll</HintPath>
+      <HintPath>Assets\Plugins\UnityPurchasing\Bin\Security.dll</HintPath>
     </Reference>
     <Reference Include="Stores">
-      <HintPath>Assets\thirdparty\UnityPurchasing\Bin\Stores.dll</HintPath>
+      <HintPath>Assets\Plugins\UnityPurchasing\Bin\Stores.dll</HintPath>
     </Reference>
     <Reference Include="Apple">
-      <HintPath>Assets\thirdparty\UnityPurchasing\Bin\Apple\Apple.dll</HintPath>
-    </Reference>
-    <Reference Include="winrt">
-      <HintPath>Assets\thirdparty\UnityPurchasing\winrt\winrt.dll</HintPath>
+      <HintPath>Assets\Plugins\UnityPurchasing\Bin\Apple\Apple.dll</HintPath>
     </Reference>
     <Reference Include="Tizen">
-      <HintPath>Assets\thirdparty\UnityPurchasing\Bin\Tizen\Tizen.dll</HintPath>
+      <HintPath>Assets\Plugins\UnityPurchasing\Bin\Tizen\Tizen.dll</HintPath>
     </Reference>
+    <Reference Include="winrt">
+      <HintPath>Assets\Plugins\UnityPurchasing\winrt\winrt.dll</HintPath>
+    </Reference>
+    <Reference Include="RSG.Promise">
+      <HintPath>Assets\packages\RSG.Promise.1.2.0.0\lib\net35\RSG.Promise.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="NumberPanic.CSharp.Plugins.csproj">
+      <Project>{CBEDB195-E8D5-9F4F-12A7-FF45D7C09DE4}</Project>
+      <Name>NumberPanic.CSharp.Plugins</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\_scripts\Controller\Advertising.cs" />
     <Compile Include="Assets\_scripts\Controller\AnimationManager.cs" />
+    <Compile Include="Assets\_scripts\Controller\EventManager.cs" />
     <Compile Include="Assets\_scripts\Controller\Game.cs" />
     <Compile Include="Assets\_scripts\Controller\GameTimer.cs" />
     <Compile Include="Assets\_scripts\Controller\Manager.cs" />
@@ -209,6 +121,7 @@
     <Compile Include="Assets\_scripts\Controller\Preferences.cs" />
     <Compile Include="Assets\_scripts\Controller\Purchaser.cs" />
     <Compile Include="Assets\_scripts\Controller\Spawner.cs" />
+    <Compile Include="Assets\_scripts\Controller\Tutorial.cs" />
     <Compile Include="Assets\_scripts\Model\Data.cs" />
     <Compile Include="Assets\_scripts\Model\ExplosionPool.cs" />
     <Compile Include="Assets\_scripts\Model\Number.cs" />
@@ -235,13 +148,8 @@
     <Compile Include="Assets\_scripts\View\SubPanel.cs" />
     <Compile Include="Assets\_scripts\View\TimerDisplay.cs" />
     <Compile Include="Assets\_scripts\View\TitleAnimator.cs" />
-    <Compile Include="Assets\_scripts\View\UIManager.cs" />
+    <Compile Include="Assets\_scripts\View\UiManager.cs" />
     <Compile Include="Assets\thirdparty\SecurePlayerPrefs\ZPlayerPrefs.cs" />
-    <Compile Include="Assets\thirdparty\UnityPurchasing\script\ComboBox.cs" />
-    <Compile Include="Assets\thirdparty\UnityPurchasing\script\Demo\DemoInventory.cs" />
-    <Compile Include="Assets\thirdparty\UnityPurchasing\script\IAPButton.cs" />
-    <Compile Include="Assets\thirdparty\UnityPurchasing\script\IAPDemo.cs" />
-    <Compile Include="Assets\thirdparty\UnityPurchasing\script\UnibillDemo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

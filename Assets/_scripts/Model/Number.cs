@@ -47,23 +47,23 @@ namespace _scripts.Model
         public void OnPointerDown(PointerEventData eventData)
         {
 
-            switch (game.state)
+            switch (game.GameState)
             {
-                case Game.State.ATTRACT:
-                case Game.State.PLAY:
-                case Game.State.CRITICAL:
-                    Color colour = game.ResolveNumber(value, true);
+                case Game.State.Attract:
+                case Game.State.Play:
+                case Game.State.Critical:
+                    var colour = game.ResolveNumber(value, true);
                     DestroyThis(colour);
                     break;
             }
         }
 
-        void DestroyThis(Color colour)
+        private void DestroyThis(Color colour)
         {
-            GameObject expl = Manager.explosionPool.GetObject();
+            var explosion = Manager.explosionPool.GetObject();
 
-            if (expl != null)
-                expl.GetComponent<Explosion>().Init(transform.position, speed, colour);
+            if (explosion != null)
+                explosion.GetComponent<Explosion>().Init(transform.position, speed, colour);
             else
                 Debug.Log("No explosions left, returning null");
 
