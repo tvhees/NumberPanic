@@ -46,9 +46,9 @@ namespace _scripts.Controller
 
         public void CloseSubPanels()
         {
-            for (int i = 0; i < subPanels.Count; i++)
+            foreach (var panel in subPanels)
             {
-                subPanels[i].anim.SetBool("open", false);
+                panel.anim.SetBool("open", false);
             }
         }
 
@@ -58,7 +58,7 @@ namespace _scripts.Controller
             {
                 if (Manager.Instance.gameTimer != null)
                     Manager.Instance.NewTimer();
-                Manager.Instance.game.Play();
+                Manager.Instance.game.Attract();
             }
             yield return StartCoroutine(continuePanel.Leave(use));
         }

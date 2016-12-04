@@ -30,7 +30,8 @@ namespace _scripts.View
         public void Update() {
             if (Manager.Instance.gameTimer != null)
             {
-                var timeRemaining = Manager.Instance.gameTimer.UpdateTimer(-Time.unscaledDeltaTime);
+                var delta = Manager.Instance.game.GameState == Game.State.Attract ? 0 : -Time.unscaledDeltaTime;
+                var timeRemaining = Manager.Instance.gameTimer.UpdateTimer(delta);
                 UpdateTimer(timeRemaining);
             }
 
@@ -47,7 +48,6 @@ namespace _scripts.View
 
         private void OnStateChanged(Game.State state)
         {
-            Debug.Log(state);
             switch (state)
             {
                 case Game.State.Title:
@@ -61,6 +61,7 @@ namespace _scripts.View
                     continuePanel.SetActive(false);
                     break;
                 case Game.State.End:
+                    Debug.Log("Set Continue Panel Active");
                     continuePanel.SetActive(true);
                     break;
                 case Game.State.Score:

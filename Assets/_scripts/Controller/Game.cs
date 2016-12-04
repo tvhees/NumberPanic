@@ -57,7 +57,7 @@ namespace _scripts.Controller
             this.SubMode = subMode;
             targetTimeScale = 1.0f;
             OldHs = Preferences.Instance.GetHighScore().Value;
-            GameState = State.Attract;
+            Attract();
         }
 
         #region Game state
@@ -74,6 +74,12 @@ namespace _scripts.Controller
 
             // Now we smoothly move towards the appropriate timescale
             Time.timeScale = Mathf.Lerp(Time.timeScale, targetTimeScale, Time.unscaledDeltaTime);
+        }
+
+        public void Attract()
+        {
+            targetTimeScale = 1.0f;
+            GameState = State.Attract;
         }
 
         /// <summary>
@@ -221,24 +227,15 @@ namespace _scripts.Controller
             return value.Value == Manager.Current || value.Text == GetFaceValue(Manager.Current).Text;
         }
 
-        private Color BadTouch() {
-            if (Manager.Instance.timeAttackMode) // In time attack mode, mistakes make you lose time
-            {
-                if (state == State.Play)
+        private Color BadTouch()
+        {
+            if (state == State.Play)
+                if (Manager.Instance.timeAttackMode)
                     Manager.Instance.gameTimer.AddTimePenalty();
-            }
-            else
-            {
-                switch (state)
-                {
-                    case State.Play:
-                        Critical(); // In classic mode, mistakes take you straight to critical time
-                        break;
-                    case State.Critical:
-                        OnTimerCompleted();
-                        break;
-                }
-            }
+                else
+                    Critical(); // In classic mode, mistakes take you straight to critical time
+            else if (state == State.Critical)
+                OnTimerCompleted();
             return Color.red;
         }
 
