@@ -11,6 +11,5 @@ namespace _scripts.View
         void Update() {
             label.text = Manager.Instance.game.TimeRemaining.ToString();
         }
-
     }
 }

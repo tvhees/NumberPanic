@@ -13,7 +13,6 @@ namespace _scripts.View
         {
             text = GetComponent<Text>();
             animator = GetComponent<Animator>();
-            UiManager.Instance.highScore = this;
         }
 
         public void Fade()

@@ -14,10 +14,6 @@ namespace _scripts.View
         private Manager.Mode mode;
         private int subValue;
 
-        void Awake() {
-            UiManager.Instance.scorePanel = transform.parent.gameObject;
-        }
-
         void OnEnable() {
             mode = Manager.MainMode;
             subValue = Manager.SubMode;

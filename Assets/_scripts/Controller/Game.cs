@@ -8,102 +8,115 @@ namespace _scripts.Controller
     public class Game {
         public enum State
         {
-            TITLE,
-            ATTRACT,
-            PLAY,
-            CRITICAL,
-            END,
-            SCORE
+            Title,
+            Attract,
+            Play,
+            Critical,
+            End,
+            Score
         }
         #region Settings
 
-        private Data data;
-        const float endMax = 5.0f;
-        const float maximumCriticalTime = 3.0f;
+        private readonly Data data;
+        private const float EndMax = 5.0f;
+        private const float MaximumCriticalTime = 3.0f;
 
         #endregion Settings
 
         #region Variables
 
         [HideInInspector]
-        public State state = State.ATTRACT;
+        private State state;
+        public State GameState
+        {
+            get { return state; }
+            set
+            {
+                if (state == value) return;
+                state = value;
+                EventManager.onStateChanged.Invoke((value));
+            }
+        }
 
         [HideInInspector]
-        public int oldHS;
+        public int OldHs;
 
         // Timers for end-game continuation and critical recovery
-        float timer;
-
-        float targetTimeScale;
-        int continuesLeft = 1;
-        public Manager.Mode mode;
-        public int subMode;
+        private float timer;
+        private float targetTimeScale;
+        private int continuesLeft = 1;
+        public Manager.Mode Mode;
+        public int SubMode;
 
         #endregion Variables
 
         public Game(Data data, Manager.Mode mode, int subMode)
         {
             this.data = data;
-            this.mode = mode;
-            this.subMode = subMode;
+            this.Mode = mode;
+            this.SubMode = subMode;
             targetTimeScale = 1.0f;
-            oldHS = Preferences.Instance.GetHighScore().Value;
-            Debug.Log(oldHS);
+            OldHs = Preferences.Instance.GetHighScore().Value;
+            Attract();
         }
 
         #region Game state
 
         public void ProcessState()
         {
-            if (state == State.CRITICAL || state == State.END)
+            if (state == State.Critical || state == State.End)
                 timer += Time.unscaledDeltaTime;
 
-            if (state == State.END && timer > endMax)
+            if (state == State.End && timer > EndMax)
                 Score();
-            else if (state == State.CRITICAL && timer > maximumCriticalTime)
+            else if (state == State.Critical && timer > MaximumCriticalTime)
                 OnTimerCompleted();
 
             // Now we smoothly move towards the appropriate timescale
             Time.timeScale = Mathf.Lerp(Time.timeScale, targetTimeScale, Time.unscaledDeltaTime);
         }
 
+        public void Attract()
+        {
+            targetTimeScale = 1.0f;
+            GameState = State.Attract;
+        }
+
         /// <summary>
-        /// Change state to PLAY and set time scale to 1;
+        /// Change state to Play and set time scale to 1;
         /// </summary>
         public void Play()
         {
             targetTimeScale = 1.0f;
-            state = State.PLAY;
+            GameState = State.Play;
         }
 
         /// <summary>
-        /// Set the state to CRITICAL and start the timer;
+        /// Set the state to Critical and start the timer;
         /// </summary>
         public void Critical()
         {
-            if (state != State.CRITICAL)
-            {
-                timer = 0;
-                targetTimeScale = 1.0f;
-                state = State.CRITICAL;
-            }
+            if (state == State.Critical) return;
+            timer = 0;
+            targetTimeScale = 1.0f;
+            GameState = State.Critical;
         }
 
         /// <summary>
-        /// Set game state to END
+        /// Set game state to End
         /// </summary>
         public void End()
         {
-            state = State.END;
+            GameState = State.End;
         }
 
         /// <summary>
-        /// Set game state to SCORE
+        /// Set game state to Score
         /// </summary>
-        void Score()
+        private void Score()
         {
             targetTimeScale = 1.0f;
-            state = State.SCORE;
+            GameState = State.Score;
         }
 
         #endregion Game state
@@ -117,8 +130,8 @@ namespace _scripts.Controller
         {
             get
             {
-                var max = state == State.CRITICAL ? maximumCriticalTime : endMax;
-                return Mathf.CeilToInt(Mathf.Max(maximumCriticalTime - timer, 0));
+                var max = state == State.Critical ? MaximumCriticalTime : EndMax;
+                return Mathf.CeilToInt(Mathf.Max(MaximumCriticalTime - timer, 0));
             }
         }
 
@@ -127,47 +140,38 @@ namespace _scripts.Controller
         /// </summary>
         public void OnTimerCompleted()
         {
-            if (state != State.END)
+            if (state == State.End) return;
+            if (continuesLeft > 0)
             {
-                if (continuesLeft > 0)
-                {
-                    continuesLeft--;
-                    timer = 0;
-                    state = State.END;
-                }
-                else
-                    Score();
+                continuesLeft--;
+                timer = 0;
+                GameState = State.End;
             }
+            else
+                Score();
         }
 
-        /// <summary>
-        /// Sets game time scale
-        /// </summary>
-        void SetTimeScaleTo(float newScale)
-        {
-            targetTimeScale = newScale;
-        }
         #endregion Timers
 
         #region Resolving number touches
 
         public FaceValue GetFaceValue(int current)
         {
-            FaceValue fV = new FaceValue();
+            var fV = new FaceValue();
             int[] intArray = null;
             string[] stringArray = null;
-            switch (mode)
+            switch (Mode)
             {
                 case Manager.Mode.Linear:
-                    fV.Value = current * (subMode + 1);
+                    fV.Value = current * (SubMode + 1);
                     fV.Text = fV.Value.ToString();
                     break;
                 case Manager.Mode.Power:
-                    fV.Value = (int)Mathf.Pow(current, (subMode + 2));
+                    fV.Value = (int)Mathf.Pow(current, (SubMode + 2));
                     fV.Text = fV.Value.ToString();
                     break;
                 case Manager.Mode.Sequence:
-                    switch (subMode)
+                    switch (SubMode)
                     {
                         case (int)Manager.Sequence.Primes:
                             intArray = data.Numbers.Primes;
@@ -182,7 +186,7 @@ namespace _scripts.Controller
                     }
                     break;
                 case Manager.Mode.English:
-                    switch (subMode)
+                    switch (SubMode)
                     {
                         case (int)Manager.English.Common:
                             stringArray = data.Texts.EnglishWords;
@@ -205,14 +209,7 @@ namespace _scripts.Controller
             var fV = GetFaceValue(value);
             if (touched)
             {
-                if (IsCurrentValue(fV)) // if we should have touched the number
-                {
-                    return Progress();
-                }
-                else // if we shouldn't have touched it!
-                {
-                    return BadTouch();
-                }
+                return IsCurrentValue(fV) ? Progress() : BadTouch();
             }
             else // if the number has reached the bottom of the screen
             {
@@ -230,24 +227,15 @@ namespace _scripts.Controller
             return value.Value == Manager.Current || value.Text == GetFaceValue(Manager.Current).Text;
         }
 
-        private Color BadTouch() {
-            if (Manager.Instance.timeAttackMode) // In time attack mode, mistakes make you lose time
-            {
-                if (state == State.PLAY)
+        private Color BadTouch()
+        {
+            if (state == State.Play)
+                if (Manager.Instance.timeAttackMode)
                     Manager.Instance.gameTimer.AddTimePenalty();
-            }
-            else
-            {
-                switch (state)
-                {
-                    case State.PLAY:
-                        Critical(); // In classic mode, mistakes take you straight to critical time
-                        break;
-                    case State.CRITICAL:
-                        OnTimerCompleted();
-                        break;
-                }
-            }
+                else
+                    Critical(); // In classic mode, mistakes take you straight to critical time
+            else if (state == State.Critical)
+                OnTimerCompleted();
             return Color.red;
         }
 
@@ -258,9 +246,10 @@ namespace _scripts.Controller
             if(Manager.Instance.timeAttackMode)
                 Manager.Instance.gameTimer.AddTimeBonus();
 
-            return GetFaceValue(Manager.Current).Value > oldHS ? Color.green : Color.yellow;
+            return GetFaceValue(Manager.Current).Value > OldHs ? Color.green : Color.yellow;
         }
         #endregion Resolving number touches
+
     }
 
     public class FaceValue

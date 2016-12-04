@@ -15,10 +15,10 @@ namespace _scripts.View
         }
 
         void Update() {
-            if (finalScore.fV.Value > Manager.Instance.game.oldHS)
+            if (finalScore.fV.Value > Manager.Instance.game.OldHs)
                 label.text = finalScore.label.text;
             else
-                label.text = Manager.Instance.game.oldHS.ToString();
+                label.text = Manager.Instance.game.OldHs.ToString();
         }
     }
 }

@@ -13,9 +13,16 @@ namespace _scripts.Controller
         [HideInInspector] public float leftBound, rightBound;
 
         private float padding, waitFactor, speedFactor;
+        private Game.State state = Game.State.Attract;
 
-        void Awake() {
+        private void Awake() {
             Manager.Instance.spawner = this;
+            EventManager.onStateChanged.AddListener(OnStateChanged);
+        }
+
+        public void OnStateChanged(Game.State newState)
+        {
+            state = newState;
         }
 
         public void Init()
@@ -29,58 +36,48 @@ namespace _scripts.Controller
             StartCoroutine(RegularSpawn());
         }
 
-        IEnumerator RegularSpawn() {
-            int counter = 0;
+        private IEnumerator RegularSpawn() {
+            var counter = 0;
 
             while (spawn)
             {
-                switch (Manager.Instance.game.state)
+                if (state != Game.State.Title)
                 {
-                    case Game.State.ATTRACT:
-                    case Game.State.PLAY:
-                    case Game.State.CRITICAL:
-                    case Game.State.END:
-                    case Game.State.SCORE:
-                        float waitTime = Mathf.Pow(padding / (Manager.Current + padding), 2f) * waitFactor;
+                    var waitTime = Mathf.Pow(padding / (Manager.Current + padding), 2f) * waitFactor;
 
-                        if (counter == 0)
-                        {
-                            // Get a new 'true' number from the pool. Reset the counter only if this works.
-                            if (SpawnNumber())
-                                counter = Mathf.Min(Random.Range(0, Manager.Current - 1), 8);
-                        }
-                        else
-                        {
-                            // Get a new 'false' number from the pool. Decrement the counter only if this works.
-                            if (SpawnNumber(false))
-                                counter--;
-                        }
-
-                        yield return new WaitForSeconds(waitTime);
-
-                        break;
+                    if (counter == 0)
+                    {
+                        // Get a new 'true' number from the pool. Reset the counter only if this works.
+                        if (SpawnNumber())
+                            counter = Mathf.Min(Random.Range(0, Manager.Current - 1), 8);
+                    }
+                    else
+                    {
+                        // Get a new 'false' number from the pool. Decrement the counter only if this works.
+                        if (SpawnNumber(false))
+                            counter--;
+                    }
+                    yield return new WaitForSeconds(waitTime);
                 }
-
                 yield return null;
-
             }
 
         }
 
         private bool SpawnNumber(bool real = true) {
             // Spawn from the top of the screen - recalculate every time in case orientation changes
-            Vector3 position = gameCam.ViewportToWorldPoint(new Vector3(Random.Range(leftBound, rightBound), 1f, 20f));
+            var position = gameCam.ViewportToWorldPoint(new Vector3(Random.Range(leftBound, rightBound), 1f, 20f));
 
             // Speed to travel downwards, damped increase as numbers increase
-            float speed = (Manager.Current + Manager.Padding) * speedFactor / Manager.Padding;
+            var speed = (Manager.Current + Manager.Padding) * speedFactor / Manager.Padding;
 
             // Default value is the next one player needs to collect
-            int value = Manager.Current;
+            var value = Manager.Current;
 
             // For 'fake' numbers we want to vary the value a little bit
             if (!real)
             {
-                for (int i = 0; i < 20; i++)
+                for (var i = 0; i < 20; i++)
                 {
                     value = (int)Random.Range(0.3f * Manager.Current, 1.7f * Manager.Current);
 

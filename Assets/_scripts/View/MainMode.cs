@@ -15,9 +15,6 @@ namespace _scripts.View
             dropDown = GetComponent<Dropdown>();
             animator = GetComponent<Animator> ();
 
-            // Link to UI manager
-            UiManager.Instance.modes = this;
-
             // Create the list of options for this dropdown
             // and tell it which function to call when an option is chosen
             GetOptionList();

@@ -69,7 +69,6 @@ namespace _scripts.Controller
             SpeedFactor = setSpeed;
             numberPool.CreatePool();
             explosionPool.CreatePool();
-            StartCoroutine(LoadGame(true));
         }
 
         private void Update()
@@ -82,7 +81,8 @@ namespace _scripts.Controller
         }
 
         public void Restart() {
-            DestroyGame();
+            if(SceneManager.GetSceneByName("Game").isLoaded)
+                DestroyGame();
             StartCoroutine(LoadGame());
         }
 

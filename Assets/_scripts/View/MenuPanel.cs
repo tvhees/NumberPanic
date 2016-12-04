@@ -11,7 +11,6 @@ namespace _scripts.View
 
         void Awake()
         {
-            UiManager.Instance.menuPanel = gameObject;
             AnimationManager.Instance.menuPanel = this;
         }
 

@@ -36,7 +36,7 @@ namespace _scripts.Controller
 
             if (remainingTime <= Mathf.Epsilon)
                 Manager.Instance.game.OnTimerCompleted();
-            else if (remainingTime <= timePenalty)
+            else if (remainingTime <= timePenalty && !Manager.Instance.timeAttackMode)
                 Manager.Instance.game.Critical();
 
             return remainingTime;

@@ -8,6 +8,7 @@ namespace _scripts.Controller
         public static int MainMode;
         public static int SubMode;
         public static bool ShowAdvertisements;
+        public static bool ShowTutorial = true;
 
         private void Awake()
         {
@@ -46,26 +47,21 @@ namespace _scripts.Controller
             var scoreName = ((Manager.Mode)MainMode).ToString() + "_" + SubMode.ToString();
             HighScore.Value = PlayerPrefs.GetInt(scoreName + "_value", 0);
             HighScore.Text = PlayerPrefs.GetString(scoreName + "_text", "");
-            Debug.Log("Getting high score " + scoreName + " " + HighScore.Value);
-
             return HighScore;
         }
 
         private static void SaveHighScore()
         {
             var scoreName = ((Manager.Mode)MainMode).ToString() + "_" + SubMode.ToString();
-            Debug.Log("Setting high score " + scoreName + " " + HighScore.Value);
             PlayerPrefs.SetInt(scoreName + "_value", HighScore.Value);
             PlayerPrefs.SetString(scoreName + "_text", HighScore.Text);
         }
 
         public void UpdateHighScore(FaceValue fV) {
-            Debug.Log("Updating high score");
             HighScore = fV;
         }
 
         public void Save(){
-            Debug.Log("Saving preferences and score");
             // Save mode choices without encryption
             PlayerPrefs.SetInt("mainMode", MainMode);
             PlayerPrefs.SetInt("subMode", SubMode);

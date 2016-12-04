@@ -13,7 +13,6 @@ namespace _scripts.View
             dropDown = GetComponent<Dropdown>();
             animator = GetComponent<Animator> ();
             dropDown.onValueChanged.AddListener(SetSubValue);
-            UiManager.Instance.subModes = this;
         }
 
         // Called after the main modes are initially generated

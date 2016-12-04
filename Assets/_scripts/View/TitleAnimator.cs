@@ -6,40 +6,36 @@ namespace _scripts.View
 {
     public class TitleAnimator : MonoBehaviour {
 
-        [HideInInspector] public bool animating;
-        public Animator[] animators;
-        private float delay = 0.1f;
+        private bool animating;
+        private Animator[] animators;
+        private const float Delay = 0.05f;
         private int letters;
 
-        void Awake()
+        private void Awake()
         {
             animating = false;
             animators = GetComponentsInChildren<Animator>();
-            AnimationManager.Instance.titleAnimator = this;
         }
 
         public IEnumerator DropTitle()
         {
-            for (int i = 0; i < animators.Length; i++)
+            foreach (var animator in animators)
             {
-                animators[i].SetTrigger("drop");
-                yield return new WaitForSeconds(delay);
+                animator.SetTrigger("drop");
+                yield return new WaitForSeconds(Delay);
             }
 
-            yield return new WaitForSeconds(delay);
-
-            Manager.Instance.game.state = Game.State.TITLE;
+            yield return new WaitForSeconds(Delay);
         }
 
         public IEnumerator LeaveTitle()
         {
             animating = true;
             letters = animators.Length;
-            Manager.Instance.game.state = Game.State.TITLE;
 
-            for (int i = 0; i < animators.Length; i++)
+            foreach (var animator in animators)
             {
-                animators[i].SetTrigger("drop");
+                animator.SetTrigger("drop");
             }
 
             while (animating)

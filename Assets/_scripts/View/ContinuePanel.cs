@@ -13,12 +13,6 @@ namespace _scripts.View
         public Animator anim;
         private bool animating;
 
-        void Awake()
-        {
-            AnimationManager.Instance.continuePanel = this;
-            UiManager.Instance.continuePanel = gameObject;
-        }
-
         void OnEnable()
         {
             if (!Preferences.ShowAdvertisements)
