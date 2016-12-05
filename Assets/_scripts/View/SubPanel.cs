@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets._scripts.Controller;
+using UnityEngine;
 using _scripts.Controller;
 
 namespace _scripts.View

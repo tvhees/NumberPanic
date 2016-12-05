@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using _scripts.Controller;
 using _scripts.View;
 
-namespace _scripts.Controller
+namespace Assets._scripts.Controller
 {
     public class AnimationManager : Singleton<AnimationManager> {
 

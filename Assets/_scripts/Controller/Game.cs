@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Assets._scripts.Controller;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using _scripts.Model;
@@ -10,6 +11,7 @@ namespace _scripts.Controller
         {
             Title,
             Attract,
+            Pause,
             Play,
             Critical,
             End,
@@ -34,7 +36,7 @@ namespace _scripts.Controller
             {
                 if (state == value) return;
                 state = value;
-                EventManager.onStateChanged.Invoke((value));
+                EventManager.OnStateChanged.Invoke((value));
             }
         }
 
@@ -76,10 +78,29 @@ namespace _scripts.Controller
             Time.timeScale = Mathf.Lerp(Time.timeScale, targetTimeScale, Time.unscaledDeltaTime);
         }
 
+        /// <summary>
+        /// Change state to Attract and set time scale to 1;
+        /// </summary>
         public void Attract()
         {
             targetTimeScale = 1.0f;
             GameState = State.Attract;
+        }
+
+        /// <summary>
+        /// Change state to Pause and set time scale to 1;
+        /// </summary>
+        public void Pause()
+        {
+            targetTimeScale = 0.0f;
+            Time.timeScale = targetTimeScale;
+            GameState = State.Pause;
+        }
+
+        public void Resume()
+        {
+            Play();
+            Time.timeScale = targetTimeScale;
         }
 
         /// <summary>

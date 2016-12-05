@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Assets._scripts.View;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;

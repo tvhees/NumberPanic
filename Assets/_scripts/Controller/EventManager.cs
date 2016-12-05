@@ -4,9 +4,13 @@ using UnityEngine;
 using UnityEngine.Events;
 using _scripts.Controller;
 
-public class GameStateEvent : UnityEvent<Game.State> { }
+namespace Assets._scripts.Controller
+{
+    public class GameStateEvent : UnityEvent<Game.State> { }
 
-public static class EventManager {
+    public static class EventManager {
 
-    public static GameStateEvent onStateChanged = new GameStateEvent();
+        public static GameStateEvent OnStateChanged = new GameStateEvent();
+        public static UnityEvent OnNumberTouched = new UnityEvent();
+    }
 }

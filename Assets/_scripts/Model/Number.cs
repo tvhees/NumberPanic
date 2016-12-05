@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using Assets._scripts.Controller;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using _scripts.Controller;
 using _scripts.View;
+using Random = UnityEngine.Random;
 
 namespace _scripts.Model
 {
@@ -23,7 +26,7 @@ namespace _scripts.Model
 
             transform.position = startPos;
 
-            float randomFactor = Random.Range(0.8f, 1.2f);
+            var randomFactor = Random.Range(0.8f, 1.2f);
             spawner = scriptIn;
             value = currentIn;
 
@@ -46,15 +49,22 @@ namespace _scripts.Model
 
         public void OnPointerDown(PointerEventData eventData)
         {
-
+            EventManager.OnNumberTouched.Invoke();
             switch (game.GameState)
             {
                 case Game.State.Attract:
+                case Game.State.Pause:
                 case Game.State.Play:
                 case Game.State.Critical:
                     var colour = game.ResolveNumber(value, true);
                     DestroyThis(colour);
                     break;
+                case Game.State.Title:
+                case Game.State.End:
+                case Game.State.Score:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -70,7 +80,7 @@ namespace _scripts.Model
             Manager.numberPool.ReturnObject(gameObject);
         }
 
-        void Update() {
+        private void Update() {
             transform.Translate(speed * Vector3.down * Time.deltaTime);
 
             if(!spawner.gameCam)

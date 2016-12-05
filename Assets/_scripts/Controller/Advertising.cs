@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using Assets._scripts.Controller;
+using UnityEngine;
 using _scripts.Controller;
 using UnityEngine.Advertisements;
 
@@ -7,7 +9,7 @@ public class Advertising : MonoBehaviour
     public string zoneID;
     private int counter;
 
-    void Awake()
+    private void Awake()
     {
         Manager.Instance.adverts = this;
         counter = 3;
@@ -27,15 +29,10 @@ public class Advertising : MonoBehaviour
     public void ShowAd()
     {
 #if UNITY_IOS || UNITY_ANDROID
-        if (Advertisement.IsReady())
-        {
-            if (string.IsNullOrEmpty(zoneID)) zoneID = null;
-
-            ShowOptions options = new ShowOptions();
-            options.resultCallback = HandleShowResult;
-
-            Advertisement.Show(zoneID, options);
-        }
+        if (!Advertisement.IsReady()) return;
+        if (string.IsNullOrEmpty(zoneID)) zoneID = null;
+        var options = new ShowOptions {resultCallback = HandleShowResult};
+        Advertisement.Show(zoneID, options);
 #endif
     }
 
@@ -51,6 +48,8 @@ public class Advertising : MonoBehaviour
             case ShowResult.Failed:
                 StartCoroutine(AnimationManager.Instance.Continue(false));
                 break;
+            default:
+                throw new ArgumentOutOfRangeException("result", result, null);
         }
     }
 #endif

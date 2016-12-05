@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using _scripts.Controller;
+using _scripts.View;
 
-namespace _scripts.View
+namespace Assets._scripts.View
 {
     public class MainMode : MonoBehaviour {
 
         private Dropdown dropDown;
         private Animator animator;
 
-        void Awake()
+        private void Awake()
         {
             // Get this objects components
             dropDown = GetComponent<Dropdown>();
@@ -31,7 +32,7 @@ namespace _scripts.View
         }
 
         // This is called whenever we choose a new mode.
-        void GetSubList(int value)
+        static void GetSubList(int value)
         {
             // Tell player preferences and game manager which mode to save/use
             Preferences.MainMode = value;
@@ -42,11 +43,11 @@ namespace _scripts.View
         }
 
         // Called at Awake as this list is static
-        void GetOptionList()
+        private void GetOptionList()
         {
             dropDown.ClearOptions();
             // Make a new option for each enum value set in the manager.
-            for (int i = 0; i < (int)Manager.Mode.NumberOfTypes; i++)
+            for (var i = 0; i < (int)Manager.Mode.NumberOfTypes; i++)
             {
                 dropDown.options.Add(new Dropdown.OptionData() { text = ((Manager.Mode)i).ToString() });
             }

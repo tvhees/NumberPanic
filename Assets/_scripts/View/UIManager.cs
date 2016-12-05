@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using Assets._scripts.Controller;
+using Assets._scripts.View;
 using UnityEngine;
 using UnityEngine.UI;
 using _scripts.Controller;
@@ -17,6 +19,7 @@ namespace _scripts.View
         public GameObject continuePanel;
         public GameObject scorePanel;
         public GameObject menuPanel;
+        private Game.State gameState;
 
         private float current;
 
@@ -24,13 +27,14 @@ namespace _scripts.View
         {
             Manager.Instance.ui = this;
             current = Manager.Current;
-            EventManager.onStateChanged.AddListener((OnStateChanged));
+            EventManager.OnStateChanged.AddListener((OnStateChanged));
         }
 
         public void Update() {
             if (Manager.Instance.gameTimer != null)
             {
-                var delta = Manager.Instance.game.GameState == Game.State.Attract ? 0 : -Time.unscaledDeltaTime;
+                var timerIsRunning = gameState == Game.State.Attract || gameState == Game.State.Pause;
+                var delta = timerIsRunning ? 0 : -Time.unscaledDeltaTime;
                 var timeRemaining = Manager.Instance.gameTimer.UpdateTimer(delta);
                 UpdateTimer(timeRemaining);
             }
@@ -48,6 +52,7 @@ namespace _scripts.View
 
         private void OnStateChanged(Game.State state)
         {
+            gameState = state;
             switch (state)
             {
                 case Game.State.Title:

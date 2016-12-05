@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Assets._scripts.Controller;
 using UnityEngine;
 using _scripts.Model;
 
@@ -17,7 +18,7 @@ namespace _scripts.Controller
 
         private void Awake() {
             Manager.Instance.spawner = this;
-            EventManager.onStateChanged.AddListener(OnStateChanged);
+            EventManager.OnStateChanged.AddListener(OnStateChanged);
         }
 
         public void OnStateChanged(Game.State newState)
@@ -33,7 +34,15 @@ namespace _scripts.Controller
             waitFactor = Manager.WaitFactor;
             speedFactor = Manager.SpeedFactor;
             spawn = true;
+            if(Preferences.ShowTutorial)
+                Invoke("RunTutorial", 3f);
             StartCoroutine(RegularSpawn());
+        }
+
+        private void RunTutorial()
+        {
+            Tutorial.Instance.RunTutorial();
+            Preferences.ShowTutorial = false;
         }
 
         private IEnumerator RegularSpawn() {
