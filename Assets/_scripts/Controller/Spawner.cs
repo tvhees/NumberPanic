@@ -35,7 +35,7 @@ namespace _scripts.Controller
             speedFactor = Manager.SpeedFactor;
             spawn = true;
             if(Preferences.ShowTutorial)
-                Invoke("RunTutorial", 3f);
+                Invoke("RunTutorial", 1.5f);
             StartCoroutine(RegularSpawn());
         }
 

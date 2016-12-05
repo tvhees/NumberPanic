@@ -19,6 +19,7 @@ namespace _scripts.View
         public GameObject continuePanel;
         public GameObject scorePanel;
         public GameObject menuPanel;
+        public TutorialPanel tutorialPanel;
         private Game.State gameState;
 
         private float current;
@@ -64,10 +65,18 @@ namespace _scripts.View
                     scorePanel.SetActive(false);
                     menuPanel.SetActive(false);
                     continuePanel.SetActive(false);
+                    tutorialPanel.gameObject.SetActive((false));
+                    break;
+                case Game.State.Pause:
+                    scorePanel.SetActive(false);
+                    menuPanel.SetActive(false);
+                    continuePanel.SetActive(false);
+                    tutorialPanel.gameObject.SetActive((true));
                     break;
                 case Game.State.End:
                     Debug.Log("Set Continue Panel Active");
                     continuePanel.SetActive(true);
+                    tutorialPanel.gameObject.SetActive((false));
                     break;
                 case Game.State.Score:
                     StartCoroutine(LoadScore());
@@ -77,6 +86,7 @@ namespace _scripts.View
                         score.gameObject.SetActive(true);
                     scorePanel.SetActive(false);
                     menuPanel.SetActive(false);
+                    tutorialPanel.gameObject.SetActive(false);
                     break;
             }
         }

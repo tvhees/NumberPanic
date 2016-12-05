@@ -40,3 +40,5 @@ C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\UnityEn
 C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\UnityEngine.VR.xml
 C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\Assembly-CSharp-firstpass.pdb
 C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\RSG.Promise.dll
+C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\DOTween.dll
+C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\DOTween.xml

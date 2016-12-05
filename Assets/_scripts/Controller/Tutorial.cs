@@ -3,6 +3,7 @@ using UnityEngine;
 using _scripts.Controller;
 using System;
 using System.Runtime.InteropServices.ComTypes;
+using _scripts.View;
 
 namespace Assets._scripts.Controller
 {
@@ -17,24 +18,29 @@ namespace Assets._scripts.Controller
 
         private void Update()
         {
-            promiseTimer.Update(Time.deltaTime);
+            promiseTimer.Update(Time.unscaledDeltaTime);
         }
 
         public void RunTutorial()
         {
-            ShowTextBox("Press a number!", _ => !waiting)
+            ShowTextBox("PRESS A NUMBER TO START!", _ => !waiting)
                 .Then(() => Manager.Instance.game.Resume())
                 .Then(() => promiseTimer.WaitFor(0.5f))
-                .Then(() =>ShowTextBox("The number you need to press is always shown here in yellow. This is also your score", _ => RecievedGenericInput()))
-                .Then(() =>ShowTextBox("Pressing the right number adds to your timer.", _ => RecievedGenericInput()))
-                .Then(() =>ShowTextBox("Pressing the wrong number or letting the right number hit the bottom of the screen decreases the timer", _ => RecievedGenericInput()))
-                .Then(() =>ShowTextBox("The game ends when the timer runs out. Try to get the highest score you can, good luck!", _ => RecievedGenericInput()))
+                .Then(() =>ShowTextBox("YOUR SCORE IS SHOWN HERE\n(touch to continue)", _ => RecievedGenericInput()))
+                .Then(() => promiseTimer.WaitFor(0.1f))
+                .Then(() =>ShowTextBox("PRESSING THE SAME NUMBER AS YOUR SCORE IS GOOD", _ => RecievedGenericInput()))
+                .Then(() => promiseTimer.WaitFor(0.1f))
+                .Then(() =>ShowTextBox("PRESSING A DIFFERENT NUMBER IS BAD", _ => RecievedGenericInput()))
+                .Then(() => promiseTimer.WaitFor(0.1f))
+                .Then(() =>ShowTextBox("THE GAME ENDS WHEN THIS TIMER REACHES ZERO", _ => RecievedGenericInput()))
+                .Then(() => promiseTimer.WaitFor(0.1f))
+                .Then(() =>ShowTextBox("GOOD LUCK!", _ => RecievedGenericInput()))
                 .Done(() => Manager.Instance.game.Resume());
         }
 
-        private IPromise ShowTextBox(string text, Func<TimeData, bool> waitCondition)
+        private IPromise ShowTextBox(string textIn, Func<TimeData, bool> waitCondition)
         {
-            Debug.Log("Showing text: " + text);
+            UiManager.Instance.tutorialPanel.Display(textIn);
             return WaitForNumberTouch(waitCondition);
         }
 
@@ -48,7 +54,7 @@ namespace Assets._scripts.Controller
         private bool RecievedGenericInput()
         {
             #if UNITY_EDITOR || UNITY_STANDALONE
-            return Input.GetMouseButton(0);
+            return Input.GetMouseButtonDown(0);
             #endif
 
             #if UNITY_ANDROID || UNITY_IOS
