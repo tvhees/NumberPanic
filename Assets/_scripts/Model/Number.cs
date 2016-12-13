@@ -26,8 +26,7 @@ namespace Assets._scripts.Model
         private ParticleSystem.EmissionModule em;
         private ParticleSystem.ShapeModule sh;
         private Spawner spawner;
-        [SerializeField]
-        private FaceValue fV;
+        [SerializeField] private FaceValue fV;
 
         public void Init(int currentIn, Vector3 startPos, float speedIn, Spawner scriptIn) {
             game = Manager.Instance.game;
@@ -81,11 +80,7 @@ namespace Assets._scripts.Model
 
         public bool IsCurrentValue
         {
-            get
-            {
-                var currentFv = game.GetFaceValue();
-                return fV.Value == currentFv.Value || fV.Text == currentFv.Text;
-            }
+            get { return fV == game.GetFaceValue(); }
         }
 
         private Color IncorrectNumberColor
