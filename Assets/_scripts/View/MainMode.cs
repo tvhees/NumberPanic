@@ -1,62 +1,63 @@
-﻿using UnityEngine;
+﻿using System;
+using Assets._scripts.Controller;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using _scripts.Controller;
 using _scripts.View;
 
 namespace Assets._scripts.View
 {
-    public class MainMode : MonoBehaviour {
+    public class MainMode : Dropdown, IModeList
+    {
+        public static UnityEvent OnClicked = new UnityEvent();
 
-        private Dropdown dropDown;
-        private Animator animator;
-
-        private void Awake()
+        protected override void Awake()
         {
-            // Get this objects components
-            dropDown = GetComponent<Dropdown>();
-            animator = GetComponent<Animator> ();
+            base.Awake();
+            if (!Application.isPlaying)
+                return;
 
-            // Create the list of options for this dropdown
-            // and tell it which function to call when an option is chosen
             GetOptionList();
-            dropDown.onValueChanged.AddListener(GetSubList);
-
-            // Load any saved mode choice (0 - "linear" is default)
-            Preferences.Instance.Load();
-            dropDown.value = Preferences.MainMode;
-            dropDown.RefreshShownValue();
-
-            // Initialise the submenu as though we just chose an option
-            GetSubList(dropDown.value);
+            onValueChanged.AddListener(GetSubList);
+            LoadSavedModes();
             UiManager.Instance.subModes.Init();
         }
 
-        // This is called whenever we choose a new mode.
-        static void GetSubList(int value)
+        private void LoadSavedModes()
         {
-            // Tell player preferences and game manager which mode to save/use
+            Preferences.Instance.Load();
+            value = Preferences.MainMode;
+            RefreshShownValue();
+            onValueChanged.Invoke(value);
+        }
+
+        /// <summary>
+        /// Create a new entry in the dropdown list for each mode specified in the game manager
+        /// </summary>
+        public void GetOptionList()
+        {
+            ClearOptions();
+            for (var i = 0; i < (int)Manager.Mode.NumberOfTypes; i++)
+                options.Add(new OptionData { text = ((Manager.Mode)i).ToString() });
+        }
+
+        /// <summary>
+        /// Save mode choice and generate a new list of options in the SubMode menu.
+        /// Called whenever a new MainMode is selected
+        /// </summary>
+        private static void GetSubList(int value)
+        {
             Preferences.MainMode = value;
             Manager.MainMode = (Manager.Mode)value;
-
-            // Tell the submode to generate a list of options for this mode
             UiManager.Instance.subModes.GetOptionList();
         }
 
-        // Called at Awake as this list is static
-        private void GetOptionList()
+        public override void OnPointerClick(PointerEventData eventData)
         {
-            dropDown.ClearOptions();
-            // Make a new option for each enum value set in the manager.
-            for (var i = 0; i < (int)Manager.Mode.NumberOfTypes; i++)
-            {
-                dropDown.options.Add(new Dropdown.OptionData() { text = ((Manager.Mode)i).ToString() });
-            }
-        }
-
-        // Called by the UImanager when a game is started or ended
-        public void Fade(bool active) {
-            dropDown.interactable = active;
-            animator.SetTrigger ("fade");
+            OnClicked.Invoke();
+            base.OnPointerClick(eventData);
         }
     }
 }

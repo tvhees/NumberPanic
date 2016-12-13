@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Assets._scripts.Controller;
+using Assets._scripts.Model;
 using UnityEngine;
 using _scripts.Model;
 
@@ -7,13 +8,14 @@ namespace _scripts.Controller
 {
     public class Spawner : MonoBehaviour
     {
+        public Camera GameCam;
+        [SerializeField] private bool spawn;
+        [SerializeField] private float leftBound;
+        [SerializeField] private float rightBound;
 
-        public GameObject number;
-        public Camera gameCam;
-        [HideInInspector] public bool spawn;
-        [HideInInspector] public float leftBound, rightBound;
-
-        private float padding, waitFactor, speedFactor;
+        private float padding;
+        private float timeBetweenNumbers;
+        private float numberSpeed;
         private Game.State state = Game.State.Attract;
 
         private void Awake() {
@@ -26,33 +28,22 @@ namespace _scripts.Controller
             state = newState;
         }
 
-        public void Init()
+        public void Start()
         {
-            leftBound = 0.2f;
-            rightBound = 0.95f;
-            padding = Manager.Padding;
-            waitFactor = Manager.WaitFactor;
-            speedFactor = Manager.SpeedFactor;
-            spawn = true;
-            if(Preferences.ShowTutorial)
-                Invoke("RunTutorial", 1.5f);
+            padding = Manager.Instance.Padding;
+            timeBetweenNumbers = Manager.Instance.TimeBetweenNumbers;
+            numberSpeed = Manager.Instance.NumberSpeed;
             StartCoroutine(RegularSpawn());
-        }
-
-        private void RunTutorial()
-        {
-            Tutorial.Instance.RunTutorial();
-            Preferences.ShowTutorial = false;
         }
 
         private IEnumerator RegularSpawn() {
             var counter = 0;
 
-            while (spawn)
+            while (true)
             {
                 if (state != Game.State.Title)
                 {
-                    var waitTime = Mathf.Pow(padding / (Manager.Current + padding), 2f) * waitFactor;
+                    var waitTime = Mathf.Pow(padding / (Manager.Current + padding), 2f) * timeBetweenNumbers;
 
                     if (counter == 0)
                     {
@@ -75,10 +66,10 @@ namespace _scripts.Controller
 
         private bool SpawnNumber(bool real = true) {
             // Spawn from the top of the screen - recalculate every time in case orientation changes
-            var position = gameCam.ViewportToWorldPoint(new Vector3(Random.Range(leftBound, rightBound), 1f, 20f));
+            var position = GameCam.ViewportToWorldPoint(new Vector3(Random.Range(leftBound, rightBound), 1f, 20f));
 
             // Speed to travel downwards, damped increase as numbers increase
-            var speed = (Manager.Current + Manager.Padding) * speedFactor / Manager.Padding;
+            var speed = (Manager.Current + Manager.Instance.Padding) * numberSpeed / Manager.Instance.Padding;
 
             // Default value is the next one player needs to collect
             var value = Manager.Current;

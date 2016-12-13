@@ -3,15 +3,15 @@ using Assets._scripts.View;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using _scripts.Controller;
 using _scripts.Model;
-using _scripts.View;
 
-namespace _scripts.Controller
+namespace Assets._scripts.Controller
 {
     public class Manager : Singleton<Manager> {
 
-        public bool timeAttackMode;
-        public GameTimer gameTimer { get; private set; }
+        public bool TimeAttackMode;
+        public GameTimer GameTimer { get; private set; }
 
         [HideInInspector] public UiManager ui;
         [HideInInspector] public Game game;
@@ -23,19 +23,22 @@ namespace _scripts.Controller
         [HideInInspector] public static ExplosionPool explosionPool;
 
         // Variables used to control pace of the game - set in inspector while testing
-        [SerializeField] private float setPadding = 20f;
-        [SerializeField] private float setWait = 1f;
-        [SerializeField] private float setSpeed = 3f;
-        public static float Padding;
-        public static float WaitFactor;
-        public static float SpeedFactor;
+        [SerializeField] private float padding;
+        [SerializeField] private float timeBetweenNumbers;
+        [SerializeField] private float numberSpeed;
+
+        public float Padding { get { return padding; } }
+        public float TimeBetweenNumbers { get { return timeBetweenNumbers; } }
+        public float NumberSpeed { get { return numberSpeed; } }
 
         // Data holders
-        readonly Data data = new Data();
+        private readonly Data data = new Data();
 
         // Game state variables
         public static Mode MainMode;
         public static int Current;
+        public bool GameStarted { get { return game != null && game.IsInPlayState; } }
+        public bool GameEnded { get { return game != null && !game.IsInPlayState; } }
 
         // Enums
         // Main modes
@@ -65,11 +68,11 @@ namespace _scripts.Controller
         }
 
         private void Start() {
-            Padding = setPadding;
-            WaitFactor = setWait;
-            SpeedFactor = setSpeed;
             numberPool.CreatePool();
             explosionPool.CreatePool();
+
+            if(Preferences.ShowTutorial)
+                Tutorial.Instance.RunMenuTutorial();
         }
 
         private void Update()
@@ -95,31 +98,24 @@ namespace _scripts.Controller
             if (!SceneManager.GetSceneByName("Game").isLoaded)
             {
                 var async = SceneManager.LoadSceneAsync("Game", LoadSceneMode.Additive);
-                var breakNo = 0;
                 while (!async.isDone)
                 {
                     yield return null;
-                    breakNo++;
-                    if (breakNo <= 1000) continue;
-                    Debug.Log("Breaking load loop");
-                    break;
                 }
             }
 
-            if (timeAttackMode && !initializing)
+            if (TimeAttackMode && !initializing)
                 NewTimer();
-
-            spawner.Init();
         }
 
         public void NewTimer()
         {
-            gameTimer = new GameTimer();
+            GameTimer = new GameTimer();
         }
 
         private void DestroyGame() {
             Time.timeScale = 1f;
-            gameTimer = null;
+            GameTimer = null;
             numberPool.Reset();
             explosionPool.Reset();
             game.End();

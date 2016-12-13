@@ -1,19 +1,26 @@
 ﻿using System;
 using Assets._scripts.Controller;
+using Assets._scripts.View;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using _scripts.Controller;
 using _scripts.View;
 using Random = UnityEngine.Random;
 
-namespace _scripts.Model
+namespace Assets._scripts.Model
 {
     public class Number : MonoBehaviour, IPointerDownHandler {
+
+        public static readonly UnityEvent OnCorrectNumberTouch = new UnityEvent();
+
         private float speed;
         private int value;
-        [SerializeField] TextMesh text;
-        [SerializeField] ParticleSystem trail;
-        [SerializeField] BoxCollider2D boxCollider;
+        [SerializeField] private TextMesh text;
+        [SerializeField] private ParticleSystem trail;
+        [SerializeField] private BoxCollider2D boxCollider;
+        [SerializeField] private Flickering arrow;
+        [SerializeField] private Flickering cross;
 
         private Game game;
         private ParticleSystem.EmissionModule em;
@@ -23,12 +30,11 @@ namespace _scripts.Model
 
         public void Init(int currentIn, Vector3 startPos, float speedIn, Spawner scriptIn) {
             game = Manager.Instance.game;
-
             transform.position = startPos;
-
             var randomFactor = Random.Range(0.8f, 1.2f);
             spawner = scriptIn;
             value = currentIn;
+            OnCorrectNumberTouch.AddListener(DestroyIfCurrentValue);
 
             // Call the game function to create a FaceValue struct, get the appropriate return
             fV = game.GetFaceValue(value);
@@ -49,23 +55,48 @@ namespace _scripts.Model
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            EventManager.OnNumberTouched.Invoke();
-            switch (game.GameState)
-            {
-                case Game.State.Attract:
-                case Game.State.Pause:
-                case Game.State.Play:
-                case Game.State.Critical:
-                    var colour = game.ResolveNumber(value, true);
-                    DestroyThis(colour);
-                    break;
-                case Game.State.Title:
-                case Game.State.End:
-                case Game.State.Score:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            if (!game.IsInPlayState)
+                return;
+
+            var color = GetExplosionColor(true);
+            if(IsCurrentValue)
+                OnCorrectNumberTouch.Invoke();
+            else
+                DestroyThis(color);
+
+            game.ProcessGameEvent(IsCurrentValue);
+        }
+
+        public Color GetExplosionColor(bool touched = false)
+        {
+            if (touched)
+                return IsCurrentValue ? CorrectNumberColor : IncorrectNumberColor;
+
+            if (IsCurrentValue && Manager.Current > 0) // if we should have touched this number
+                return IncorrectNumberColor;
+
+            return Color.white;
+        }
+
+        public bool IsCurrentValue
+        {
+            get { return fV.Value == Manager.Current || fV.Text == game.GetFaceValue().Text; }
+        }
+
+        private Color IncorrectNumberColor
+        {
+            get { return Color.red; }
+        }
+
+        private Color CorrectNumberColor
+        {
+            get { return fV.Value > game.HighScore ? Color.green : Color.yellow; }
+        }
+
+        private void DestroyIfCurrentValue()
+        {
+            if(IsCurrentValue)
+                DestroyThis(CorrectNumberColor);
         }
 
         private void DestroyThis(Color colour)
@@ -80,16 +111,57 @@ namespace _scripts.Model
             Manager.numberPool.ReturnObject(gameObject);
         }
 
+        private void OnDisable()
+        {
+            OnCorrectNumberTouch.RemoveListener(DestroyIfCurrentValue);
+        }
+
+        #region Update
+
+        /// <summary>
+        /// Move numbers downwards each frame, toggle tutorial symbols and destroy
+        /// </summary>
         private void Update() {
             transform.Translate(speed * Vector3.down * Time.deltaTime);
+            DestroyIfOutOfView();
+            ToggleTutorialSymbols();
+        }
 
-            if(!spawner.gameCam)
+        private void DestroyIfOutOfView()
+        {
+            if (!spawner.GameCam)
                 Manager.numberPool.ReturnObject(gameObject);
-            else if (transform.position.y < spawner.gameCam.ViewportToWorldPoint(Vector3.zero).y)
+            else if (transform.position.y < spawner.GameCam.ViewportToWorldPoint(Vector3.zero).y)
             {
-                var colour = game.ResolveNumber(value);
+                var colour = GetExplosionColor();
                 DestroyThis(colour);
+                if(IsCurrentValue)
+                    game.ProcessGameEvent(false);
+            }
+        }
+
+        private void ToggleTutorialSymbols()
+        {
+            if(Preferences.ShowTutorial)
+            {
+                if (IsCurrentValue)
+                {
+                    arrow.gameObject.SetActive(true);
+                    cross.gameObject.SetActive(false);
+                }
+                else
+                {
+                    arrow.gameObject.SetActive(false);
+                    cross.gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                arrow.gameObject.SetActive(false);
+                cross.gameObject.SetActive(false);
             }
         }
     }
+
+    #endregion Update
 }

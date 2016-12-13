@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets._scripts.Controller;
+using UnityEngine;
 
 namespace _scripts.Controller
 {
@@ -35,9 +36,9 @@ namespace _scripts.Controller
             remainingTime = Mathf.Max(0f, remainingTime + delta);
 
             if (remainingTime <= Mathf.Epsilon)
-                Manager.Instance.game.OnTimerCompleted();
-            else if (remainingTime <= timePenalty && !Manager.Instance.timeAttackMode)
-                Manager.Instance.game.Critical();
+                Manager.Instance.game.ProcessGameLoss();
+            else if (remainingTime <= timePenalty && !Manager.Instance.TimeAttackMode)
+                Manager.Instance.game.EnterCriticalState();
 
             return remainingTime;
         }

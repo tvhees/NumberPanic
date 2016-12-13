@@ -11,6 +11,6 @@ namespace Assets._scripts.Controller
     public static class EventManager {
 
         public static GameStateEvent OnStateChanged = new GameStateEvent();
-        public static UnityEvent OnNumberTouched = new UnityEvent();
+        public static UnityEvent OnDropDownClicked = new UnityEvent();
     }
 }

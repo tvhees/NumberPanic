@@ -1,32 +1,37 @@
 ﻿using System.Collections;
 using Assets._scripts.Controller;
 using UnityEngine;
-using _scripts.Controller;
+using UnityEngine.Events;
 
-namespace _scripts.View
+namespace Assets._scripts.View
 {
-    public class MenuPanel : MonoBehaviour {
+    public class MenuPanel : MonoBehaviour
+    {
 
-        public Animator anim;
-        [HideInInspector] public bool animating;
+        public static UnityEvent OnFinishedAnimation = new UnityEvent();
+        public bool Animating { get; private set; }
+        [SerializeField] private Animator anim;
 
-        void Awake()
+        private void Awake()
         {
             AnimationManager.Instance.menuPanel = this;
+            Animating = true;
         }
 
         public IEnumerator DropMenu()
         {
-            animating = true;
+            Animating = true;
             anim.SetTrigger("drop");
 
-            while (animating)
+            while (Animating)
                 yield return null;
         }
 
         public void MenuCallback()
         {
-            animating = false;
+            Debug.Log("Menu Finished Animating");
+            Animating = false;
+            OnFinishedAnimation.Invoke();
         }
     }
 }

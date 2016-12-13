@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets._scripts.Controller;
+using UnityEngine;
 using UnityEngine.UI;
 using _scripts.Controller;
 
@@ -15,10 +16,10 @@ namespace _scripts.View
         }
 
         void Update() {
-            if (finalScore.fV.Value > Manager.Instance.game.OldHs)
+            if (finalScore.fV.Value > Manager.Instance.game.HighScore)
                 label.text = finalScore.label.text;
             else
-                label.text = Manager.Instance.game.OldHs.ToString();
+                label.text = Manager.Instance.game.HighScore.ToString();
         }
     }
 }

@@ -53,6 +53,7 @@
     <Compile Include="Assets\_scripts\Controller\Advertising.cs" />
     <Compile Include="Assets\_scripts\Controller\AnimationManager.cs" />
     <Compile Include="Assets\_scripts\Controller\EventManager.cs" />
+    <Compile Include="Assets\_scripts\Controller\FaceValue.cs" />
     <Compile Include="Assets\_scripts\Controller\Game.cs" />
     <Compile Include="Assets\_scripts\Controller\GameTimer.cs" />
     <Compile Include="Assets\_scripts\Controller\Manager.cs" />
@@ -74,7 +75,9 @@
     <Compile Include="Assets\_scripts\View\FinalHighScore.cs" />
     <Compile Include="Assets\_scripts\View\FinalLetterCallback.cs" />
     <Compile Include="Assets\_scripts\View\FinalScore.cs" />
+    <Compile Include="Assets\_scripts\View\Flickering.cs" />
     <Compile Include="Assets\_scripts\View\HighScore.cs" />
+    <Compile Include="Assets\_scripts\View\IModeList.cs" />
     <Compile Include="Assets\_scripts\View\LoadingCover.cs" />
     <Compile Include="Assets\_scripts\View\MainMode.cs" />
     <Compile Include="Assets\_scripts\View\MenuPanel.cs" />
@@ -114,6 +117,9 @@
     <Reference Include="UnityEngine.VR">
       <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
     </Reference>
+    <Reference Include="DOTween">
+      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Demigiant/DOTween/DOTween.dll</HintPath>
+    </Reference>
     <Reference Include="RSG.Promise">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/packages/RSG.Promise.1.2.0.0/lib/net35/RSG.Promise.dll</HintPath>
     </Reference>
@@ -137,9 +143,6 @@
     </Reference>
     <Reference Include="winrt">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/winrt/winrt.dll</HintPath>
-    </Reference>
-    <Reference Include="DOTween">
-      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Demigiant/DOTween/DOTween.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

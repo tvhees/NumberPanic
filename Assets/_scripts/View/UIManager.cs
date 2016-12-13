@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using Assets._scripts.Controller;
-using Assets._scripts.View;
 using UnityEngine;
-using UnityEngine.UI;
 using _scripts.Controller;
+using _scripts.View;
 
-namespace _scripts.View
+namespace Assets._scripts.View
 {
     public class UiManager : Singleton<UiManager> {
 
@@ -20,6 +19,7 @@ namespace _scripts.View
         public GameObject scorePanel;
         public GameObject menuPanel;
         public TutorialPanel tutorialPanel;
+        public GameObject tutorialArrow;
         private Game.State gameState;
 
         private float current;
@@ -32,11 +32,11 @@ namespace _scripts.View
         }
 
         public void Update() {
-            if (Manager.Instance.gameTimer != null)
+            if (Manager.Instance.GameTimer != null)
             {
                 var timerIsRunning = gameState == Game.State.Attract || gameState == Game.State.Pause;
                 var delta = timerIsRunning ? 0 : -Time.unscaledDeltaTime;
-                var timeRemaining = Manager.Instance.gameTimer.UpdateTimer(delta);
+                var timeRemaining = Manager.Instance.GameTimer.UpdateTimer(delta);
                 UpdateTimer(timeRemaining);
             }
 
@@ -74,7 +74,6 @@ namespace _scripts.View
                     tutorialPanel.gameObject.SetActive((true));
                     break;
                 case Game.State.End:
-                    Debug.Log("Set Continue Panel Active");
                     continuePanel.SetActive(true);
                     tutorialPanel.gameObject.SetActive((false));
                     break;
@@ -107,9 +106,9 @@ namespace _scripts.View
 
             score.Increment();
 
-            if (score.fV.Value >= Preferences.HighScore.Value)
+            if (score.Fv.Value >= Preferences.HighScore.Value)
             {
-                Preferences.Instance.UpdateHighScore(score.fV);
+                Preferences.Instance.UpdateHighScore(score.Fv);
             }
         }
 

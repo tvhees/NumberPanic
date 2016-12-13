@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets._scripts.View;
+using UnityEngine;
 using UnityEngine.UI;
 using _scripts.Controller;
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets._scripts.View;
 using UnityEngine;
 using _scripts.Controller;
 using _scripts.View;
@@ -15,6 +16,11 @@ namespace Assets._scripts.Controller
         public ContinuePanel continuePanel;
         public ScorePanel scorePanel;
         private bool firstGame;
+
+        private void Awake()
+        {
+            NewGameButton.OnButtonPressed.AddListener(() => StartCoroutine((NewGame())));
+        }
 
         private void Start()
         {
@@ -57,9 +63,9 @@ namespace Assets._scripts.Controller
         {
             if (use)
             {
-                if (Manager.Instance.gameTimer != null)
+                if (Manager.Instance.GameTimer != null)
                     Manager.Instance.NewTimer();
-                Manager.Instance.game.Attract();
+                Manager.Instance.game.EnterAttractState();
             }
             yield return StartCoroutine(continuePanel.Leave(use));
         }

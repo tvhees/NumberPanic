@@ -1,61 +1,35 @@
-﻿using UnityEngine;
+﻿using System;
+using Assets._scripts.Controller;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using _scripts.Controller;
 
-namespace _scripts.View
+namespace Assets._scripts.View
 {
-    public class SubMode : MonoBehaviour {
+    public class SubMode : Dropdown, IModeList {
 
-        private Dropdown dropDown;
-        private Animator animator;
+        public static UnityEvent OnClicked = new UnityEvent();
 
-        void Awake() {
-            dropDown = GetComponent<Dropdown>();
-            animator = GetComponent<Animator> ();
-            dropDown.onValueChanged.AddListener(SetSubValue);
+        protected override void Awake() {
+            base.Awake();
+            if (!Application.isPlaying)
+                return;
+            onValueChanged.AddListener(SetSubValue);
         }
 
         // Called after the main modes are initially generated
         public void Init() {
             // Load any previously saved submode (default: 0) and use it
-            dropDown.value = Preferences.SubMode;
-            SetSubValue(dropDown.value);
-        }
-
-        // Get a new list of options any time we pick a different main mode
-        public void GetOptionList()
-        {
-            dropDown.ClearOptions();
-
-            switch (Manager.MainMode)
-            {
-                case Manager.Mode.Linear:
-                    // We just need numbers for these options
-                    for (int i = 0; i < 10; i++)
-                        dropDown.options.Add(new Dropdown.OptionData() { text = (i + 1).ToString() });
-                    break;
-                case Manager.Mode.Power:
-                    for (int i = 1; i < 3; i++)
-                        dropDown.options.Add(new Dropdown.OptionData() { text = (i + 1).ToString() });
-                    break;
-                case Manager.Mode.Sequence:
-                    // Create an option for each sequence defined in the Manager
-                    for (int i = 0; i < (int)Manager.Sequence.NumberOfTypes; i++)
-                        dropDown.options.Add(new Dropdown.OptionData() { text = ((Manager.Sequence)i).ToString() });
-                    break;
-                case Manager.Mode.English:
-                    for (int i = 0; i < (int)Manager.English.NumberOfTypes; i++)
-                        dropDown.options.Add(new Dropdown.OptionData() { text = ((Manager.English)i).ToString() });
-                    break;
-            }
-
-            dropDown.RefreshShownValue();
-            SetSubValue(dropDown.value);
+            value = Preferences.SubMode;
+            SetSubValue(value);
         }
 
         // Called on initialisation and every time we choose a new submode
         // or new main mode
-        void SetSubValue(int value) {
+        private static void SetSubValue(int value) {
+            EventManager.OnDropDownClicked.Invoke();
+
             // Tell player prefs and manager what submode we're on
             Preferences.SubMode = value;
             Manager.SubMode = value;
@@ -66,10 +40,51 @@ namespace _scripts.View
                 UiManager.Instance.score.UpdateDisplay();
         }
 
+        // Get a new list of options any time we pick a different main mode
+        public void GetOptionList()
+        {
+            ClearOptions();
+
+            switch (Manager.MainMode)
+            {
+                case Manager.Mode.Linear:
+                    // We just need numbers for these options
+                    for (var i = 0; i < 10; i++)
+                        options.Add(new OptionData { text = (i + 1).ToString() });
+                    break;
+                case Manager.Mode.Power:
+                    for (var i = 1; i < 3; i++)
+                        options.Add(new OptionData { text = (i + 1).ToString() });
+                    break;
+                case Manager.Mode.Sequence:
+                    // Create an option for each sequence defined in the Manager
+                    for (var i = 0; i < (int)Manager.Sequence.NumberOfTypes; i++)
+                        options.Add(new OptionData { text = ((Manager.Sequence)i).ToString() });
+                    break;
+                case Manager.Mode.English:
+                    for (var i = 0; i < (int)Manager.English.NumberOfTypes; i++)
+                        options.Add(new OptionData { text = ((Manager.English)i).ToString() });
+                    break;
+                case Manager.Mode.NumberOfTypes:
+                    throw new ArgumentOutOfRangeException();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            RefreshShownValue();
+            SetSubValue(value);
+        }
+
         public void Fade(bool active)
         {
-            dropDown.interactable = active;
+            interactable = active;
             animator.SetTrigger ("fade");
+        }
+
+        public override void OnPointerClick(PointerEventData eventData)
+        {
+            EventManager.OnDropDownClicked.Invoke();
+            base.OnPointerClick(eventData);
         }
     }
 }

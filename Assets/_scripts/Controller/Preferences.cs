@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace _scripts.Controller
+namespace Assets._scripts.Controller
 {
     public class Preferences : Singleton<Preferences> {
 

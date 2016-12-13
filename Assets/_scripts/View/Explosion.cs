@@ -1,22 +1,26 @@
-﻿using UnityEngine;
+﻿using Assets._scripts.Controller;
+using UnityEngine;
 using _scripts.Controller;
 
 namespace _scripts.View
 {
-    public class Explosion : MonoBehaviour {
+    public class Explosion : MonoBehaviour
+    {
 
-        private ParticleSystem.LimitVelocityOverLifetimeModule lim;
-        private float timer, lifetime;
+        private float timer;
+        private float lifetime;
 
         public void Init(Vector3 position, float speed, Color colour)
         {
             transform.position = position;
 
-            ParticleSystem ps = GetComponent<ParticleSystem>();
-            ps.startSpeed = speed;
-            ps.startLifetime = speed;
-            ps.startColor = colour;
-            lim = ps.limitVelocityOverLifetime;
+            var ps = GetComponent<ParticleSystem>();
+            var main = ps.main;
+            var lim = ps.limitVelocityOverLifetime;
+            main.startSpeed = speed;
+            main.startLifetime = speed;
+            main.startColor = colour;
+
             lim.limit = new ParticleSystem.MinMaxCurve(speed / 2f);
             ps.Emit(15 * (int)speed);
 
@@ -24,7 +28,7 @@ namespace _scripts.View
             lifetime = speed;
         }
 
-        void Update() {
+        private void Update() {
             timer += Time.deltaTime;
 
             if(timer >= lifetime)

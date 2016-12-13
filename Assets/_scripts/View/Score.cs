@@ -1,31 +1,33 @@
-﻿using UnityEngine;
+﻿using Assets._scripts.Controller;
+using UnityEngine;
 using UnityEngine.UI;
 using _scripts.Controller;
+using _scripts.View;
 
-namespace _scripts.View
+namespace Assets._scripts.View
 {
     public class Score : MonoBehaviour {
-        [HideInInspector] public FaceValue fV;
+        [HideInInspector] public FaceValue Fv;
 
         private Text display;
         private int current;
 
-        void Awake() {
+        private void Awake() {
             display = GetComponent<Text>();
             UiManager.Instance.score = this;
             UpdateDisplay();
         }
 
         public void UpdateDisplay() {
-            fV = Manager.Instance.game.GetFaceValue(current);
-            display.text = fV.Text;
+            Fv = Manager.Instance.game.GetFaceValue(current);
+            display.text = Fv.Text;
         }
 
         public void Increment()
         {
             current++;
-            UpdateDisplay();
             GetComponent<Animator>().SetTrigger("expand");
+            UpdateDisplay();
         }
     }
 }
