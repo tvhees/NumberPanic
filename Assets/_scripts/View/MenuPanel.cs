@@ -29,7 +29,6 @@ namespace Assets._scripts.View
 
         public void MenuCallback()
         {
-            Debug.Log("Menu Finished Animating");
             Animating = false;
             OnFinishedAnimation.Invoke();
         }
