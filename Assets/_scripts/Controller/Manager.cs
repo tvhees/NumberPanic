@@ -80,6 +80,9 @@ namespace Assets._scripts.Controller
             if (Input.GetKeyDown(KeyCode.Escape))
                 Application.Quit();
 
+            if(Input.GetKeyDown(KeyCode.T))
+                GameTimer.AddTimePenalty();
+
             if (game != null)
                 game.ProcessState();
         }

@@ -1,56 +1,42 @@
 ﻿using System;
-using Assets._scripts.Controller;
 using UnityEngine;
-using _scripts.Controller;
 using UnityEngine.Advertisements;
 
-public class Advertising : MonoBehaviour
+namespace Assets._scripts.Controller
 {
-    public string zoneID;
-    private int counter;
-
-    private void Awake()
+    public class Advertising : MonoBehaviour
     {
-        Manager.Instance.adverts = this;
-        counter = 3;
-    }
-
-    public void RegularAd()
-    {
-        counter--;
-
-        if (counter == 0)
+        private void Awake()
         {
-            ShowAd();
-            counter = 3;
+            Advertisement.Initialize(Advertisement.gameId);
+            Manager.Instance.adverts = this;
         }
-    }
 
-    public void ShowAd()
-    {
+        public void ShowAd()
+        {
 #if UNITY_IOS || UNITY_ANDROID
-        if (!Advertisement.IsReady()) return;
-        if (string.IsNullOrEmpty(zoneID)) zoneID = null;
-        var options = new ShowOptions {resultCallback = HandleShowResult};
-        Advertisement.Show(zoneID, options);
+            if (!Advertisement.IsReady()) return;
+            var options = new ShowOptions {resultCallback = HandleShowResult};
+            Advertisement.Show(options);
 #endif
-    }
+        }
 
 #if UNITY_IOS || UNITY_ANDROID
-    private void HandleShowResult(ShowResult result)
-    {
-        switch (result)
+        private void HandleShowResult(ShowResult result)
         {
-            case ShowResult.Finished:
-            case ShowResult.Skipped:
-                StartCoroutine(AnimationManager.Instance.Continue(true));
-                break;
-            case ShowResult.Failed:
-                StartCoroutine(AnimationManager.Instance.Continue(false));
-                break;
-            default:
-                throw new ArgumentOutOfRangeException("result", result, null);
+            switch (result)
+            {
+                case ShowResult.Finished:
+                case ShowResult.Skipped:
+                    StartCoroutine(AnimationManager.Instance.Continue(true));
+                    break;
+                case ShowResult.Failed:
+                    StartCoroutine(AnimationManager.Instance.Continue(false));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("result", result, null);
+            }
         }
-    }
 #endif
+    }
 }
