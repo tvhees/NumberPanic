@@ -3,21 +3,27 @@ using UnityEngine;
 using _scripts.Controller;
 using System;
 using System.Net.Security;
+using System.Runtime.Remoting.Messaging;
 using Assets._scripts.Model;
 using Assets._scripts.View;
+using UnityEngine.UI;
 using _scripts.View;
 using Random = UnityEngine.Random;
 
 namespace Assets._scripts.Controller
 {
     public class Tutorial : Singleton<Tutorial> {
-        private readonly PromiseTimer promiseTimer = new PromiseTimer();
+        private readonly PromiseTimer menuTimer = new PromiseTimer();
+        private readonly PromiseTimer gameTimer = new PromiseTimer();
         private GameObject tutorialArrow;
+
+        #region Waiting Flags
+
         private bool waitingForPlayButton;
         private bool waitingForMenuAnimation;
         private bool waitingForMainModeButton;
         private bool waitingForSubModeButton;
-        private bool gameWaiting;
+        private bool waitingForNumberTouch;
         private bool isRecievingInput
         {
             get
@@ -31,6 +37,7 @@ namespace Assets._scripts.Controller
 #endif
             }
         }
+        #endregion Waiting Flags
 
         private void Awake()
         {
@@ -38,48 +45,69 @@ namespace Assets._scripts.Controller
             MenuPanel.OnFinishedAnimation.AddListener(() => waitingForMenuAnimation = false);
             MainMode.OnClicked.AddListener(() => waitingForMainModeButton = false);
             SubMode.OnClicked.AddListener(() => waitingForSubModeButton = false);
-            Number.OnCorrectNumberTouch.AddListener(() => gameWaiting = false);
+            Number.OnCorrectNumberTouch.AddListener(() => waitingForNumberTouch = false);
             tutorialArrow = UiManager.Instance.tutorialArrow;
         }
 
         private void Update()
         {
-            promiseTimer.Update(Time.unscaledDeltaTime);
+            menuTimer.Update(Time.unscaledDeltaTime);
+            gameTimer.Update(Time.unscaledDeltaTime);
         }
 
         public void RunMenuTutorial()
         {
             Random.InitState(1);
-            Promise.Resolved()
-                .Then(HighlightButton("Play"))
-                .Then(WaitForPlayButton())
-                .Then(() => tutorialArrow.SetActive(false))
-                .Then(WaitForMenuAnimation())
-                .Then(WaitForMenuAnimation())
-                .Then(HighlightButton("MainMode"))
-                .Then(WaitForMainModeButton())
-                .Then(HighlightButton("SubMode"))
-                .Then(WaitForSubModeButton())
-                .Then(HighlightButton("Play"))
-                .Then(WaitForPlayButton())
-                .Done(DeactivateTutorial);
+            Promise.Sequence(
+                HighlightObject("Play"),
+                WaitForPlayButton(),
+                ToggleArrow(false),
+                WaitForMenuAnimation(),
+                WaitForMenuAnimation(),
+                HighlightObject("MainMode"),
+                WaitForMainModeButton(),
+                HighlightObject("SubMode"),
+                WaitForSubModeButton(),
+                HighlightObject("Play"),
+                WaitForPlayButton())
+            .Done(DeactivateTutorial);
+        }
 
-#if false
-            ShowTextBox("PRESS A NUMBER TO START!", _ => !waiting)
-                .Then(() => Manager.Instance.game.UnPause())
-                .Then(() => promiseTimer.WaitFor(0.5f))
-                .Then(() =>ShowTextBox("YOUR SCORE IS SHOWN HERE\n(touch to continue)", _ => isRecievingInput))
-                .Then(() => promiseTimer.WaitFor(0.1f))
-                .Then(() =>ShowTextBox("PRESSING THE SAME NUMBER AS YOUR SCORE IS GOOD", _ => isRecievingInput))
-                .Then(() => promiseTimer.WaitFor(0.1f))
-                .Then(() =>ShowTextBox("PRESSING A DIFFERENT NUMBER IS BAD", _ => isRecievingInput))
-                .Then(() => promiseTimer.WaitFor(0.1f))
-                .Then(() =>ShowTextBox("THE GAME ENDS WHEN THIS TIMER REACHES ZERO", _ => isRecievingInput))
-                .Then(() => promiseTimer.WaitFor(0.1f))
-                .Then(() =>ShowTextBox("GOOD LUCK!", _ => isRecievingInput))
-                .Then(() => Manager.Instance.game.UnPause())
-                .Done(() => Preferences.ShowTutorial = false);
-            #endif
+        public void RunGameTutorial()
+        {
+            const float inputDelay = 0.5f;
+            Promise.Sequence(
+                WaitForSeconds(1.2f),
+                PauseGame(),
+                HighlightObject("GameScore"),
+                ShowText("This is the target number" +
+                         "\n(touch to continue)" +
+                         "\n..."),
+                WaitForInput(inputDelay),
+                HighlightObject("TimerDisplay"),
+                ShowText("This is the remaining game time" +
+                         "\n..."),
+                WaitForInput(inputDelay),
+                ShowText("Try touching a number the same as the target"),
+                HighlightObject("Number(Clone)"),
+                WaitForNumberTouch(),
+                ToggleArrow(false),
+                UnpauseGame(),
+                WaitForSeconds(0.5f),
+                PauseGame(),
+                ShowText("This will increase the target number and give you extra game time" +
+                         "\n..."),
+                WaitForInput(inputDelay),
+                ShowText("Letting a target number leave the screen or touching a different number" +
+                         "\nwill lose you game time!" +
+                         "\n..."),
+                WaitForInput(inputDelay),
+                ShowText("The game ends when you" +
+                         "\nrun out of time." +
+                         "\nGood luck!" +
+                         "\n..."),
+                WaitForInput(inputDelay))
+            .Done(Manager.Instance.game.Unpause);
         }
 
         private void DeactivateTutorial()
@@ -88,32 +116,23 @@ namespace Assets._scripts.Controller
             Preferences.ShowTutorial = false;
         }
 
-        private Func<IPromise> ShowTextBox(string textIn, Func<TimeData, bool> waitCondition)
-        {
-            UiManager.Instance.tutorialPanel.Display(textIn);
-            return PauseUntilCondition(waitCondition);
-        }
-
-        private Func<IPromise> WaitUntilCondition(Func<TimeData, bool> waitCondition)
-        {
-            return () => promiseTimer.WaitUntil(waitCondition);
-        }
-
-        private Func<IPromise> PauseUntilCondition(Func<TimeData, bool> waitCondition)
-        {
-            Manager.Instance.game.Pause();
-            gameWaiting = true;
-            return () => promiseTimer.WaitUntil(waitCondition);
-        }
-
         #region Menu tutorials
+
+        private Func<IPromise> ToggleArrow(bool isOn)
+        {
+            return () =>
+            {
+                tutorialArrow.SetActive(isOn);
+                return Promise.Resolved();
+            };
+        }
 
         private Func<IPromise> WaitForPlayButton()
         {
             return () =>
             {
                 waitingForPlayButton = true;
-                return promiseTimer.WaitUntil(_ => !waitingForPlayButton);
+                return menuTimer.WaitUntil(_ => !waitingForPlayButton);
             };
         }
 
@@ -122,7 +141,7 @@ namespace Assets._scripts.Controller
             return () =>
             {
                 waitingForMenuAnimation = true;
-                return promiseTimer.WaitUntil(_ => !waitingForMenuAnimation);
+                return menuTimer.WaitUntil(_ => !waitingForMenuAnimation);
             };
         }
 
@@ -131,7 +150,7 @@ namespace Assets._scripts.Controller
             return () =>
             {
                 waitingForMainModeButton = true;
-                return promiseTimer.WaitUntil(_ => !waitingForMainModeButton);
+                return menuTimer.WaitUntil(_ => !waitingForMainModeButton);
             };
         }
 
@@ -140,16 +159,15 @@ namespace Assets._scripts.Controller
             return () =>
             {
                 waitingForSubModeButton = true;
-                return promiseTimer.WaitUntil(_ => !waitingForSubModeButton);
+                return menuTimer.WaitUntil(_ => !waitingForSubModeButton);
             };
         }
 
-        private Func<IPromise> HighlightButton(string buttonName)
+        private Func<IPromise> HighlightObject(string objectName)
         {
             return () =>
             {
-                Debug.Log("Highlight: " + buttonName);
-                var button = GameObject.Find(buttonName);
+                var button = GameObject.Find(objectName);
                 var pos = new Vector3
                 (
                     button.transform.position.x,
@@ -167,14 +185,56 @@ namespace Assets._scripts.Controller
 
         #region Game tutorials
 
-        private Func<IPromise> HighlightScore()
+        private Func<IPromise> ShowText(string textIn)
         {
-            return Promise.Resolved;
+            return () =>
+            {
+                UiManager.Instance.tutorialPanel.Display(textIn);
+                return Promise.Resolved();
+            };
         }
 
-        private Func<IPromise> HighlightTimer()
+        private Func<IPromise> PauseGame()
         {
-            return Promise.Resolved;
+            return () =>
+            {
+                Manager.Instance.game.Pause();
+                return Promise.Resolved();
+            };
+        }
+
+        private Func<IPromise> UnpauseGame()
+        {
+            return () =>
+            {
+                Manager.Instance.game.Unpause();
+                return Promise.Resolved();
+            };
+        }
+
+        private Func<IPromise> WaitForInput()
+        {
+            return () => gameTimer.WaitUntil(_ => isRecievingInput);
+        }
+
+        private Func<IPromise> WaitForInput(float delay)
+        {
+            return () => Promise.Sequence(WaitForSeconds(delay),
+                                            WaitForInput());
+        }
+
+        private Func<IPromise> WaitForSeconds(float t)
+        {
+            return () => gameTimer.WaitFor(t);
+        }
+
+        private Func<IPromise> WaitForNumberTouch()
+        {
+            return () =>
+            {
+                waitingForNumberTouch = true;
+                return gameTimer.WaitUntil(_ => !waitingForNumberTouch);
+            };
         }
 
         #endregion

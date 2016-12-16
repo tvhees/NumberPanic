@@ -102,7 +102,7 @@ namespace Assets._scripts.Controller
         /// <summary>
         /// Change state to Play and immediately move time scale to 1.0f
         /// </summary>
-        public void UnPause()
+        public void Unpause()
         {
             Play();
             Time.timeScale = targetTimeScale;

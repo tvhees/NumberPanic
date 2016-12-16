@@ -34,6 +34,7 @@ namespace _scripts.Controller
             timeBetweenNumbers = Manager.Instance.TimeBetweenNumbers;
             numberSpeed = Manager.Instance.NumberSpeed;
             StartCoroutine(RegularSpawn());
+            Tutorial.Instance.RunGameTutorial();
         }
 
         private IEnumerator RegularSpawn() {

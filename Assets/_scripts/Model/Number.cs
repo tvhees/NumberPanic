@@ -124,7 +124,7 @@ namespace Assets._scripts.Model
         private void Update() {
             transform.Translate(speed * Vector3.down * Time.deltaTime);
             DestroyIfOutOfView();
-            ToggleTutorialSymbols();
+            //ToggleTutorialSymbols();
         }
 
         private void DestroyIfOutOfView()
