@@ -14,6 +14,7 @@ namespace Assets._scripts.Controller
         public GameTimer GameTimer { get; private set; }
 
         [HideInInspector] public UiManager ui;
+        [HideInInspector] public AudioManager audioManager;
         [HideInInspector] public Game game;
         [HideInInspector] public Spawner spawner;
         [HideInInspector] public Advertising adverts;
@@ -95,7 +96,7 @@ namespace Assets._scripts.Controller
 
         private IEnumerator LoadGame(bool initializing = false) {
             Current = 0;
-
+            audioManager.StopTitleMusic();
             game = new Game(data, MainMode, SubMode);
 
             if (!SceneManager.GetSceneByName("Game").isLoaded)

@@ -52,16 +52,19 @@
   <ItemGroup>
     <Compile Include="Assets\_scripts\Controller\Advertising.cs" />
     <Compile Include="Assets\_scripts\Controller\AnimationManager.cs" />
+    <Compile Include="Assets\_scripts\Controller\AudioManager.cs" />
     <Compile Include="Assets\_scripts\Controller\EventManager.cs" />
     <Compile Include="Assets\_scripts\Controller\FaceValue.cs" />
     <Compile Include="Assets\_scripts\Controller\Game.cs" />
     <Compile Include="Assets\_scripts\Controller\GameTimer.cs" />
+    <Compile Include="Assets\_scripts\Controller\InputManager.cs" />
     <Compile Include="Assets\_scripts\Controller\Manager.cs" />
     <Compile Include="Assets\_scripts\Controller\ObjectPool.cs" />
     <Compile Include="Assets\_scripts\Controller\Preferences.cs" />
     <Compile Include="Assets\_scripts\Controller\Purchaser.cs" />
     <Compile Include="Assets\_scripts\Controller\Spawner.cs" />
     <Compile Include="Assets\_scripts\Controller\Tutorial.cs" />
+    <Compile Include="Assets\_scripts\Model\AudioClipObject.cs" />
     <Compile Include="Assets\_scripts\Model\Data.cs" />
     <Compile Include="Assets\_scripts\Model\ExplosionPool.cs" />
     <Compile Include="Assets\_scripts\Model\Number.cs" />

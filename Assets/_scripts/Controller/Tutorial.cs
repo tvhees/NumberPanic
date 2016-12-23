@@ -19,6 +19,7 @@ namespace Assets._scripts.Controller
 
         #region Waiting Flags
 
+        private const float InputDelay = 0.5f;
         private bool waitingForPlayButton;
         private bool waitingForMenuAnimation;
         private bool waitingForMainModeButton;
@@ -75,38 +76,28 @@ namespace Assets._scripts.Controller
 
         public void RunGameTutorial()
         {
-            const float inputDelay = 0.5f;
             Promise.Sequence(
                 WaitForSeconds(1.2f),
                 PauseGame(),
-                HighlightObject("GameScore"),
-                ShowText("This is the target number" +
-                         "\n(touch to continue)" +
-                         "\n..."),
-                WaitForInput(inputDelay),
-                HighlightObject("TimerDisplay"),
-                ShowText("This is the remaining game time" +
-                         "\n..."),
-                WaitForInput(inputDelay),
-                ShowText("Try touching a number the same as the target"),
-                HighlightObject("Number(Clone)"),
-                WaitForNumberTouch(),
+                ExplainScore(),
+                ExplainTimer(),
+                PromptUserToTouchNumber(),
                 ToggleArrow(false),
                 UnpauseGame(),
                 WaitForSeconds(0.5f),
                 PauseGame(),
                 ShowText("This will increase the target number and give you extra game time" +
                          "\n..."),
-                WaitForInput(inputDelay),
+                WaitForInput(InputDelay),
                 ShowText("Letting a target number leave the screen or touching a different number" +
                          "\nwill lose you game time!" +
                          "\n..."),
-                WaitForInput(inputDelay),
+                WaitForInput(InputDelay),
                 ShowText("The game ends when you" +
                          "\nrun out of time." +
                          "\nGood luck!" +
                          "\n..."),
-                WaitForInput(inputDelay))
+                WaitForInput(InputDelay))
             .Done(Manager.Instance.game.Unpause);
         }
 
@@ -184,6 +175,39 @@ namespace Assets._scripts.Controller
         #endregion
 
         #region Game tutorials
+
+        private Func<IPromise> ExplainScore()
+        {
+            return () =>
+                Promise.Sequence(
+                    HighlightObject("GameScore"),
+                    ShowText("This is the target number" +
+                             "\n(touch to continue)" +
+                             "\n..."),
+                    WaitForInput(InputDelay)
+                );
+        }
+
+        private Func<IPromise> ExplainTimer()
+        {
+            return () =>
+                Promise.Sequence(
+                    HighlightObject("TimerDisplay"),
+                    ShowText("This is the remaining game time" +
+                             "\n..."),
+                    WaitForInput(InputDelay)
+                );
+        }
+
+        private Func<IPromise> PromptUserToTouchNumber()
+        {
+            return () =>
+                Promise.Sequence(
+                    ShowText("Try touching a number the same as the target"),
+                    HighlightObject("Number(Clone)"),
+                    WaitForNumberTouch()
+                );
+        }
 
         private Func<IPromise> ShowText(string textIn)
         {

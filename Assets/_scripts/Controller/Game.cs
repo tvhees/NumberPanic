@@ -255,6 +255,7 @@ namespace Assets._scripts.Controller
 
         private void NegativeGameEvent()
         {
+            Manager.Instance.audioManager.PlayNegativeSound();
             if (state == State.Critical)
                 ProcessGameLoss();
             else if (state == State.Play)
@@ -269,6 +270,7 @@ namespace Assets._scripts.Controller
         /// </summary>
         private void PositiveGameEvent()
         {
+            Manager.Instance.audioManager.PlayPositiveSound();
             Manager.Current++;
             Play();
             if(Manager.Instance.TimeAttackMode)
