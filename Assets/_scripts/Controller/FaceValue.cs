@@ -1,7 +1,6 @@
-using System.Diagnostics;
 using JetBrains.Annotations;
 
-namespace Assets._scripts.Controller
+namespace Controller
 {
     [System.Serializable]
     public class FaceValue

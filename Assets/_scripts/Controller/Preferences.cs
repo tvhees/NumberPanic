@@ -1,6 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using thirdparty.SecurePlayerPrefs;
+using UnityEngine;
+using UnityEngine.UI;
+using Utility;
+using View;
 
-namespace Assets._scripts.Controller
+namespace Controller
 {
     public class Preferences : Singleton<Preferences> {
 
@@ -8,7 +13,8 @@ namespace Assets._scripts.Controller
         public static int MainMode;
         public static int SubMode;
         public static bool ShowAdvertisements;
-        public static bool ShowTutorial = true;
+        public static bool ShowTutorial;
+        public static bool ShakeCamera;
 
         private void Awake()
         {
@@ -36,10 +42,16 @@ namespace Assets._scripts.Controller
         }
 #endif
 
-        public void Load(){
+        public void Load()
+        {
+            SocialManager.LoadAchievementArrays();
             MainMode = PlayerPrefs.GetInt("mainMode", 0);
             SubMode = PlayerPrefs.GetInt("subMode", 0);
             ShowAdvertisements = ExtensionMethods.GetBool("ShowAdvertisements", true);
+            ShowTutorial = ExtensionMethods.GetBool("ShowTutorial", true);
+            ShakeCamera = ExtensionMethods.GetBool("ShakeCamera", true);
+            UiManager.Instance.SetTutorialToggle(ShowTutorial);
+            UiManager.Instance.SetShakeToggle(ShakeCamera);
             GetHighScore();
         }
 
@@ -61,6 +73,21 @@ namespace Assets._scripts.Controller
             HighScore = fV;
         }
 
+        public void ToggleTutorial(bool isOn)
+        {
+            ShowTutorial = isOn;
+            UiManager.Instance.SetTutorialToggle(isOn);
+            Save();
+            if(isOn)
+                Tutorial.Instance.RunMenuTutorial();
+        }
+
+        public void ToggleShake(bool isOn)
+        {
+            ShakeCamera = isOn;
+            Save();
+        }
+
         public void Save(){
             // Save mode choices without encryption
             PlayerPrefs.SetInt("mainMode", MainMode);
@@ -69,8 +96,13 @@ namespace Assets._scripts.Controller
             // Save high score without encryption
             SaveHighScore();
 
-            // Save Noads purchase flag with encryption
+            // Save Noads purchase flag with encryption and other toggles
             ExtensionMethods.SetBool("ShowAdvertisements", ShowAdvertisements);
+            ExtensionMethods.SetBool("ShowTutorial", ShowTutorial);
+            ExtensionMethods.SetBool("ShakeCamera", ShakeCamera);
+
+            // Save achievement arrays without encryption
+            SocialManager.SaveAchievementArrays();
 
             // Save all preferences
             ZPlayerPrefs.Save ();

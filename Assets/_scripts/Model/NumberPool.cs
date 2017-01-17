@@ -1,17 +1,16 @@
-﻿using Assets._scripts.Controller;
+﻿using Controller;
 using UnityEngine;
-using _scripts.Controller;
 
-namespace _scripts.Model
+namespace Model
 {
-    public class NumberPool : ObjectPool {
+    public class NumberPool : ObjectPool
+    {
+        public Color colour;
 
         protected override void Init()
         {
-            Manager.numberPool = this;
             poolSize = 20;
             homePosition = Vector3.zero;
         }
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
-namespace Assets._scripts.View
+namespace View
 {
     public class Flickering : MonoBehaviour
     {
@@ -8,11 +9,11 @@ namespace Assets._scripts.View
         [SerializeField] private AnimationCurve curve;
         [SerializeField] private float flickerTime;
         [SerializeField] private Gradient colourGradient;
-        [SerializeField] private TextMesh text;
+        [SerializeField] private Image img;
 
         private void Update()
         {
-            text.color = GetNewColour(text.color, Time.unscaledTime*FlickerTimeScale);
+            img.color = GetNewColour(img.color, Time.unscaledTime*FlickerTimeScale);
         }
 
         private Color GetNewColour(Color color, float time)

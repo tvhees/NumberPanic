@@ -1,8 +1,7 @@
-﻿using Assets._scripts.Controller;
+﻿using Controller;
 using UnityEngine;
-using _scripts.Controller;
 
-namespace _scripts.Model
+namespace Model
 {
     public class ExplosionPool : ObjectPool {
 

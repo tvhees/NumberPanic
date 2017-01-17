@@ -2,16 +2,10 @@
 using UnityEngine;
 using UnityEngine.Advertisements;
 
-namespace Assets._scripts.Controller
+namespace Controller
 {
     public class Advertising : MonoBehaviour
     {
-        private void Awake()
-        {
-            Advertisement.Initialize(Advertisement.gameId);
-            Manager.Instance.adverts = this;
-        }
-
         public void ShowAd()
         {
 #if UNITY_IOS || UNITY_ANDROID
@@ -28,15 +22,21 @@ namespace Assets._scripts.Controller
             {
                 case ShowResult.Finished:
                 case ShowResult.Skipped:
-                    StartCoroutine(AnimationManager.Instance.Continue(true));
+                    StartCoroutine(AnimationManager.Instance.ContinueButtonPressed(true));
                     break;
                 case ShowResult.Failed:
-                    StartCoroutine(AnimationManager.Instance.Continue(false));
+                    StartCoroutine(AnimationManager.Instance.ContinueButtonPressed(false));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("result", result, null);
             }
         }
 #endif
+
+        private void Awake()
+        {
+            Advertisement.Initialize(Advertisement.gameId);
+            Manager.Instance.adverts = this;
+        }
     }
 }

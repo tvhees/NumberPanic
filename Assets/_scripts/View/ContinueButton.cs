@@ -1,31 +1,28 @@
-﻿using Assets._scripts.Controller;
+﻿using Controller;
 using UnityEngine;
 using UnityEngine.UI;
-using _scripts.Controller;
 
-namespace _scripts.View
+namespace View
 {
-    public class ContinueButton : MonoBehaviour {
+    public class ContinueButton : MonoBehaviour
+    {
+        [SerializeField] private Button button;
 
-        public Button button;
-
-        void OnEnable()
+        private void OnEnable()
         {
             button.interactable = true;
         }
     
-        public void ContinueGame() {
+        public void ContinueGame()
+        {
 #if UNITY_ANDROID || UNITY_IOS
-            if(Preferences.ShowAdvertisements)
+            if (Preferences.ShowAdvertisements)
+            {
                 Manager.Instance.adverts.ShowAd();
-            else
-                StartCoroutine(AnimationManager.Instance.Continue(true));
-
+                return;
+            }
 #endif
-
-#if !UNITY_ANDROID && !UNITY_IOS
-        StartCoroutine(AnimationManager.Instance.Continue(true));
-#endif
+            StartCoroutine(AnimationManager.Instance.ContinueButtonPressed(true));
         }
     }
 }

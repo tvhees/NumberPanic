@@ -1,26 +1,24 @@
-﻿using Assets._scripts.Controller;
+﻿using Controller;
 using UnityEngine;
-using _scripts.Controller;
 
-namespace _scripts.View
+namespace View
 {
     public class SubPanel : MonoBehaviour {
 
-        public Animator anim;
-
-        void Awake()
-        {
-            AnimationManager.Instance.subPanels.Add(this);
-        }
+        [SerializeField] private Animator anim;
 
         public void TogglePanel()
         {
-            bool open = anim.GetBool("open");
+            var open = anim.GetBool("open");
             AnimationManager.Instance.CloseSubPanels();
 
             if (!open)
                 anim.SetBool("open", true);
         }
 
+        public void ClosePanel()
+        {
+            anim.SetBool("open", false);
+        }
     }
 }

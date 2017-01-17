@@ -1,10 +1,8 @@
-﻿using Assets._scripts.Controller;
+﻿using Controller;
 using UnityEngine;
 using UnityEngine.UI;
-using _scripts.Controller;
-using _scripts.View;
 
-namespace Assets._scripts.View
+namespace View
 {
     public class Score : MonoBehaviour {
         [HideInInspector] public FaceValue Fv;

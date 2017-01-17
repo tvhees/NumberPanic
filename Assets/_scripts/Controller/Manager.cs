@@ -1,12 +1,12 @@
 ﻿using System.Collections;
-using Assets._scripts.View;
+using Model;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using _scripts.Controller;
-using _scripts.Model;
+using Utility;
+using View;
 
-namespace Assets._scripts.Controller
+namespace Controller
 {
     public class Manager : Singleton<Manager> {
 
@@ -14,12 +14,13 @@ namespace Assets._scripts.Controller
         public GameTimer GameTimer { get; private set; }
 
         [HideInInspector] public UiManager ui;
+        [HideInInspector] public AudioManager audioManager;
         [HideInInspector] public Game game;
         [HideInInspector] public Spawner spawner;
         [HideInInspector] public Advertising adverts;
         [HideInInspector] public MainMode modes;
         [HideInInspector] public Text highScore, title;
-        [HideInInspector] public static NumberPool numberPool;
+        public NumberPool[] numberPools;
         [HideInInspector] public static ExplosionPool explosionPool;
 
         // Variables used to control pace of the game - set in inspector while testing
@@ -32,7 +33,7 @@ namespace Assets._scripts.Controller
         public float NumberSpeed { get { return numberSpeed; } }
 
         // Data holders
-        private readonly Data data = new Data();
+        public readonly Data data = new Data();
 
         // Game state variables
         public static Mode MainMode;
@@ -57,20 +58,23 @@ namespace Assets._scripts.Controller
         {
             Primes,
             Fibbonaci,
+            Pi,
             NumberOfTypes
         }
 
         public enum English
         {
-            Common,
+            Alphabet,
+            CommonWords,
             AusAnthem,
             NumberOfTypes
         }
 
         private void Start() {
-            numberPool.CreatePool();
+            foreach(var pool in numberPools)
+                pool.CreatePool();
             explosionPool.CreatePool();
-
+            Preferences.Instance.Load();
             if(Preferences.ShowTutorial)
                 Tutorial.Instance.RunMenuTutorial();
         }
@@ -95,7 +99,7 @@ namespace Assets._scripts.Controller
 
         private IEnumerator LoadGame(bool initializing = false) {
             Current = 0;
-
+            audioManager.StopTitleMusic();
             game = new Game(data, MainMode, SubMode);
 
             if (!SceneManager.GetSceneByName("Game").isLoaded)
@@ -119,10 +123,17 @@ namespace Assets._scripts.Controller
         private void DestroyGame() {
             Time.timeScale = 1f;
             GameTimer = null;
-            numberPool.Reset();
+            foreach(var pool in numberPools)
+                pool.Reset();
             explosionPool.Reset();
             game.End();
             SceneManager.UnloadSceneAsync("Game");
+        }
+
+        public NumberPool GetPool(int n)
+        {
+            var index = (int)Mathf.Repeat(n, numberPools.Length);
+            return numberPools[index];
         }
     }
 }

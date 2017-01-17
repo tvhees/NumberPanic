@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace _scripts.View
+namespace View
 {
     public class FinalLetterCallback : MonoBehaviour {
 

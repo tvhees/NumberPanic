@@ -1,24 +1,23 @@
-﻿using Assets._scripts.Controller;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace _scripts.Controller
+namespace Controller
 {
     public class GameTimer 
     {
-        public const float startingTime = 20.0f;
-        public const float timeBonus = 3.0f;
-        public const float timePenalty = 6.0f;
+        public const float StartingTime = 20.0f;
+        public const float TimeBonus = 3.0f;
+        public const float TimePenalty = 6.0f;
 
-        public float remainingTime;
+        private float remainingTime;
 
         public GameTimer()
         {
-            remainingTime = startingTime;
+            remainingTime = StartingTime;
         }
 
         public void AddTimeBonus()
         {
-            remainingTime += timeBonus;
+            remainingTime += TimeBonus;
         }
 
         public void AddTimeBonus(float inputBonus)
@@ -28,7 +27,7 @@ namespace _scripts.Controller
 
         public void AddTimePenalty()
         {
-            remainingTime = Mathf.Max(0f, remainingTime - timePenalty);
+            remainingTime = Mathf.Max(0f, remainingTime - TimePenalty);
         }
 
         public float UpdateTimer(float delta)
@@ -37,7 +36,7 @@ namespace _scripts.Controller
 
             if (remainingTime <= Mathf.Epsilon)
                 Manager.Instance.game.ProcessGameLoss();
-            else if (remainingTime <= timePenalty && !Manager.Instance.TimeAttackMode)
+            else if (remainingTime <= TimePenalty && !Manager.Instance.TimeAttackMode)
                 Manager.Instance.game.EnterCriticalState();
 
             return remainingTime;

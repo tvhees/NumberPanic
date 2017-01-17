@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityEngine.Purchasing
+namespace Plugins.UnityPurchasing.script.Demo
 {
 	public class DemoInventory : MonoBehaviour
 	{

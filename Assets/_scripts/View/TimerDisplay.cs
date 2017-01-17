@@ -1,9 +1,8 @@
-﻿using Assets._scripts.View;
+﻿using Controller;
 using UnityEngine;
 using UnityEngine.UI;
-using _scripts.Controller;
 
-namespace _scripts.View
+namespace View
 {
     public class TimerDisplay : MonoBehaviour 
     {
@@ -21,7 +20,7 @@ namespace _scripts.View
         public void SetRemainingTime(float remainingTime, string remainingTimeString)
         {
             timerText.text = remainingTimeString;
-            timerText.color = Color.Lerp(noTimeColour, lotsOfTimeColour, remainingTime/(GameTimer.startingTime * 2f));
+            timerText.color = Color.Lerp(noTimeColour, lotsOfTimeColour, remainingTime/(GameTimer.StartingTime * 2f));
         }
     }
 }

@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
-using _scripts.Controller;
+﻿using UnityEngine.Events;
 
-namespace Assets._scripts.Controller
+namespace Controller
 {
     public class GameStateEvent : UnityEvent<Game.State> { }
 

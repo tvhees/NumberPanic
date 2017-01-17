@@ -1,20 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Assets._scripts.View;
 using UnityEngine;
-using _scripts.Controller;
-using _scripts.View;
+using Utility;
+using View;
 
-namespace Assets._scripts.Controller
+namespace Controller
 {
     public class AnimationManager : Singleton<AnimationManager> {
 
-        public TitleAnimator titleAnimator;
-        public MenuPanel menuPanel;
-        [HideInInspector] public List<SubPanel> subPanels = new List<SubPanel>();
-        public LoadingCover loadingCover;
-        public ContinuePanel continuePanel;
-        public ScorePanel scorePanel;
+        [SerializeField] private SubPanel[] subPanels;
+        [SerializeField] private TitleAnimator titleAnimator;
+        [SerializeField] private MenuPanel menuPanel;
+        [SerializeField] private LoadingCover loadingCover;
+        [SerializeField] private ContinuePanel continuePanel;
+        [SerializeField] private ScorePanel scorePanel;
         private bool firstGame;
 
         private void Awake()
@@ -36,9 +35,8 @@ namespace Assets._scripts.Controller
                 StartCoroutine(scorePanel.Drop());
             }
 
-            //CloseSubPanels();
+            CloseSubPanels();
             yield return StartCoroutine(menuPanel.DropMenu());
-            UiManager.Instance.settingsButton.TogglePanel();
 
             if (firstGame)
             {
@@ -54,20 +52,18 @@ namespace Assets._scripts.Controller
         public void CloseSubPanels()
         {
             foreach (var panel in subPanels)
-            {
-                panel.anim.SetBool("open", false);
-            }
+                panel.ClosePanel();
         }
 
-        public IEnumerator Continue(bool use)
+        public IEnumerator ContinueButtonPressed(bool isContinuing)
         {
-            if (use)
+            if (isContinuing)
             {
                 if (Manager.Instance.GameTimer != null)
                     Manager.Instance.NewTimer();
                 Manager.Instance.game.EnterAttractState();
             }
-            yield return StartCoroutine(continuePanel.Leave(use));
+            yield return StartCoroutine(continuePanel.Leave(isContinuing));
         }
     }
 }
