@@ -1,17 +1,12 @@
 ﻿using System.Collections;
-using Assets._scripts.Controller;
+using Controller;
 using UnityEngine;
-using _scripts.Controller;
 
-namespace _scripts.View
+namespace View
 {
     public class ScorePanel : MonoBehaviour {
-        public Animator anim;
+        [SerializeField] private Animator anim;
         private bool animating;
-
-        void Awake() {
-            AnimationManager.Instance.scorePanel = this;
-        }
 
         public IEnumerator Drop()
         {

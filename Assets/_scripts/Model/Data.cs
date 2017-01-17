@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
-using UnityEngine;
 
-namespace _scripts.Model
+namespace Model
 {
     public class Data {
         public NumberArrays Numbers = new NumberArrays();
@@ -19,13 +17,26 @@ namespace _scripts.Model
             Numbers.Fibbonaci = new int[100];
             Numbers.Fibbonaci[0] = 1;
             Numbers.Fibbonaci[1] = 2;
-            for (int i = 2; i < 100; i++)
+            for (var i = 2; i < 100; i++)
             {
                 Numbers.Fibbonaci[i] = Numbers.Fibbonaci[i - 2] + Numbers.Fibbonaci[i - 1];
             }
+            Numbers.Pi = new[]
+            {
+                3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5, 8, 9, 7, 9, 3,
+                2, 3, 8, 4, 6, 2, 6, 4, 3, 3, 8, 3, 2, 7, 9, 5, 0, 2, 8, 8, 4, 1, 9,
+                7, 1, 6, 9, 3, 9, 9, 3, 7, 5, 1, 0, 5, 8, 2, 0, 9, 7, 4, 9, 4, 4, 5,
+                9, 2, 3, 0, 7, 8, 1, 6, 4, 0, 6, 2, 8, 6, 2, 0, 8, 9, 9, 8, 6, 2, 8,
+                0, 3, 4, 8, 2, 5, 3, 4, 2, 1, 1, 7, 0, 6, 7, 9
+            };
 
-            Texts.EnglishWords = new string[] { "the", "be", "and", "of", "a", "in", "to", "have", "it", "I", "that", "for", "you", "he", "with", "on", "do", "say", "this", "they", "at", "but", "we", "his", "from", "not", "by", "she", "or", "as", "what", "go", "their", "can", "who", "get", "if", "would", "her", "all", "my", "make", "about", "know", "will", "up", "one", "time", "there", "year", "so", "think", "when", "which", "them", "some" };
-            Texts.AusAnthem = new string[] { "australians", "all", "let", "us", "rejoice", "for", "we", "are", "young", "and", "free", "we've", "golden", "soil", "and", "wealth", "for", "toil", "our", "home", "is", "girt", "by", "sea" };
+            Texts.Alphabet = new[]
+            {
+                "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p",
+                "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+            };
+            Texts.EnglishWords = new[] { "the", "be", "and", "of", "a", "in", "to", "have", "it", "I", "that", "for", "you", "he", "with", "on", "do", "say", "this", "they", "at", "but", "we", "his", "from", "not", "by", "she", "or", "as", "what", "go", "their", "can", "who", "get", "if", "would", "her", "all", "my", "make", "about", "know", "will", "up", "one", "time", "there", "year", "so", "think", "when", "which", "them", "some" };
+            Texts.AusAnthem = new[] { "australians", "all", "let", "us", "rejoice", "for", "we", "are", "young", "and", "free", "we've", "golden", "soil", "and", "wealth", "for", "toil", "our", "home", "is", "girt", "by", "sea" };
         }
     }
 
@@ -34,11 +45,13 @@ namespace _scripts.Model
     {
         public int[] Primes;
         public int[] Fibbonaci;
+        public int[] Pi;
     }
 
     [Serializable]
     public class TextArrays
     {
+        public string[] Alphabet;
         public string[] EnglishWords;
         public string[] AusAnthem;
     }

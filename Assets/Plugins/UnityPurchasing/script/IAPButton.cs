@@ -1,10 +1,11 @@
 #if UNITY_PURCHASING
-using UnityEngine.Events;
-using UnityEngine.UI;
-using System.IO;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Purchasing;
+using UnityEngine.UI;
 
-namespace UnityEngine.Purchasing
+namespace Plugins.UnityPurchasing.script
 {
 	[RequireComponent (typeof (Button))]
 	[AddComponentMenu("Unity IAP/IAP Button")]
@@ -136,7 +137,7 @@ namespace UnityEngine.Purchasing
 						builder.AddProduct(product.id, product.type);
 					}
 				}
-				UnityPurchasing.Initialize (this, builder);
+				UnityEngine.Purchasing.UnityPurchasing.Initialize (this, builder);
 			}
 
 			public static IAPButtonStoreManager Instance {

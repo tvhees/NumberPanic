@@ -1,21 +1,18 @@
 ﻿using System.Collections;
-using Assets._scripts.Controller;
-using Assets._scripts.Model;
+using Model;
 using UnityEngine;
-using _scripts.Model;
 
-namespace _scripts.Controller
+namespace Controller
 {
     public class Spawner : MonoBehaviour
     {
         public Camera GameCam;
         [SerializeField] private bool spawn;
-        [SerializeField] private float leftBound;
-        [SerializeField] private float rightBound;
 
         private float padding;
         private float timeBetweenNumbers;
         private float numberSpeed;
+        private Game game;
         private Game.State state = Game.State.Attract;
 
         private void Awake() {
@@ -34,12 +31,13 @@ namespace _scripts.Controller
             timeBetweenNumbers = Manager.Instance.TimeBetweenNumbers;
             numberSpeed = Manager.Instance.NumberSpeed;
             StartCoroutine(RegularSpawn());
-            Tutorial.Instance.RunGameTutorial();
+            if(Preferences.ShowTutorial)
+                Tutorial.Instance.RunGameTutorial();
         }
 
         private IEnumerator RegularSpawn() {
             var counter = 0;
-
+            var poolCounter = 0;
             while (true)
             {
                 if (state != Game.State.Title)
@@ -49,15 +47,17 @@ namespace _scripts.Controller
                     if (counter == 0)
                     {
                         // Get a new 'true' number from the pool. Reset the counter only if this works.
-                        if (SpawnNumber())
+                        if (SpawnNumber(poolCounter))
                             counter = Mathf.Min(Random.Range(0, Manager.Current - 1), 8);
                     }
                     else
                     {
                         // Get a new 'false' number from the pool. Decrement the counter only if this works.
-                        if (SpawnNumber(false))
+                        if (SpawnNumber(poolCounter, false))
                             counter--;
                     }
+
+                    poolCounter++;
                     yield return new WaitForSeconds(waitTime);
                 }
                 yield return null;
@@ -65,9 +65,10 @@ namespace _scripts.Controller
 
         }
 
-        private bool SpawnNumber(bool real = true) {
-            // Spawn from the top of the screen - recalculate every time in case orientation changes
-            var position = GameCam.ViewportToWorldPoint(new Vector3(Random.Range(leftBound, rightBound), 1f, 20f));
+        private bool SpawnNumber(int poolNum, bool real = true) {
+
+            var pool = Manager.Instance.GetPool(poolNum);
+            var obj = pool.GetObject();
 
             // Speed to travel downwards, damped increase as numbers increase
             var speed = (Manager.Current + Manager.Instance.Padding) * numberSpeed / Manager.Instance.Padding;
@@ -87,10 +88,9 @@ namespace _scripts.Controller
                 }
             }
 
-            var obj = Manager.numberPool.GetObject();
             if (obj)
             {
-                obj.GetComponent<Number>().Init(value, position, speed, this);
+                obj.GetComponent<Number>().Init(value, speed, this, pool);
                 return true;
             }
 

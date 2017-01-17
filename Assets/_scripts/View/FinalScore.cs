@@ -1,9 +1,8 @@
-﻿using Assets._scripts.Controller;
+﻿using Controller;
 using UnityEngine;
 using UnityEngine.UI;
-using _scripts.Controller;
 
-namespace _scripts.View
+namespace View
 {
     public class FinalScore : MonoBehaviour {
 

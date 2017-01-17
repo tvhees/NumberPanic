@@ -1,7 +1,7 @@
 ﻿using DG.Tweening;
 using UnityEngine;
 
-namespace Assets._scripts.Controller
+namespace Controller
 {
     public class AudioManager : MonoBehaviour
     {

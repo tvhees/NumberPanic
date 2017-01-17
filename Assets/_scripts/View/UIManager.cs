@@ -1,10 +1,10 @@
 ﻿using System.Collections;
-using Assets._scripts.Controller;
+using Controller;
 using UnityEngine;
-using _scripts.Controller;
-using _scripts.View;
+using UnityEngine.UI;
+using Utility;
 
-namespace Assets._scripts.View
+namespace View
 {
     public class UiManager : Singleton<UiManager> {
 
@@ -20,6 +20,8 @@ namespace Assets._scripts.View
         public GameObject menuPanel;
         public TutorialPanel tutorialPanel;
         public GameObject tutorialArrow;
+        [SerializeField] private Toggle tutorialToggle;
+        [SerializeField] private Toggle shakeToggle;
         private Game.State gameState;
 
         private float current;
@@ -94,7 +96,7 @@ namespace Assets._scripts.View
         {
             Preferences.Instance.Save();
             if (continuePanel.activeSelf)
-                yield return StartCoroutine(AnimationManager.Instance.Continue(false));
+                yield return StartCoroutine(AnimationManager.Instance.ContinueButtonPressed(false));
             scorePanel.SetActive(true);
             menuPanel.SetActive(true);
             settingsButton.TogglePanel();
@@ -116,6 +118,26 @@ namespace Assets._scripts.View
         {
             var remainingTimeString = string.Format("{0:0.0}", remainingTime);
             timerDisplay.SetRemainingTime(remainingTime, remainingTimeString);
+        }
+
+        public void SetTutorialToggle(bool isOn)
+        {
+            tutorialToggle.isOn = isOn;
+        }
+
+        public void SetShakeToggle(bool isOn)
+        {
+            shakeToggle.isOn = isOn;
+        }
+
+        public void ToggleTutorial(Toggle toggle)
+        {
+            Preferences.Instance.ToggleTutorial(toggle.isOn);
+        }
+
+        public void ToggleShake(Toggle toggle)
+        {
+            Preferences.Instance.ToggleShake(toggle.isOn);
         }
     }
 }

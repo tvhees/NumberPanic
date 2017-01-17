@@ -1,11 +1,11 @@
 ﻿using System;
-using Assets._scripts.Controller;
+using Controller;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Assets._scripts.View
+namespace View
 {
     public class SubMode : Dropdown, IModeList {
 
@@ -71,6 +71,7 @@ namespace Assets._scripts.View
                     throw new ArgumentOutOfRangeException();
             }
 
+            value = 0;
             RefreshShownValue();
             SetSubValue(value);
         }
@@ -83,6 +84,7 @@ namespace Assets._scripts.View
 
         public override void OnPointerClick(PointerEventData eventData)
         {
+            OnClicked.Invoke();
             EventManager.OnDropDownClicked.Invoke();
             base.OnPointerClick(eventData);
         }

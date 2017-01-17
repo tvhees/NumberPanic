@@ -1,10 +1,11 @@
 #if UNITY_PURCHASING
+using System.Collections.Generic;
+using Plugins.UnityPurchasing.script;
 using UnityEditor;
 using UnityEngine;
-using System.IO;
-using System.Collections.Generic;
+using UnityEngine.Purchasing;
 
-namespace UnityEngine.Purchasing
+namespace Plugins.UnityPurchasing.Editor
 {
 	public static class IAPButtonMenu
 	{
@@ -34,7 +35,7 @@ namespace UnityEngine.Purchasing
 
 	[CustomEditor(typeof(IAPButton))]
 	[CanEditMultipleObjects]
-	public class IAPButtonEditor : Editor 
+	public class IAPButtonEditor : UnityEditor.Editor 
 	{
 		private static readonly string[] excludedFields = new string[] { "m_Script" };
 		private const string kNoProduct = "<None>";

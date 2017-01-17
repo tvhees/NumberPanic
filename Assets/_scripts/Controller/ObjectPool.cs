@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace _scripts.Controller
+namespace Controller
 {
     public abstract class ObjectPool : MonoBehaviour {
 
@@ -10,7 +10,7 @@ namespace _scripts.Controller
         protected Vector3 homePosition;
         protected List<GameObject> pool, checkedOut;
 
-        void Awake() {
+        private void Awake() {
             Init();
         }
 
@@ -22,8 +22,8 @@ namespace _scripts.Controller
             pool = new List<GameObject>();
             checkedOut = new List<GameObject>();
 
-            for (int i = 0; i < poolSize; i++){
-                GameObject obj = Instantiate(prefab);
+            for (var i = 0; i < poolSize; i++){
+                var obj = Instantiate(prefab);
                 obj.transform.SetParent(transform);
                 obj.transform.position = homePosition;
                 obj.SetActive (false);
@@ -33,18 +33,14 @@ namespace _scripts.Controller
 
         public GameObject GetObject()
         {
-            if(pool.Count > 0){
-                GameObject obj = pool [0];
-                pool.Remove(obj);
-                checkedOut.Add(obj);
+            if (pool.Count <= 0) return null;
 
-                poolSize = pool.Count;
-                obj.SetActive(true);
-
-                return obj;
-            }
-
-            return null;
+            var obj = pool [0];
+            pool.Remove(obj);
+            checkedOut.Add(obj);
+            poolSize = pool.Count;
+            obj.SetActive(true);
+            return obj;
         }
 
         public void ReturnObject(GameObject obj)

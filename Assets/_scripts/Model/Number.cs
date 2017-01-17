@@ -1,39 +1,39 @@
 ﻿using System;
-using Assets._scripts.Controller;
-using Assets._scripts.View;
+using Controller;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using _scripts.Controller;
-using _scripts.View;
+using View;
 using Random = UnityEngine.Random;
 
-namespace Assets._scripts.Model
+namespace Model
 {
     public class Number : MonoBehaviour, IPointerDownHandler {
 
         public static readonly UnityEvent OnCorrectNumberTouch = new UnityEvent();
 
-        private float speed;
+        private const float BaseCharacterSize = 0.1f;
         private int value;
         [SerializeField] private TextMesh text;
         [SerializeField] private ParticleSystem trail;
         [SerializeField] private BoxCollider2D boxCollider;
-        [SerializeField] private Flickering arrow;
-        [SerializeField] private Flickering cross;
 
         private Game game;
+        private MovingObject movementModule;
         private ParticleSystem.EmissionModule em;
         private ParticleSystem.ShapeModule sh;
         private Spawner spawner;
+        private NumberPool homePool;
         [SerializeField] private FaceValue fV;
 
-        public void Init(int currentIn, Vector3 startPos, float speedIn, Spawner scriptIn) {
+        public void Init(int currentIn, float speedIn, Spawner scriptIn, NumberPool homePool)
+        {
+            movementModule = GetComponent<MovingObject>();
             game = Manager.Instance.game;
-            transform.position = startPos;
             var randomFactor = Random.Range(0.8f, 1.2f);
             spawner = scriptIn;
             value = currentIn;
+            this.homePool = homePool;
             OnCorrectNumberTouch.AddListener(DestroyIfCurrentValue);
 
             // Call the game function to create a FaceValue struct, get the appropriate return
@@ -41,16 +41,26 @@ namespace Assets._scripts.Model
             if (fV.Text != null)
             {
                 text.text = fV.Text;
-                boxCollider.size = new Vector2(fV.Text.Length, boxCollider.size.y);
+                text.characterSize = Number.BaseCharacterSize * randomFactor;
+                text.color = homePool.colour;
+                boxCollider.size = new Vector2(fV.Text.Length * 0.8f, boxCollider.size.y);
             }
 
-            speed = speedIn/randomFactor;
+            // Spawn from the top of the screen
+            // Calculate horizontal bounds for which collider won't be outside camera view.
+            var halfWidth = new Vector3(boxCollider.bounds.extents.x, 0f, 0f);
+            var leftBound = spawner.GameCam.ViewportToWorldPoint(new Vector3(0f, 1f, homePool.transform.position.z));
+            var rightBound = spawner.GameCam.ViewportToWorldPoint(new Vector3(1f, 1f, homePool.transform.position.z));
+            var x = Random.value;
+            transform.position = (1 - x) * (leftBound + halfWidth) + x * (rightBound - halfWidth);
+
+            movementModule.Speed = speedIn/randomFactor;
 
             // Modifying particle trail
             sh = trail.shape;
-            sh.radius = 0.01f * speed;
+            sh.radius = 0.01f * movementModule.Speed;
             em = trail.emission;
-            em.rateOverDistance = new ParticleSystem.MinMaxCurve(speed);
+            em.rateOverDistance = new ParticleSystem.MinMaxCurve(movementModule.Speed);
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -64,7 +74,7 @@ namespace Assets._scripts.Model
             else
                 DestroyThis(color);
 
-            game.ProcessGameEvent(IsCurrentValue);
+            game.ProcessGameEvent(IsCurrentValue, spawner.GameCam);
         }
 
         public Color GetExplosionColor(bool touched = false)
@@ -104,11 +114,11 @@ namespace Assets._scripts.Model
             var explosion = Manager.explosionPool.GetObject();
 
             if (explosion != null)
-                explosion.GetComponent<Explosion>().Init(transform.position, speed, colour);
+                explosion.GetComponent<Explosion>().Init(transform.position, movementModule.Speed, colour);
             else
                 Debug.Log("No explosions left, returning null");
 
-            Manager.numberPool.ReturnObject(gameObject);
+            homePool.ReturnObject(gameObject);
         }
 
         private void OnDisable()
@@ -122,43 +132,19 @@ namespace Assets._scripts.Model
         /// Move numbers downwards each frame, toggle tutorial symbols and destroy
         /// </summary>
         private void Update() {
-            transform.Translate(speed * Vector3.down * Time.deltaTime);
             DestroyIfOutOfView();
-            //ToggleTutorialSymbols();
         }
 
         private void DestroyIfOutOfView()
         {
             if (!spawner.GameCam)
-                Manager.numberPool.ReturnObject(gameObject);
+                homePool.ReturnObject(gameObject);
             else if (transform.position.y < spawner.GameCam.ViewportToWorldPoint(Vector3.zero).y)
             {
                 var colour = GetExplosionColor();
                 DestroyThis(colour);
                 if(IsCurrentValue)
-                    game.ProcessGameEvent(false);
-            }
-        }
-
-        private void ToggleTutorialSymbols()
-        {
-            if(Preferences.ShowTutorial)
-            {
-                if (IsCurrentValue)
-                {
-                    arrow.gameObject.SetActive(true);
-                    cross.gameObject.SetActive(false);
-                }
-                else
-                {
-                    arrow.gameObject.SetActive(false);
-                    cross.gameObject.SetActive(true);
-                }
-            }
-            else
-            {
-                arrow.gameObject.SetActive(false);
-                cross.gameObject.SetActive(false);
+                    game.ProcessGameEvent(false, spawner.GameCam);
             }
         }
     }

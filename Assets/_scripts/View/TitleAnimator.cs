@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
-using _scripts.Controller;
 
-namespace _scripts.View
+namespace View
 {
     public class TitleAnimator : MonoBehaviour {
 

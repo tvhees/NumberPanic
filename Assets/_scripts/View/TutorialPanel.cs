@@ -1,16 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 
-public class TutorialPanel : MonoBehaviour
+namespace View
 {
-
-    public Text words;
-
-    public void Display(string textIn)
+    public class TutorialPanel : MonoBehaviour
     {
-        words.text = textIn;
+
+        public Text words;
+
+        public void Display(string textIn)
+        {
+            words.text = textIn;
+        }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
+using Model;
 using UnityEngine;
-using _scripts.Controller;
-using _scripts.Model;
+using View;
 
-namespace Assets._scripts.Controller
+namespace Controller
 {
     public class Game {
         public enum State
@@ -19,8 +19,8 @@ namespace Assets._scripts.Controller
         #region Settings
 
         private readonly Data data;
-        private readonly Manager.Mode mode;
-        private readonly int subMode;
+        public readonly Manager.Mode mode;
+        public readonly int subMode;
         private const float EndMax = 5.0f;
         private const float MaximumCriticalTime = 3.0f;
 
@@ -57,13 +57,13 @@ namespace Assets._scripts.Controller
             targetTimeScale = 1.0f;
             HighScore = Preferences.Instance.GetHighScore().Value;
             EnterAttractState();
+            SocialManager.Instance.NewGamePlayed(mode);
         }
 
         #region Game state
 
         public bool IsInPlayState {
-            get { return GameState == State.Attract || GameState == State.Pause
-                         || GameState == State.Play || GameState == State.Critical; }
+            get { return GameState == State.Attract || GameState == State.Play || GameState == State.Critical; }
         }
 
         public void ProcessState()
@@ -215,6 +215,9 @@ namespace Assets._scripts.Controller
                         case (int) Manager.Sequence.Fibbonaci:
                             seq = data.Numbers.Fibbonaci;
                             break;
+                        case (int) Manager.Sequence.Pi:
+                            seq = data.Numbers.Pi;
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
@@ -225,7 +228,7 @@ namespace Assets._scripts.Controller
                     string[] words;
                     switch (subMode)
                     {
-                        case (int)Manager.English.Common:
+                        case (int)Manager.English.CommonWords:
                             words = data.Texts.EnglishWords;
                             break;
                         case (int)Manager.English.AusAnthem:
@@ -245,17 +248,20 @@ namespace Assets._scripts.Controller
             return fV;
         }
 
-        public void ProcessGameEvent(bool isPositiveEvent)
+        public void ProcessGameEvent(bool isPositiveEvent, Camera gameCam)
         {
             if(isPositiveEvent)
                 PositiveGameEvent();
             else
-                NegativeGameEvent();
+                NegativeGameEvent(gameCam);
         }
 
-        private void NegativeGameEvent()
+        private void NegativeGameEvent(Camera gameCam)
         {
             Manager.Instance.audioManager.PlayNegativeSound();
+            if(Preferences.ShakeCamera)
+                gameCam.GetComponent<Shake>().Punch();
+
             if (state == State.Critical)
                 ProcessGameLoss();
             else if (state == State.Play)
@@ -272,6 +278,9 @@ namespace Assets._scripts.Controller
         {
             Manager.Instance.audioManager.PlayPositiveSound();
             Manager.Current++;
+            if(Manager.Current > 12)
+                SocialManager.UpdateTimesTablesArray(mode, subMode);
+
             Play();
             if(Manager.Instance.TimeAttackMode)
                 Manager.Instance.GameTimer.AddTimeBonus();

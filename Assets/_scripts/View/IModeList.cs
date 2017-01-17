@@ -1,8 +1,4 @@
-using System.Reflection;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
-
-namespace Assets._scripts.View
+namespace View
 {
     public interface IModeList
     {

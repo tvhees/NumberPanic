@@ -1,8 +1,7 @@
-﻿using Assets._scripts.Controller;
+﻿using Controller;
 using UnityEngine;
-using _scripts.Controller;
 
-namespace _scripts.View
+namespace View
 {
     public class PanelButton : MonoBehaviour {
     
@@ -10,12 +9,11 @@ namespace _scripts.View
 
         public void TogglePanel()
         {
-            bool open = panelAnim.GetBool("open");
+            var open = panelAnim.GetBool("open");
             AnimationManager.Instance.CloseSubPanels();
-
             if(!open)
                 panelAnim.SetBool("open", true);
-        }	
+        }
     }
 }
 

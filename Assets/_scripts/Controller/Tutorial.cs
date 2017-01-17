@@ -1,21 +1,20 @@
-﻿using RSG;
+﻿using System;
+using Model;
+using RSG;
 using UnityEngine;
-using _scripts.Controller;
-using System;
-using System.Net.Security;
-using System.Runtime.Remoting.Messaging;
-using Assets._scripts.Model;
-using Assets._scripts.View;
-using UnityEngine.UI;
-using _scripts.View;
+using Utility;
+using View;
 using Random = UnityEngine.Random;
 
-namespace Assets._scripts.Controller
+namespace Controller
 {
     public class Tutorial : Singleton<Tutorial> {
         private readonly PromiseTimer menuTimer = new PromiseTimer();
         private readonly PromiseTimer gameTimer = new PromiseTimer();
-        private GameObject tutorialArrow;
+        private readonly PromiseTimer toggleTimer = new PromiseTimer();
+        private GameObject tutorialBox;
+
+        public bool IsRunning;
 
         #region Waiting Flags
 
@@ -47,19 +46,31 @@ namespace Assets._scripts.Controller
             MainMode.OnClicked.AddListener(() => waitingForMainModeButton = false);
             SubMode.OnClicked.AddListener(() => waitingForSubModeButton = false);
             Number.OnCorrectNumberTouch.AddListener(() => waitingForNumberTouch = false);
-            tutorialArrow = UiManager.Instance.tutorialArrow;
+            tutorialBox = UiManager.Instance.tutorialArrow;
         }
 
         private void Update()
         {
             menuTimer.Update(Time.unscaledDeltaTime);
             gameTimer.Update(Time.unscaledDeltaTime);
+            toggleTimer.Update(Time.unscaledDeltaTime);
+
         }
 
         public void RunMenuTutorial()
         {
+            if (IsRunning)
+                return;
+            IsRunning = true;
             Random.InitState(1);
-            Promise.Sequence(
+            Promise.Race(MenuTutorial(),
+                    toggleTimer.WaitUntil(_ => !Preferences.ShowTutorial))
+            .Done(DeactivateTutorial);
+        }
+
+        private IPromise MenuTutorial()
+        {
+            return Promise.Sequence(
                 HighlightObject("Play"),
                 WaitForPlayButton(),
                 ToggleArrow(false),
@@ -68,43 +79,37 @@ namespace Assets._scripts.Controller
                 HighlightObject("MainMode"),
                 WaitForMainModeButton(),
                 HighlightObject("SubMode"),
-                WaitForSubModeButton(),
-                HighlightObject("Play"),
-                WaitForPlayButton())
-            .Done(DeactivateTutorial);
+                WaitForSubModeButton());
         }
 
         public void RunGameTutorial()
         {
             Promise.Sequence(
-                WaitForSeconds(1.2f),
+                WaitForSeconds(1.5f),
                 PauseGame(),
                 ExplainScore(),
                 ExplainTimer(),
-                PromptUserToTouchNumber(),
                 ToggleArrow(false),
-                UnpauseGame(),
-                WaitForSeconds(0.5f),
-                PauseGame(),
-                ShowText("This will increase the target number and give you extra game time" +
+                ShowText("Touching a number the same as the target will increase the target number and" +
+                         " give you more game time" +
                          "\n..."),
                 WaitForInput(InputDelay),
                 ShowText("Letting a target number leave the screen or touching a different number" +
-                         "\nwill lose you game time!" +
+                         " will lose you game time!" +
                          "\n..."),
                 WaitForInput(InputDelay),
-                ShowText("The game ends when you" +
-                         "\nrun out of time." +
-                         "\nGood luck!" +
+                ShowText("The game ends when you run out of time." +
+                         " Good luck!" +
                          "\n..."),
                 WaitForInput(InputDelay))
-            .Done(Manager.Instance.game.Unpause);
+            .Done(Manager.Instance.game.EnterAttractState);
         }
 
         private void DeactivateTutorial()
         {
-            tutorialArrow.SetActive(false);
-            Preferences.ShowTutorial = false;
+            tutorialBox.SetActive(false);
+            Preferences.Instance.ToggleTutorial(false);
+            IsRunning = false;
         }
 
         #region Menu tutorials
@@ -113,7 +118,7 @@ namespace Assets._scripts.Controller
         {
             return () =>
             {
-                tutorialArrow.SetActive(isOn);
+                tutorialBox.SetActive(isOn);
                 return Promise.Resolved();
             };
         }
@@ -159,15 +164,12 @@ namespace Assets._scripts.Controller
             return () =>
             {
                 var button = GameObject.Find(objectName);
-                var pos = new Vector3
-                (
-                    button.transform.position.x,
-                    button.transform.position.y - 1.5f,
-                    0
-                );
-                tutorialArrow.SetActive(true);
-                tutorialArrow.transform.SetParent(button.transform);
-                tutorialArrow.transform.position = pos;
+                tutorialBox.SetActive(true);
+                tutorialBox.transform.SetParent(button.transform);
+                var rect = (RectTransform) tutorialBox.transform;
+                rect.offsetMax = Vector2.zero;
+                rect.offsetMin = Vector2.zero;
+                rect.localScale = Vector3.one;
                 return Promise.Resolved();
             };
         }
@@ -196,16 +198,6 @@ namespace Assets._scripts.Controller
                     ShowText("This is the remaining game time" +
                              "\n..."),
                     WaitForInput(InputDelay)
-                );
-        }
-
-        private Func<IPromise> PromptUserToTouchNumber()
-        {
-            return () =>
-                Promise.Sequence(
-                    ShowText("Try touching a number the same as the target"),
-                    HighlightObject("Number(Clone)"),
-                    WaitForNumberTouch()
                 );
         }
 
