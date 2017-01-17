@@ -228,6 +228,9 @@ namespace Controller
                     string[] words;
                     switch (subMode)
                     {
+                        case (int) Manager.English.Alphabet:
+                            words = data.Texts.Alphabet;
+                            break;
                         case (int)Manager.English.CommonWords:
                             words = data.Texts.EnglishWords;
                             break;

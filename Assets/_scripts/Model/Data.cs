@@ -36,7 +36,17 @@ namespace Model
                 "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
             };
             Texts.EnglishWords = new[] { "the", "be", "and", "of", "a", "in", "to", "have", "it", "I", "that", "for", "you", "he", "with", "on", "do", "say", "this", "they", "at", "but", "we", "his", "from", "not", "by", "she", "or", "as", "what", "go", "their", "can", "who", "get", "if", "would", "her", "all", "my", "make", "about", "know", "will", "up", "one", "time", "there", "year", "so", "think", "when", "which", "them", "some" };
-            Texts.AusAnthem = new[] { "australians", "all", "let", "us", "rejoice", "for", "we", "are", "young", "and", "free", "we've", "golden", "soil", "and", "wealth", "for", "toil", "our", "home", "is", "girt", "by", "sea" };
+            Texts.AusAnthem = new[] { "australians", "all", "let", "us", "rejoice", "for", "we", "are", "young", "and", "free",
+                "we've", "golden", "soil", "and", "wealth", "for", "toil", "our", "home", "is", "girt", "by", "sea",
+                "our", "land", "abounds", "in", "nature's", "gifts", "of", "beauty", "rich", "and", "rare",
+                "in", "history's", "page", "let", "every", "stage", "advance", "australia", "fair",
+                "in", "joyful", "strains", "then", "let", "us", "sing", "advance", "australia", "fair",
+                "beneath", "our", "radiant", "southern", "cross", "we'll", "toil", "with", "hearts", "and", "hands",
+                "to", "make", "this", "commonwealth", "of", "ours", "renowned", "of", "all", "the", "lands",
+                "for", "those", "who've", "come", "across", "the", "seas", "we've", "boundless", "plains", "to", "share",
+                "with", "courage", "let", "us", "all", "combine", "to", "advance", "australia", "fair",
+                "in", "joyful", "strains", "then", "let", "us", "sing", "advance", "australia", "fair"
+            };
         }
     }
 
