@@ -1,13 +1,13 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{F8AF362E-5866-71E9-929B-CB185E5E2A4F}") = "NumberPanic", "Assembly-CSharp-firstpass.csproj", "{6BE49290-6730-C792-D04C-354FCB2EBD1C}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberPanic", "Assembly-CSharp-firstpass.csproj", "{6BE49290-6730-C792-D04C-354FCB2EBD1C}"
 EndProject
-Project("{F8AF362E-5866-71E9-929B-CB185E5E2A4F}") = "NumberPanic", "Assembly-CSharp.csproj", "{5BCF2A80-EB21-65B9-512D-05EEC0CAAA7E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberPanic", "Assembly-CSharp.csproj", "{5BCF2A80-EB21-65B9-512D-05EEC0CAAA7E}"
 EndProject
-Project("{F8AF362E-5866-71E9-929B-CB185E5E2A4F}") = "NumberPanic", "Assembly-CSharp-Editor-firstpass.csproj", "{69C4F747-4243-1706-C0C8-77C95EA6CC7C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberPanic", "Assembly-CSharp-Editor-firstpass.csproj", "{69C4F747-4243-1706-C0C8-77C95EA6CC7C}"
 EndProject
-Project("{F8AF362E-5866-71E9-929B-CB185E5E2A4F}") = "NumberPanic", "Assembly-CSharp-Editor.csproj", "{D9604A02-CE16-F8C7-E97E-3BC9B884E30D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberPanic", "Assembly-CSharp-Editor.csproj", "{D9604A02-CE16-F8C7-E97E-3BC9B884E30D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
