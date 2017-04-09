@@ -18,7 +18,7 @@ namespace View
 #if UNITY_ANDROID || UNITY_IOS
             if (Preferences.ShowAdvertisements)
             {
-                Manager.Instance.adverts.ShowAd();
+                MainManager.Instance.adverts.ShowAd();
                 return;
             }
 #endif

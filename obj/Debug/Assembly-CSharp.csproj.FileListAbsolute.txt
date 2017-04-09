@@ -44,3 +44,5 @@ C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\nunit.f
 C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\UnityEngine.TestRunner.dll
 C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\UnityEngine.TestRunner.xml
 C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\nunit.framework.xml
+C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\UnityEditor.Purchasing.dll
+C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\UnityEditor.Purchasing.xml

@@ -32,7 +32,7 @@ namespace View
 
             // Tell player prefs and manager what submode we're on
             Preferences.SubMode = value;
-            Manager.SubMode = value;
+            MainManager.SubMode = value;
 
             // Update the main score display to reflect the choice
             // mostly required for odd sequences like primes that don't start at 0
@@ -45,27 +45,27 @@ namespace View
         {
             ClearOptions();
 
-            switch (Manager.MainMode)
+            switch (MainManager.MainMode)
             {
-                case Manager.Mode.Linear:
+                case MainManager.Mode.Linear:
                     // We just need numbers for these options
                     for (var i = 0; i < 10; i++)
                         options.Add(new OptionData { text = (i + 1).ToString() });
                     break;
-                case Manager.Mode.Power:
+                case MainManager.Mode.Power:
                     for (var i = 1; i < 3; i++)
                         options.Add(new OptionData { text = (i + 1).ToString() });
                     break;
-                case Manager.Mode.Sequence:
+                case MainManager.Mode.Sequence:
                     // Create an option for each sequence defined in the Manager
-                    for (var i = 0; i < (int)Manager.Sequence.NumberOfTypes; i++)
-                        options.Add(new OptionData { text = ((Manager.Sequence)i).ToString() });
+                    for (var i = 0; i < (int)MainManager.Sequence.NumberOfTypes; i++)
+                        options.Add(new OptionData { text = ((MainManager.Sequence)i).ToString() });
                     break;
-                case Manager.Mode.English:
-                    for (var i = 0; i < (int)Manager.English.NumberOfTypes; i++)
-                        options.Add(new OptionData { text = ((Manager.English)i).ToString() });
+                case MainManager.Mode.English:
+                    for (var i = 0; i < (int)MainManager.English.NumberOfTypes; i++)
+                        options.Add(new OptionData { text = ((MainManager.English)i).ToString() });
                     break;
-                case Manager.Mode.NumberOfTypes:
+                case MainManager.Mode.NumberOfTypes:
                     throw new ArgumentOutOfRangeException();
                 default:
                     throw new ArgumentOutOfRangeException();

@@ -17,7 +17,7 @@ namespace View
         }
 
         public void UpdateDisplay() {
-            Fv = Manager.Instance.game.GetFaceValue(current);
+            Fv = MainManager.Instance.game.GetFaceValue(current);
             display.text = Fv.Text;
         }
 

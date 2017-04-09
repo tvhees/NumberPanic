@@ -35,9 +35,9 @@ namespace Controller
             remainingTime = Mathf.Max(0f, remainingTime + delta);
 
             if (remainingTime <= Mathf.Epsilon)
-                Manager.Instance.game.ProcessGameLoss();
-            else if (remainingTime <= TimePenalty && !Manager.Instance.TimeAttackMode)
-                Manager.Instance.game.EnterCriticalState();
+                MainManager.Instance.game.ProcessGameLoss();
+            else if (remainingTime <= TimePenalty && !MainManager.Instance.TimeAttackMode)
+                MainManager.Instance.game.EnterCriticalState();
 
             return remainingTime;
         }

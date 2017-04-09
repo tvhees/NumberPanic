@@ -15,10 +15,10 @@ namespace View
         }
 
         void Update() {
-            if (finalScore.fV.Value > Manager.Instance.game.HighScore)
+            if (finalScore.fV.Value > MainManager.Instance.game.HighScore)
                 label.text = finalScore.label.text;
             else
-                label.text = Manager.Instance.game.HighScore.ToString();
+                label.text = MainManager.Instance.game.HighScore.ToString();
         }
     }
 }

@@ -8,7 +8,7 @@ using View;
 
 namespace Controller
 {
-    public class Manager : Singleton<Manager> {
+    public class MainManager : Singleton<MainManager> {
 
         public bool TimeAttackMode;
         public GameTimer GameTimer { get; private set; }

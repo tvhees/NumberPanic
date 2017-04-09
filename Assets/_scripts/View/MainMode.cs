@@ -36,8 +36,8 @@ namespace View
         public void GetOptionList()
         {
             ClearOptions();
-            for (var i = 0; i < (int)Manager.Mode.NumberOfTypes; i++)
-                options.Add(new OptionData { text = ((Manager.Mode)i).ToString() });
+            for (var i = 0; i < (int)MainManager.Mode.NumberOfTypes; i++)
+                options.Add(new OptionData { text = ((MainManager.Mode)i).ToString() });
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace View
         private static void GetSubList(int value)
         {
             Preferences.MainMode = value;
-            Manager.MainMode = (Manager.Mode)value;
+            MainManager.MainMode = (MainManager.Mode)value;
             UiManager.Instance.subModes.GetOptionList();
         }
 

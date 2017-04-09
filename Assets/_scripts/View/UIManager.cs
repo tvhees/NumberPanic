@@ -28,28 +28,28 @@ namespace View
 
         private void Start()
         {
-            Manager.Instance.ui = this;
-            current = Manager.Current;
+            MainManager.Instance.ui = this;
+            current = MainManager.Current;
             EventManager.OnStateChanged.AddListener((OnStateChanged));
         }
 
         public void Update() {
-            if (Manager.Instance.GameTimer != null)
+            if (MainManager.Instance.GameTimer != null)
             {
                 var timerIsRunning = gameState == Game.State.Attract || gameState == Game.State.Pause;
                 var delta = timerIsRunning ? 0 : -Time.unscaledDeltaTime;
-                var timeRemaining = Manager.Instance.GameTimer.UpdateTimer(delta);
+                var timeRemaining = MainManager.Instance.GameTimer.UpdateTimer(delta);
                 UpdateTimer(timeRemaining);
             }
 
-            if (Manager.Current > current)
+            if (MainManager.Current > current)
             {
                 UpdateScore();
             }
 
-            if (current > Manager.Current)
+            if (current > MainManager.Current)
             {
-                current = Manager.Current;
+                current = MainManager.Current;
             }
         }
 
@@ -104,7 +104,7 @@ namespace View
 
         private void UpdateScore()
         {
-            current = Manager.Current;
+            current = MainManager.Current;
 
             score.Increment();
 

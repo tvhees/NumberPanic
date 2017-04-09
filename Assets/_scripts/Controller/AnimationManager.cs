@@ -46,7 +46,7 @@ namespace Controller
 
             loadingCover.anim.SetBool("open", false);
 
-            Manager.Instance.Restart();
+            MainManager.Instance.Restart();
         }
 
         public void CloseSubPanels()
@@ -59,9 +59,9 @@ namespace Controller
         {
             if (isContinuing)
             {
-                if (Manager.Instance.GameTimer != null)
-                    Manager.Instance.NewTimer();
-                Manager.Instance.game.EnterAttractState();
+                if (MainManager.Instance.GameTimer != null)
+                    MainManager.Instance.NewTimer();
+                MainManager.Instance.game.EnterAttractState();
             }
             yield return StartCoroutine(continuePanel.Leave(isContinuing));
         }

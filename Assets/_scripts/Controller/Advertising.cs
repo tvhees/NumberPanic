@@ -36,7 +36,7 @@ namespace Controller
         private void Awake()
         {
             Advertisement.Initialize(Advertisement.gameId);
-            Manager.Instance.adverts = this;
+            MainManager.Instance.adverts = this;
         }
     }
 }

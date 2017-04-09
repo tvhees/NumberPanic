@@ -102,7 +102,7 @@ namespace Controller
                          " Good luck!" +
                          "\n..."),
                 WaitForInput(InputDelay))
-            .Done(Manager.Instance.game.EnterAttractState);
+            .Done(MainManager.Instance.game.EnterAttractState);
         }
 
         private void DeactivateTutorial()
@@ -214,7 +214,7 @@ namespace Controller
         {
             return () =>
             {
-                Manager.Instance.game.Pause();
+                MainManager.Instance.game.Pause();
                 return Promise.Resolved();
             };
         }
@@ -223,7 +223,7 @@ namespace Controller
         {
             return () =>
             {
-                Manager.Instance.game.Unpause();
+                MainManager.Instance.game.Unpause();
                 return Promise.Resolved();
             };
         }

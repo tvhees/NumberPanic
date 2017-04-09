@@ -50,6 +50,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\BetterManagers\BaseTypes\BaseMonoBehaviour.cs" />
+    <Compile Include="Assets\BetterManagers\BaseTypes\BaseScriptableObject.cs" />
+    <Compile Include="Assets\BetterManagers\ComponentDependencies\ComponentDependencyAttribute.cs" />
+    <Compile Include="Assets\BetterManagers\ComponentDependencies\ComponentDependencyCache.cs" />
+    <Compile Include="Assets\BetterManagers\Drawer\PopupEditorDrawer.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\Manager.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\ManagerAlwaysGlobalAttribute.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\ManagerAttributeCache.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\ManagerContainer.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\ManagerContainerExecutor.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\ManagerContainer_GetManager.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\ManagerContainer_Sorting.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\ManagerDependencyAttribute.cs" />
+    <Compile Include="Assets\BetterManagers\Previews\IPreviewModelSource.cs" />
+    <Compile Include="Assets\BetterManagers\Previews\PreviewInstance.cs" />
+    <Compile Include="Assets\BetterManagers\Previews\PreviewModel.cs" />
+    <Compile Include="Assets\BetterManagers\ResourceSingleton\ResourceSingleton.cs" />
+    <Compile Include="Assets\BetterManagers\ScriptExecutionOrder\ScriptExecutionOrder.cs" />
     <Compile Include="Assets\GPGSIds.cs" />
     <Compile Include="Assets\GooglePlayGames\BasicApi\Achievement.cs" />
     <Compile Include="Assets\GooglePlayGames\BasicApi\CommonStatusCodes.cs" />
@@ -236,7 +254,7 @@
     <Compile Include="Assets\_scripts\Controller\FaceValue.cs" />
     <Compile Include="Assets\_scripts\Controller\Game.cs" />
     <Compile Include="Assets\_scripts\Controller\GameTimer.cs" />
-    <Compile Include="Assets\_scripts\Controller\Manager.cs" />
+    <Compile Include="Assets\_scripts\Controller\MainManager.cs" />
     <Compile Include="Assets\_scripts\Controller\MovingObject.cs" />
     <Compile Include="Assets\_scripts\Controller\ObjectPool.cs" />
     <Compile Include="Assets\_scripts\Controller\Preferences.cs" />
@@ -244,6 +262,18 @@
     <Compile Include="Assets\_scripts\Controller\SocialManager.cs" />
     <Compile Include="Assets\_scripts\Controller\Spawner.cs" />
     <Compile Include="Assets\_scripts\Controller\Tutorial.cs" />
+    <Compile Include="Assets\_scripts\GameData\GlobalSettings.cs" />
+    <Compile Include="Assets\_scripts\GameStates\AttractState.cs" />
+    <Compile Include="Assets\_scripts\GameStates\CriticalState.cs" />
+    <Compile Include="Assets\_scripts\GameStates\EndState.cs" />
+    <Compile Include="Assets\_scripts\GameStates\PauseState.cs" />
+    <Compile Include="Assets\_scripts\GameStates\PlayState.cs" />
+    <Compile Include="Assets\_scripts\GameStates\ScoreState.cs" />
+    <Compile Include="Assets\_scripts\GameStates\State.cs" />
+    <Compile Include="Assets\_scripts\GameStates\StateBase.cs" />
+    <Compile Include="Assets\_scripts\GameStates\TitleState.cs" />
+    <Compile Include="Assets\_scripts\Managers\GameMan.cs" />
+    <Compile Include="Assets\_scripts\Managers\StateController.cs" />
     <Compile Include="Assets\_scripts\Model\AudioClipObject.cs" />
     <Compile Include="Assets\_scripts\Model\Data.cs" />
     <Compile Include="Assets\_scripts\Model\ExplosionPool.cs" />

@@ -31,7 +31,7 @@ namespace View
             timer += Time.deltaTime;
 
             if(timer >= lifetime)
-                Manager.explosionPool.ReturnObject(gameObject);
+                MainManager.explosionPool.ReturnObject(gameObject);
         }
     }
 }

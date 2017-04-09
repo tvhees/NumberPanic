@@ -29,7 +29,7 @@ namespace Model
         public void Init(int currentIn, float speedIn, Spawner scriptIn, NumberPool homePool)
         {
             movementModule = GetComponent<MovingObject>();
-            game = Manager.Instance.game;
+            game = MainManager.Instance.game;
             var randomFactor = Random.Range(0.8f, 1.2f);
             spawner = scriptIn;
             value = currentIn;
@@ -82,7 +82,7 @@ namespace Model
             if (touched)
                 return IsCurrentValue ? CorrectNumberColor : IncorrectNumberColor;
 
-            if (IsCurrentValue && Manager.Current > 0) // if we should have touched this number
+            if (IsCurrentValue && MainManager.Current > 0) // if we should have touched this number
                 return IncorrectNumberColor;
 
             return Color.white;
@@ -111,7 +111,7 @@ namespace Model
 
         private void DestroyThis(Color colour)
         {
-            var explosion = Manager.explosionPool.GetObject();
+            var explosion = MainManager.explosionPool.GetObject();
 
             if (explosion != null)
                 explosion.GetComponent<Explosion>().Init(transform.position, movementModule.Speed, colour);

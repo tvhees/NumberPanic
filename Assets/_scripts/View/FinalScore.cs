@@ -11,12 +11,12 @@ namespace View
         [HideInInspector] public FaceValue fV;
 
         private float counter, countTime;
-        private Manager.Mode mode;
+        private MainManager.Mode mode;
         private int subValue;
 
         void OnEnable() {
-            mode = Manager.MainMode;
-            subValue = Manager.SubMode;
+            mode = MainManager.MainMode;
+            subValue = MainManager.SubMode;
             current = 0;
             countTime = 1f;
             counter = 0;
@@ -24,10 +24,10 @@ namespace View
 
         void Update() {
             counter += Time.unscaledDeltaTime;
-            current = Mathf.CeilToInt(Manager.Current * Mathf.Clamp01(counter / countTime));
+            current = Mathf.CeilToInt(MainManager.Current * Mathf.Clamp01(counter / countTime));
             // Important! We are using STORED values of mode and SubMode here
             // This prevents final scores changing if mode choice is update in settings post-game
-            fV = Manager.Instance.game.GetFaceValue(current);
+            fV = MainManager.Instance.game.GetFaceValue(current);
             label.text = fV.Text;
         }
 

@@ -19,7 +19,7 @@ namespace Controller
         #region Settings
 
         private readonly Data data;
-        public readonly Manager.Mode mode;
+        public readonly MainManager.Mode mode;
         public readonly int subMode;
         private const float EndMax = 5.0f;
         private const float MaximumCriticalTime = 3.0f;
@@ -49,7 +49,7 @@ namespace Controller
 
         #endregion Variables
 
-        public Game(Data data, Manager.Mode mode, int subMode)
+        public Game(Data data, MainManager.Mode mode, int subMode)
         {
             this.data = data;
             this.mode = mode;
@@ -187,7 +187,7 @@ namespace Controller
         /// </summary>
         public FaceValue GetFaceValue()
         {
-            return GetFaceValue(Manager.Current);
+            return GetFaceValue(MainManager.Current);
         }
 
         /// <summary>
@@ -198,25 +198,25 @@ namespace Controller
             var fV = new FaceValue();
             switch (mode)
             {
-                case Manager.Mode.Linear:
+                case MainManager.Mode.Linear:
                     fV.Value = n * (subMode + 1);
                     fV.Text = fV.Value.ToString();
                     break;
-                case Manager.Mode.Power:
+                case MainManager.Mode.Power:
                     fV.Value = (int)Mathf.Pow(n, (subMode + 2));
                     fV.Text = fV.Value.ToString();
                     break;
-                case Manager.Mode.Sequence:
+                case MainManager.Mode.Sequence:
                     int[] seq;
                     switch (subMode)
                     {
-                        case (int) Manager.Sequence.Primes:
+                        case (int) MainManager.Sequence.Primes:
                             seq = data.Numbers.Primes;
                             break;
-                        case (int) Manager.Sequence.Fibbonaci:
+                        case (int) MainManager.Sequence.Fibbonaci:
                             seq = data.Numbers.Fibbonaci;
                             break;
-                        case (int) Manager.Sequence.Pi:
+                        case (int) MainManager.Sequence.Pi:
                             seq = data.Numbers.Pi;
                             break;
                         default:
@@ -225,17 +225,17 @@ namespace Controller
                     fV.Value = seq[(int) Mathf.Repeat(n, seq.Length)];
                     fV.Text = fV.Value.ToString();
                     break;
-                case Manager.Mode.English:
+                case MainManager.Mode.English:
                     string[] words;
                     switch (subMode)
                     {
-                        case (int) Manager.English.Alphabet:
+                        case (int) MainManager.English.Alphabet:
                             words = data.Texts.Alphabet;
                             break;
-                        case (int)Manager.English.CommonWords:
+                        case (int)MainManager.English.CommonWords:
                             words = data.Texts.EnglishWords;
                             break;
-                        case (int)Manager.English.AusAnthem:
+                        case (int)MainManager.English.AusAnthem:
                             words = data.Texts.AusAnthem;
                             break;
                         default:
@@ -244,7 +244,7 @@ namespace Controller
                     fV.Value = n;
                     fV.Text = words[(int)Mathf.Repeat(n, words.Length)];
                     break;
-                case Manager.Mode.NumberOfTypes:
+                case MainManager.Mode.NumberOfTypes:
                     throw new ArgumentOutOfRangeException();
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -262,15 +262,15 @@ namespace Controller
 
         private void NegativeGameEvent(Camera gameCam)
         {
-            Manager.Instance.audioManager.PlayNegativeSound();
+            MainManager.Instance.audioManager.PlayNegativeSound();
             if(Preferences.ShakeCamera)
                 gameCam.GetComponent<Shake>().Punch();
 
             if (state == State.Critical)
                 ProcessGameLoss();
             else if (state == State.Play)
-                if (Manager.Instance.TimeAttackMode)
-                    Manager.Instance.GameTimer.AddTimePenalty();
+                if (MainManager.Instance.TimeAttackMode)
+                    MainManager.Instance.GameTimer.AddTimePenalty();
                 else
                     EnterCriticalState(); // In classic mode, mistakes take you straight to critical time
         }
@@ -280,14 +280,14 @@ namespace Controller
         /// </summary>
         private void PositiveGameEvent()
         {
-            Manager.Instance.audioManager.PlayPositiveSound();
-            Manager.Current++;
-            if(Manager.Current > 12)
+            MainManager.Instance.audioManager.PlayPositiveSound();
+            MainManager.Current++;
+            if(MainManager.Current > 12)
                 SocialManager.UpdateTimesTablesArray(mode, subMode);
 
             Play();
-            if(Manager.Instance.TimeAttackMode)
-                Manager.Instance.GameTimer.AddTimeBonus();
+            if(MainManager.Instance.TimeAttackMode)
+                MainManager.Instance.GameTimer.AddTimeBonus();
         }
 
         #endregion Resolving number touches
