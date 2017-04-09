@@ -133,6 +133,7 @@ namespace Controller
         /// </summary>
         public void End()
         {
+            targetTimeScale = 0.0f;
             GameState = State.End;
         }
 
@@ -171,7 +172,7 @@ namespace Controller
             {
                 continuesLeft--;
                 timer = 0;
-                GameState = State.End;
+                End();
             }
             else
                 EnterScoreState();
