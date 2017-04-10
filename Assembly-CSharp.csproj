@@ -272,8 +272,8 @@
     <Compile Include="Assets\_scripts\GameStates\State.cs" />
     <Compile Include="Assets\_scripts\GameStates\StateBase.cs" />
     <Compile Include="Assets\_scripts\GameStates\TitleState.cs" />
-    <Compile Include="Assets\_scripts\Managers\GameMan.cs" />
-    <Compile Include="Assets\_scripts\Managers\StateController.cs" />
+    <Compile Include="Assets\_scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\_scripts\Managers\StateManager.cs" />
     <Compile Include="Assets\_scripts\Model\AudioClipObject.cs" />
     <Compile Include="Assets\_scripts\Model\Data.cs" />
     <Compile Include="Assets\_scripts\Model\ExplosionPool.cs" />

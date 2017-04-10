@@ -5,13 +5,13 @@ namespace GameStates
 {
     public abstract class StateBase : BaseMonoBehaviour
     {
-        protected GameMan Game;
-        protected StateController StateController;
+        protected GameManager Game;
+        protected StateManager StateManager;
 
         protected override void Awake()
         {
-            Game = GetManager<GameMan>();
-            StateController = GetManager<StateController>();
+            Game = GetManager<GameManager>();
+            StateManager = GetManager<StateManager>();
         }
 
         public virtual void StartState()
@@ -26,7 +26,7 @@ namespace GameStates
 
         protected virtual void NextState()
         {
-            StateController.MoveToNext();
+            StateManager.GoToNextState();
         }
     }
 }

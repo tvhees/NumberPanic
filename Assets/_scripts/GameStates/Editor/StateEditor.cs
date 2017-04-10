@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Managers;
+using UnityEditor;
 using UnityEngine;
 
 namespace GameStates
@@ -28,7 +29,7 @@ namespace GameStates
             // we've received a new game object
             if ( newState != state.Current )
             {
-                state.SetState(newState);
+                state.GetManager<StateManager>().MoveToState(newState);
             }
 
             // Restore the old color so the

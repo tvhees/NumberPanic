@@ -1,10 +1,11 @@
 ﻿using System.Collections;
+using Managers;
 using Model;
 using UnityEngine;
 
 namespace Controller
 {
-    public class Spawner : MonoBehaviour
+    public class Spawner : BaseMonoBehaviour
     {
         public Camera GameCam;
         [SerializeField] private bool spawn;
@@ -13,16 +14,10 @@ namespace Controller
         private float timeBetweenNumbers;
         private float numberSpeed;
         private Game game;
-        private Game.State state = Game.State.Attract;
 
-        private void Awake() {
+        protected override void Awake() {
+            base.Awake();
             MainManager.Instance.spawner = this;
-            EventManager.OnStateChanged.AddListener(OnStateChanged);
-        }
-
-        public void OnStateChanged(Game.State newState)
-        {
-            state = newState;
         }
 
         public void Start()
@@ -31,8 +26,7 @@ namespace Controller
             timeBetweenNumbers = MainManager.Instance.TimeBetweenNumbers;
             numberSpeed = MainManager.Instance.NumberSpeed;
             StartCoroutine(RegularSpawn());
-            if(Preferences.ShowTutorial)
-                Tutorial.Instance.RunGameTutorial();
+            if(Preferences.ShowTutorial) { Tutorial.Instance.RunGameTutorial(); }
         }
 
         private IEnumerator RegularSpawn() {
@@ -40,7 +34,7 @@ namespace Controller
             var poolCounter = 0;
             while (true)
             {
-                if (state != Game.State.Title)
+                if (!GetManager<StateManager>().CurrentStateIs(States.Title))
                 {
                     var waitTime = Mathf.Pow(padding / (MainManager.Current + padding), 2f) * timeBetweenNumbers;
 
