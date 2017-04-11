@@ -10,6 +10,16 @@ namespace Utility
 {
     public static class ExtensionMethods {
 
+        public static RectTransform rectTransform<T>(this T param) where T : Component
+        {
+            return param.transform as RectTransform;
+        }
+
+        public static RectTransform rectTransform(this GameObject param)
+        {
+            return param.transform as RectTransform;
+        }
+
         public static void Randomise<T>(this T[] param){
             for (int i = 0; i < param.Length; i++) {
                 var temp = param [i];
@@ -26,11 +36,11 @@ namespace Utility
             return instance;
         }
 
+        /// <summary>
+        /// Add two int arrays together index by index.
+        /// alpha is the multiplyer for the calling array, beta the multiplyer for the sent array.
+        /// </summary>
         public static int[] Zip(this int[] a, int[] b, int alpha = 1, int beta = 1){
-            /// <summary>
-            /// Add two int arrays together index by index.
-            /// alpha is the multiplyer for the calling array, beta the multiplyer for the sent array.
-            /// </summary>
             int[] c = new int[a.Length];
             for (int i = 0; i < a.Length; i++) {
                 c[i] = alpha * a[i] + beta * b[i];

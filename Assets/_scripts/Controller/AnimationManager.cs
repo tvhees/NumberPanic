@@ -23,7 +23,7 @@ namespace Controller
 
         private void Start()
         {
-            StartCoroutine(titleAnimator.DropTitle());
+            StartCoroutine(titleAnimator.TweenTitle());
             firstGame = true;
         }
 

@@ -280,6 +280,7 @@
     <Compile Include="Assets\_scripts\Model\Number.cs" />
     <Compile Include="Assets\_scripts\Model\NumberPool.cs" />
     <Compile Include="Assets\_scripts\Utility\ExtensionMethods.cs" />
+    <Compile Include="Assets\_scripts\Utility\Path.cs" />
     <Compile Include="Assets\_scripts\Utility\Singleton.cs" />
     <Compile Include="Assets\_scripts\View\AchievementsButton.cs" />
     <Compile Include="Assets\_scripts\View\ContinueButton.cs" />
@@ -347,9 +348,6 @@
     <Reference Include="RSG.Promise">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/packages/RSG.Promise.1.2.0.0/lib/net35/RSG.Promise.dll</HintPath>
     </Reference>
-    <Reference Include="Common">
-      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Common.dll</HintPath>
-    </Reference>
     <Reference Include="Editor">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Editor.dll</HintPath>
     </Reference>
@@ -367,6 +365,9 @@
     </Reference>
     <Reference Include="winrt">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/winrt/winrt.dll</HintPath>
+    </Reference>
+    <Reference Include="Purchasing.Common">
+      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Purchasing.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
