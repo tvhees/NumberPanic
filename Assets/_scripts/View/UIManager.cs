@@ -58,14 +58,10 @@ namespace View
             gameState = state;
             switch (state)
             {
-                case Game.State.Title:
-                    menuPanel.SetActive(true);
-                    break;
                 case Game.State.Attract:
                     if (score != null)
                         score.gameObject.SetActive(true);
                     scorePanel.SetActive(false);
-                    menuPanel.SetActive(false);
                     continuePanel.SetActive(false);
                     tutorialPanel.gameObject.SetActive((false));
                     break;

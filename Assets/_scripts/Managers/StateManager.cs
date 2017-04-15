@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using GameStates;
+using RSG;
 using UnityEngine;
 
 namespace Managers
@@ -12,44 +13,55 @@ namespace Managers
     {
         private State stateObject;
         private StateBase current;
-        private StateBase[] allStates;
+        private StateBase[] stateClasses;
+        private readonly States[] stateNums =
+        {
+            States.Title,
+            States.Attract,
+            States.Pause,
+            States.Play,
+            States.Critical,
+            States.End,
+            States.Score
+        };
+
+        public States Current { get { return stateNums[current.transform.GetSiblingIndex()]; }}
 
         public bool CurrentStateIs(States queryState)
         {
-            return current == allStates[(int) queryState];
+            return current == stateClasses[(int) queryState];
         }
 
         public void SetStateObject(State stateObject)
         {
             this.stateObject = stateObject;
-            allStates = stateObject.GetComponentsInChildren<StateBase>(true);
-            MoveToState(allStates.First());
+            stateClasses = stateObject.GetComponentsInChildren<StateBase>(true);
+            MoveToState(stateClasses.First());
         }
 
-        public void GoToNextState()
+        public IPromise MoveToState(States newState)
         {
-            var currentIndex = current.transform.GetSiblingIndex();
-            var newIndex = (int)Mathf.Repeat(currentIndex + 1, stateObject.transform.childCount);
-            MoveToState(allStates[newIndex]);
+            return MoveToState(stateClasses[(int)newState]);
         }
 
-        public void MoveToState(States newState)
+        public IPromise MoveToState(GameObject newState)
         {
-            MoveToState(allStates[(int)newState]);
+            return MoveToState(newState.GetComponent<StateBase>());
         }
 
-        public void MoveToState(GameObject newState)
+        private IPromise MoveToState(StateBase newState)
         {
-            MoveToState(newState.GetComponent<StateBase>());
+            return Promise.Sequence(
+                () => current ? current.EndState() : Promise.Resolved(),
+                () => SetNewState(newState),
+                () => current.StartState());
         }
 
-        private void MoveToState(StateBase newState)
+        private IPromise SetNewState(StateBase newState)
         {
-            if(current) { current.EndState(); }
             current = newState;
             stateObject.Current = newState.gameObject;
-            current.gameObject.SetActive(true);
-            current.StartState();
+            return Promise.Resolved();
         }
     }
 }

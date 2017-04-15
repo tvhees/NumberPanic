@@ -262,7 +262,7 @@
     <Compile Include="Assets\_scripts\Controller\SocialManager.cs" />
     <Compile Include="Assets\_scripts\Controller\Spawner.cs" />
     <Compile Include="Assets\_scripts\Controller\Tutorial.cs" />
-    <Compile Include="Assets\_scripts\GameData\GlobalSettings.cs" />
+    <Compile Include="Assets\_scripts\GameData\Settings.cs" />
     <Compile Include="Assets\_scripts\GameStates\AttractState.cs" />
     <Compile Include="Assets\_scripts\GameStates\CriticalState.cs" />
     <Compile Include="Assets\_scripts\GameStates\EndState.cs" />
@@ -272,7 +272,9 @@
     <Compile Include="Assets\_scripts\GameStates\State.cs" />
     <Compile Include="Assets\_scripts\GameStates\StateBase.cs" />
     <Compile Include="Assets\_scripts\GameStates\TitleState.cs" />
+    <Compile Include="Assets\_scripts\Managers\AnimManager.cs" />
     <Compile Include="Assets\_scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\_scripts\Managers\SceneObject.cs" />
     <Compile Include="Assets\_scripts\Managers\StateManager.cs" />
     <Compile Include="Assets\_scripts\Model\AudioClipObject.cs" />
     <Compile Include="Assets\_scripts\Model\Data.cs" />
@@ -288,11 +290,11 @@
     <Compile Include="Assets\_scripts\View\ContinuePanel.cs" />
     <Compile Include="Assets\_scripts\View\Explosion.cs" />
     <Compile Include="Assets\_scripts\View\FinalHighScore.cs" />
-    <Compile Include="Assets\_scripts\View\FinalLetterCallback.cs" />
     <Compile Include="Assets\_scripts\View\FinalScore.cs" />
     <Compile Include="Assets\_scripts\View\Flickering.cs" />
     <Compile Include="Assets\_scripts\View\HighScore.cs" />
     <Compile Include="Assets\_scripts\View\IModeList.cs" />
+    <Compile Include="Assets\_scripts\View\ITransitionAnimation.cs" />
     <Compile Include="Assets\_scripts\View\LoadingCover.cs" />
     <Compile Include="Assets\_scripts\View\MainMode.cs" />
     <Compile Include="Assets\_scripts\View\MenuPanel.cs" />
@@ -351,6 +353,9 @@
     <Reference Include="Editor">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Purchasing.Common">
+      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Purchasing.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Security">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Security.dll</HintPath>
     </Reference>
@@ -365,9 +370,6 @@
     </Reference>
     <Reference Include="winrt">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/winrt/winrt.dll</HintPath>
-    </Reference>
-    <Reference Include="Purchasing.Common">
-      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Purchasing.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

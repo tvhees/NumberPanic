@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Utility;
 using View;
@@ -9,8 +8,6 @@ namespace Controller
     public class AnimationManager : Singleton<AnimationManager> {
 
         [SerializeField] private SubPanel[] subPanels;
-        [SerializeField] private TitleAnimator titleAnimator;
-        [SerializeField] private MenuPanel menuPanel;
         [SerializeField] private LoadingCover loadingCover;
         [SerializeField] private ContinuePanel continuePanel;
         [SerializeField] private ScorePanel scorePanel;
@@ -23,7 +20,6 @@ namespace Controller
 
         private void Start()
         {
-            StartCoroutine(titleAnimator.TweenTitle());
             firstGame = true;
         }
 
@@ -36,11 +32,9 @@ namespace Controller
             }
 
             CloseSubPanels();
-            yield return StartCoroutine(menuPanel.DropMenu());
 
             if (firstGame)
             {
-                yield return StartCoroutine(titleAnimator.LeaveTitle());
                 firstGame = false;
             }
 

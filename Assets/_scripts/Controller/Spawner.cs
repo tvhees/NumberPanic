@@ -1,18 +1,36 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using Controller;
+using GameData;
 using Managers;
 using Model;
 using UnityEngine;
+using UnityEngine.VR.WSA.Persistence;
+using Random = UnityEngine.Random;
+
+namespace GameData
+{
+    public partial class Settings
+    {
+        [SerializeField] private Spawner.SpawnerSettings spawnerSettings;
+        public static Spawner.SpawnerSettings Spawner {get { return instance.spawnerSettings; }}
+    }
+}
 
 namespace Controller
 {
     public class Spawner : BaseMonoBehaviour
     {
         public Camera GameCam;
-        [SerializeField] private bool spawn;
 
-        private float padding;
-        private float timeBetweenNumbers;
-        private float numberSpeed;
+        [Serializable]
+        public class SpawnerSettings
+        {
+            public float DifficultyPadding;
+            public float TimeBetweenNumbers;
+            public float NumberSpeed;
+        }
+
         private Game game;
 
         protected override void Awake() {
@@ -22,9 +40,6 @@ namespace Controller
 
         public void Start()
         {
-            padding = MainManager.Instance.Padding;
-            timeBetweenNumbers = MainManager.Instance.TimeBetweenNumbers;
-            numberSpeed = MainManager.Instance.NumberSpeed;
             StartCoroutine(RegularSpawn());
             if(Preferences.ShowTutorial) { Tutorial.Instance.RunGameTutorial(); }
         }
@@ -36,7 +51,11 @@ namespace Controller
             {
                 if (!GetManager<StateManager>().CurrentStateIs(States.Title))
                 {
-                    var waitTime = Mathf.Pow(padding / (MainManager.Current + padding), 2f) * timeBetweenNumbers;
+                    var waitTime =
+                        Mathf.Pow(
+                            Settings.Spawner.DifficultyPadding /
+                            (MainManager.Current + Settings.Spawner.DifficultyPadding), 2f) *
+                        Settings.Spawner.TimeBetweenNumbers;
 
                     if (counter == 0)
                     {
@@ -65,7 +84,8 @@ namespace Controller
             var obj = pool.GetObject();
 
             // Speed to travel downwards, damped increase as numbers increase
-            var speed = (MainManager.Current + MainManager.Instance.Padding) * numberSpeed / MainManager.Instance.Padding;
+            var speed = (MainManager.Current + Settings.Spawner.DifficultyPadding) * Settings.Spawner.NumberSpeed /
+                        Settings.Spawner.DifficultyPadding;
 
             // Default value is the next one player needs to collect
             var value = MainManager.Current;

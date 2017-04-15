@@ -1,8 +1,10 @@
 ﻿using Managers;
+using RSG;
 using UnityEngine;
 
 namespace GameStates
 {
+    [ManagerDependency(typeof(ManagerContainer))]
     public abstract class StateBase : BaseMonoBehaviour
     {
         protected GameManager Game;
@@ -14,19 +16,17 @@ namespace GameStates
             StateManager = GetManager<StateManager>();
         }
 
-        public virtual void StartState()
+        public virtual IPromise StartState()
         {
             Debug.Log(name);
+            gameObject.SetActive(true);
+            return Promise.Resolved();
         }
 
-        public virtual void EndState()
+        public virtual IPromise EndState()
         {
             gameObject.SetActive(false);
-        }
-
-        protected virtual void NextState()
-        {
-            StateManager.GoToNextState();
+            return Promise.Resolved();
         }
     }
 }

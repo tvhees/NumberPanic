@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 namespace GameData
 {
-    public partial class GlobalSettings : ResourceSingleton<GlobalSettings> {
+    public partial class Settings : ResourceSingleton<Settings> {
 
     #if UNITY_EDITOR
 

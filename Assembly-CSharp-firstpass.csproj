@@ -96,6 +96,9 @@
     <Reference Include="Editor">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Purchasing.Common">
+      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Purchasing.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Security">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Security.dll</HintPath>
     </Reference>
@@ -110,9 +113,6 @@
     </Reference>
     <Reference Include="winrt">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/winrt/winrt.dll</HintPath>
-    </Reference>
-    <Reference Include="Purchasing.Common">
-      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Purchasing.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

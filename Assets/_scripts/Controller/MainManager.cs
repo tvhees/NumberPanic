@@ -23,15 +23,6 @@ namespace Controller
         public NumberPool[] numberPools;
         [HideInInspector] public static ExplosionPool explosionPool;
 
-        // Variables used to control pace of the game - set in inspector while testing
-        [SerializeField] private float padding;
-        [SerializeField] private float timeBetweenNumbers;
-        [SerializeField] private float numberSpeed;
-
-        public float Padding { get { return padding; } }
-        public float TimeBetweenNumbers { get { return timeBetweenNumbers; } }
-        public float NumberSpeed { get { return numberSpeed; } }
-
         // Data holders
         public readonly Data data = new Data();
 

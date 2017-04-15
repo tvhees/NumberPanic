@@ -1,81 +1,98 @@
-﻿using System.Collections;
-using System.IO;
+﻿using System;
 using System.Linq;
 using DG.Tweening;
+using GameData;
+using RSG;
 using UnityEngine;
 using UnityEngine.UI;
+using View;
 using Path = Utility.Path;
+
+namespace GameData {
+    public partial class Settings
+    {
+        [SerializeField]
+        private TitleAnimator.TitleSettings title;
+        public static TitleAnimator.TitleSettings Title { get { return instance.title; } }
+    }
+}
 
 namespace View
 {
-    public class TitleAnimator : MonoBehaviour {
+    [RequireComponent(typeof(Path))]
+    public class TitleAnimator : MonoBehaviour, ITransitionAnimation
+    {
 
         private bool animating;
-        private Animator[] animators;
-        private const float Delay = 0.05f;
-        private int numLetters;
         [SerializeField] private Path touchyPath;
         [SerializeField] private Path numbersPath;
 
-        private void Awake()
+        [Serializable]
+        public class TitleSettings
         {
-            animating = false;
-            animators = GetComponentsInChildren<Animator>();
+            public float DelayBetweenLetters;
+            [Range(0.1f, 5)]
+            public float LetterSpeed;
         }
 
-        public IEnumerator DropTitle()
+        public IPromise ScreenEnterAnimation()
         {
-            foreach (var animator in animators)
+            return new Promise((resolve, reject) =>
             {
-                animator.SetTrigger("drop");
-                yield return new WaitForSeconds(Delay);
-            }
+                ResetTitle();
 
-            yield return new WaitForSeconds(Delay);
+                AnimateLetters(resolve, 1, Ease.OutBounce);
+            });
         }
 
-        public IEnumerator TweenTitle()
+        public IPromise ScreenExitAnimation()
+        {
+            return new Promise((resolve, reject) =>
+            {
+                AnimateLetters(resolve, 2);
+            });
+        }
+
+        private void ResetTitle()
         {
             var letters = GetComponentsInChildren<Text>();
-            var dropSequence = DOTween.Sequence();
+            for (var i = 0; i < letters.Length; i++)
+            {
+                var l = letters[i];
+                var home = i < 6 ? touchyPath.Points.First() : numbersPath.Points.First();
+                l.rectTransform.localPosition = new Vector2(l.rectTransform.localPosition.x, home.y);
+            }
+        }
+
+        private void AnimateLetters(Action resolve, int pathIndex, DG.Tweening.Ease ease = Ease.Linear)
+        {
+            var letters = GetComponentsInChildren<Text>();
+            var sequence = DOTween.Sequence();
             var timePosition = 0f;
-            animating = true;
+            var delay = Settings.Title.DelayBetweenLetters;
+            var duration = 1.0f / Settings.Title.LetterSpeed;
 
             for (var i = 0; i < letters.Length; i++)
             {
                 var l = letters[i];
-                var endPoint = i < 6 ? touchyPath.Points.Last() : numbersPath.Points.Last();
-                dropSequence.Insert(timePosition, l.rectTransform.DOLocalMoveY(endPoint.y, 0.2f));
-                timePosition += Delay;
+                var endPoint = i < 6 ? touchyPath.Points[pathIndex]
+                    : numbersPath.Points[pathIndex];
+
+                sequence.Insert(timePosition,
+                    l.rectTransform.DOLocalMoveY(endPoint.y,duration).SetEase(ease));
+
+                timePosition += delay;
             }
 
-            dropSequence.OnComplete(() => animating = false);
-
-            while (animating)
+            sequence.OnComplete(() =>
             {
-                yield return null;
-            }
+                resolve();
+            });
         }
 
-        public IEnumerator LeaveTitle()
+        public void SetActive(bool value)
         {
-            animating = true;
-            numLetters = animators.Length;
-
-            foreach (var animator in animators)
-            {
-                animator.SetTrigger("drop");
-            }
-
-            while (animating)
-                yield return null;
-        }
-
-        public void Callback()
-        {
-            numLetters--;
-            if(numLetters <= 0)
-                animating = false;
+            gameObject.SetActive(value);
         }
     }
 }
