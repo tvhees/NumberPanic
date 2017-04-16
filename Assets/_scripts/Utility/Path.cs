@@ -9,6 +9,7 @@ namespace Utility
         private Vector3[] startingPoints = { new Vector3(0, 0, 0), new Vector3(1, 0, 0) };
         public float HandleSize = 0.8f;
         public float PickSize = 1.0f;
+        public bool RelativeToParent;
 
         private void Awake()
         {

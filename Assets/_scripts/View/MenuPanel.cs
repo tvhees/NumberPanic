@@ -24,7 +24,6 @@ namespace View
     {
         [SerializeField] private Path path;
         public static UnityEvent OnFinishedAnimation = new UnityEvent();
-        private bool animating;
 
         [Serializable]
         public class MenuSettings
@@ -35,12 +34,12 @@ namespace View
 
         public IPromise ScreenEnterAnimation()
         {
-            return new Promise((resolve, reject) => StartCoroutine(ScreenEnterAnimation(resolve)));
+            return new Promise((resolve, reject) => ScreenEnterAnimation(resolve));
         }
 
         public IPromise ScreenExitAnimation()
         {
-            return new Promise((resolve, reject) => StartCoroutine(ScreenExitAnimation(resolve)));
+            return new Promise((resolve, reject) => ScreenExitAnimation(resolve));
         }
 
         public void SetActive(bool value)
@@ -48,51 +47,34 @@ namespace View
             gameObject.SetActive(value);
         }
 
+        private void ScreenEnterAnimation(Action resolve)
+        {
+            ResetMenu();
+
+            AnimatePanel(resolve, 0, Ease.OutBounce);
+        }
+
+        private void ScreenExitAnimation(Action resolve)
+        {
+            AnimatePanel(resolve, 1);
+        }
+
         private void ResetMenu()
         {
             this.rectTransform().localPosition = new Vector2(this.rectTransform().localPosition.x, path.Points.Last().y);
         }
 
-        private IEnumerator ScreenEnterAnimation(Action resolve)
-        {
-            ResetMenu();
-
-            var duration = 1 / Settings.Menu.Speed;
-            animating = true;
-
-            this.rectTransform().DOLocalMoveY(path.Points.First().y, duration)
-                .OnComplete(() =>
-                {
-                    animating = false;
-                    OnFinishedAnimation.Invoke();
-                });
-
-            while (animating)
-            {
-                yield return null;
-            }
-
-            resolve();
-        }
-
-        private IEnumerator ScreenExitAnimation(Action resolve)
+        private void AnimatePanel(Action resolve, int pathIndex, Ease ease = Ease.Linear)
         {
             var duration = 1 / Settings.Menu.Speed;
-            animating = true;
 
-            this.rectTransform().DOLocalMoveY(path.Points.Last().y, duration)
+            this.rectTransform().DOLocalMoveY(path.Points[pathIndex].y, duration)
+                .SetEase(ease)
                 .OnComplete(() =>
                 {
-                    animating = false;
+                    resolve();
                     OnFinishedAnimation.Invoke();
                 });
-
-            while (animating)
-            {
-                yield return null;
-            }
-
-            resolve();
         }
     }
 }

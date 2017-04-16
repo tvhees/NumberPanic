@@ -31,6 +31,7 @@ namespace View
         public class TitleSettings
         {
             public float DelayBetweenLetters;
+            public float DelayBetweenWords;
             [Range(0.1f, 5)]
             public float LetterSpeed;
         }
@@ -64,24 +65,29 @@ namespace View
             }
         }
 
-        private void AnimateLetters(Action resolve, int pathIndex, DG.Tweening.Ease ease = Ease.Linear)
+        private void AnimateLetters(Action resolve, int pathIndex, Ease ease = Ease.Linear)
         {
             var letters = GetComponentsInChildren<Text>();
             var sequence = DOTween.Sequence();
             var timePosition = 0f;
             var delay = Settings.Title.DelayBetweenLetters;
             var duration = 1.0f / Settings.Title.LetterSpeed;
-
+            var delayBetweenWords = Settings.Title.DelayBetweenWords;
+            var lettersInFirstWord = "touchy".Length;
             for (var i = 0; i < letters.Length; i++)
             {
                 var l = letters[i];
-                var endPoint = i < 6 ? touchyPath.Points[pathIndex]
+                var endPoint = i < lettersInFirstWord ? touchyPath.Points[pathIndex]
                     : numbersPath.Points[pathIndex];
 
                 sequence.Insert(timePosition,
                     l.rectTransform.DOLocalMoveY(endPoint.y,duration).SetEase(ease));
 
                 timePosition += delay;
+                if (i == lettersInFirstWord - 1)
+                {
+                    timePosition += delayBetweenWords;
+                }
             }
 
             sequence.OnComplete(() =>

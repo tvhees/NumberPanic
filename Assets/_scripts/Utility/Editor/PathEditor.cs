@@ -36,8 +36,10 @@ public class PathEditor : Editor
     {
         GetPath();
 
-        pathTransform = path.transform;
-        pathRotation = Tools.pivotRotation == PivotRotation.Local ? pathTransform.rotation : Quaternion.identity;
+        pathTransform = path.RelativeToParent ? path.transform.parent : path.transform;
+        pathRotation = Tools.pivotRotation == PivotRotation.Local ?
+            pathTransform ? pathTransform.rotation : Quaternion.identity
+            : Quaternion.identity;
 
         var points = new Vector3[path.Points.Length];
         var segmentIndices = new int[points.Length * 2 - 2];
@@ -59,7 +61,7 @@ public class PathEditor : Editor
 
     private Vector3 ShowPoint(int index)
     {
-        var point = pathTransform.TransformPoint(path.GetPoint(index));
+        var point = pathTransform ? pathTransform.TransformPoint(path.GetPoint(index)) : path.GetPoint(index);
 
         Handles.color = Color.white;
         if (Handles.Button(point, pathRotation, path.HandleSize, path.PickSize, Handles.SphereCap)) {
@@ -74,7 +76,7 @@ public class PathEditor : Editor
             if (EditorGUI.EndChangeCheck()) {
                 Undo.RecordObject(path, "Move Point");
                 EditorUtility.SetDirty(path);
-                path.SetPoint(index, pathTransform.InverseTransformPoint(point));
+                path.SetPoint(index, pathTransform ? pathTransform.InverseTransformPoint(point) : point);
             }
         }
 

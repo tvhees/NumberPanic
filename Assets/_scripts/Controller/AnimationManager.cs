@@ -8,7 +8,6 @@ namespace Controller
     public class AnimationManager : Singleton<AnimationManager> {
 
         [SerializeField] private SubPanel[] subPanels;
-        [SerializeField] private LoadingCover loadingCover;
         [SerializeField] private ContinuePanel continuePanel;
         [SerializeField] private ScorePanel scorePanel;
         private bool firstGame;
@@ -27,7 +26,7 @@ namespace Controller
 
             if (!firstGame)
             {
-                yield return StartCoroutine(loadingCover.Enter());
+                yield return null;
                 StartCoroutine(scorePanel.Drop());
             }
 
@@ -37,8 +36,6 @@ namespace Controller
             {
                 firstGame = false;
             }
-
-            loadingCover.anim.SetBool("open", false);
 
             MainManager.Instance.Restart();
         }
