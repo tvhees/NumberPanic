@@ -61,6 +61,7 @@ namespace Managers
         {
             current = newState;
             stateObject.Current = newState.gameObject;
+            Debug.Log("Setting state:" + newState.name);
             return Promise.Resolved();
         }
     }

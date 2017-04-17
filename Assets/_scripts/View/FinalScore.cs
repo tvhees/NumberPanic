@@ -23,6 +23,9 @@ namespace View
         }
 
         void Update() {
+            if (MainManager.Instance.game == null)
+                return;
+
             counter += Time.unscaledDeltaTime;
             current = Mathf.CeilToInt(MainManager.Current * Mathf.Clamp01(counter / countTime));
             // Important! We are using STORED values of mode and SubMode here

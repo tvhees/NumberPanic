@@ -19,14 +19,15 @@ namespace GameStates
 
         public virtual IPromise StartState()
         {
-            Debug.Log(name);
             Settings.OnChanged.AddListener(RestartThisState);
             gameObject.SetActive(true);
+            Debug.Log("Starting state:" + name);
             return Promise.Resolved();
         }
 
         public virtual IPromise EndState()
         {
+            Debug.Log("Ending state:" + name);
             Settings.OnChanged.RemoveListener(RestartThisState);
             gameObject.SetActive(false);
             return Promise.Resolved();

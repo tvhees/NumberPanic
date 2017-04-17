@@ -159,7 +159,7 @@ ISerializationCallbackReceiver
         instance.hideFlags = HideFlags.NotEditable;
         UnityEditor.EditorUtility.SetDirty(instance);
         var so = new UnityEditor.SerializedObject(instance);
-        so.UpdateIfDirtyOrScript();
+        so.UpdateIfRequiredOrScript();
         UnityEditor.AssetDatabase.SaveAssets();
     }
 #endif

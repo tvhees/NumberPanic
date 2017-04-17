@@ -14,7 +14,11 @@ namespace View
             finalScore = transform.parent.GetComponentInChildren<FinalScore>();
         }
 
-        void Update() {
+        void Update()
+        {
+            if (MainManager.Instance.game == null)
+                return;
+
             if (finalScore.fV.Value > MainManager.Instance.game.HighScore)
                 label.text = finalScore.label.text;
             else

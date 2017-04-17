@@ -24,13 +24,9 @@ namespace Controller
 
         public IEnumerator NewGame() {
 
-            if (!firstGame)
-            {
-                yield return null;
-                StartCoroutine(scorePanel.Drop());
-            }
+            yield return null;
 
-            CloseSubPanels();
+            /*CloseSubPanels();*/
 
             if (firstGame)
             {

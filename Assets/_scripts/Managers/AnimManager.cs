@@ -13,6 +13,7 @@ namespace Managers
         public ITransitionAnimation Title {get { return objects.TitleAnimator; }}
         public ITransitionAnimation Menu {get { return objects.MenuPanel; }}
         public ITransitionAnimation Loading {get { return objects.LoadingCover; }}
+        public ITransitionAnimation Score {get { return objects.ScorePanel; }}
 
         [Serializable]
         public class SceneObjects
@@ -22,7 +23,7 @@ namespace Managers
             public MenuPanel MenuPanel;
             public LoadingCover LoadingCover;
             public ContinuePanel continuePanel;
-            public ScorePanel scorePanel;
+            public ScorePanel ScorePanel;
         }
 
         public void SetObjects(SceneObjects objects)

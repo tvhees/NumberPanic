@@ -64,7 +64,7 @@ public class PathEditor : Editor
         var point = pathTransform ? pathTransform.TransformPoint(path.GetPoint(index)) : path.GetPoint(index);
 
         Handles.color = Color.white;
-        if (Handles.Button(point, pathRotation, path.HandleSize, path.PickSize, Handles.SphereCap)) {
+        if (Handles.Button(point, pathRotation, path.HandleSize, path.PickSize, Handles.SphereHandleCap)) {
             selectedIndex = index;
         }
 

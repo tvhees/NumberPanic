@@ -41,7 +41,6 @@ namespace View
             return new Promise((resolve, reject) =>
             {
                 ResetTitle();
-
                 AnimateLetters(resolve, 1, Ease.OutBounce);
             });
         }

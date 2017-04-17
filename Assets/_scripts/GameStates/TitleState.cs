@@ -1,7 +1,6 @@
-﻿using System;
-using GameData;
-using Managers;
+﻿using Managers;
 using RSG;
+using UnityEngine;
 
 namespace GameStates
 {
@@ -11,9 +10,19 @@ namespace GameStates
         {
             return Promise.Sequence(
                 () => base.StartState(),
+                DebugMsg,
                 () => GetManager<AnimManager>().Title.ScreenEnterAnimation(),
                 () => GetManager<AnimManager>().Menu.ScreenEnterAnimation()
             );
+        }
+
+        private IPromise DebugMsg()
+        {
+            Debug.Log(GetManager<AnimManager>());
+            Debug.Log("1");
+            Debug.Log(GetManager<AnimManager>().Title);
+            Debug.Log("2");
+            return Promise.Resolved();
         }
 
         public override IPromise EndState()

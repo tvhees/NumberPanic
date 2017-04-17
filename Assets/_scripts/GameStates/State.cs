@@ -8,9 +8,8 @@ namespace GameStates
     {
         public GameObject Current;
 
-        protected override void Awake()
+        protected void Start()
         {
-            base.Awake();
             GetManager<StateManager>().SetStateObject(this);
         }
     }
