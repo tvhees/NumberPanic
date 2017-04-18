@@ -16,7 +16,6 @@ namespace View
         public MainMode modes;
         public SubMode subModes;
         public GameObject continuePanel;
-        public GameObject scorePanel;
         public GameObject menuPanel;
         public TutorialPanel tutorialPanel;
         public GameObject tutorialArrow;
@@ -61,12 +60,10 @@ namespace View
                 case Game.State.Attract:
                     if (score != null)
                         score.gameObject.SetActive(true);
-                    scorePanel.SetActive(false);
                     continuePanel.SetActive(false);
                     tutorialPanel.gameObject.SetActive((false));
                     break;
                 case Game.State.Pause:
-                    scorePanel.SetActive(false);
                     menuPanel.SetActive(false);
                     continuePanel.SetActive(false);
                     tutorialPanel.gameObject.SetActive((true));
@@ -81,7 +78,6 @@ namespace View
                 default:
                     if (score != null)
                         score.gameObject.SetActive(true);
-                    scorePanel.SetActive(false);
                     menuPanel.SetActive(false);
                     tutorialPanel.gameObject.SetActive(false);
                     break;
@@ -93,7 +89,6 @@ namespace View
             Preferences.Instance.Save();
             if (continuePanel.activeSelf)
                 yield return StartCoroutine(AnimationManager.Instance.ContinueButtonPressed(false));
-            scorePanel.SetActive(true);
             menuPanel.SetActive(true);
             settingsButton.TogglePanel();
         }

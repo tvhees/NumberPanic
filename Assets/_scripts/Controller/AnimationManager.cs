@@ -9,7 +9,6 @@ namespace Controller
 
         [SerializeField] private SubPanel[] subPanels;
         [SerializeField] private ContinuePanel continuePanel;
-        [SerializeField] private ScorePanel scorePanel;
         private bool firstGame;
 
         private void Awake()

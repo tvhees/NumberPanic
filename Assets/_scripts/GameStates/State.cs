@@ -8,7 +8,7 @@ namespace GameStates
     {
         public GameObject Current;
 
-        protected void Start()
+        private void Start()
         {
             GetManager<StateManager>().SetStateObject(this);
         }

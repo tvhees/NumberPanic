@@ -1,4 +1,5 @@
 ﻿using System;
+using Managers;
 using Model;
 using UnityEngine;
 using View;
@@ -21,6 +22,7 @@ namespace Controller
         private readonly Data data;
         public readonly MainManager.Mode mode;
         public readonly int subMode;
+        private readonly StateManager stateManager;
         private const float EndMax = 5.0f;
         private const float MaximumCriticalTime = 3.0f;
 
@@ -49,11 +51,12 @@ namespace Controller
 
         #endregion Variables
 
-        public Game(Data data, MainManager.Mode mode, int subMode)
+        public Game(Data data, MainManager.Mode mode, int subMode, StateManager stateManager)
         {
             this.data = data;
             this.mode = mode;
             this.subMode = subMode;
+            this.stateManager = stateManager;
             targetTimeScale = 1.0f;
             HighScore = Preferences.Instance.GetHighScore().Value;
             EnterAttractState();
@@ -144,6 +147,10 @@ namespace Controller
         {
             targetTimeScale = 1.0f;
             GameState = State.Score;
+            if (!stateManager.CurrentStateIs(States.Score))
+            {
+                stateManager.MoveToState(States.Score);
+            }
         }
 
         #endregion Game state

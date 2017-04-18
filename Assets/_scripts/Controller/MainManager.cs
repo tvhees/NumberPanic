@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Managers;
 using Model;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,6 +23,7 @@ namespace Controller
         [HideInInspector] public Text highScore, title;
         public NumberPool[] numberPools;
         [HideInInspector] public static ExplosionPool explosionPool;
+        public StateManager StateManager;
 
         // Data holders
         public readonly Data data = new Data();
@@ -91,7 +93,7 @@ namespace Controller
         private IEnumerator LoadGame(bool initializing = false) {
             Current = 0;
             audioManager.StopTitleMusic();
-            game = new Game(data, MainMode, SubMode);
+            game = new Game(data, MainMode, SubMode, StateManager);
 
             if (!SceneManager.GetSceneByName("Game").isLoaded)
             {

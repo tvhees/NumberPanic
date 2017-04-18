@@ -47,10 +47,7 @@ namespace View
 
         public IPromise ScreenExitAnimation()
         {
-            return new Promise((resolve, reject) =>
-            {
-                AnimateLetters(resolve, 2);
-            });
+            return new Promise((resolve, reject) => AnimateLetters(resolve, 2));
         }
 
         private void ResetTitle()

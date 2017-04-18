@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Controller;
 using GameStates;
 using RSG;
 using UnityEngine;
@@ -34,6 +36,8 @@ namespace Managers
 
         public void SetStateObject(State stateObject)
         {
+            // Temporary
+            MainManager.Instance.StateManager = this;
             this.stateObject = stateObject;
             stateClasses = stateObject.GetComponentsInChildren<StateBase>(true);
             MoveToState(stateClasses.First());
@@ -54,15 +58,25 @@ namespace Managers
             return Promise.Sequence(
                 () => current ? current.EndState() : Promise.Resolved(),
                 () => SetNewState(newState),
-                () => current.StartState());
+                () => current.StartState())
+                .Catch(ex => Debug.LogException(ex, this));
         }
 
         private IPromise SetNewState(StateBase newState)
         {
-            current = newState;
-            stateObject.Current = newState.gameObject;
-            Debug.Log("Setting state:" + newState.name);
-            return Promise.Resolved();
+            return new Promise((resolve, reject) => {
+                try
+                {
+                    current = newState;
+                    stateObject.Current = newState.gameObject;
+                    Debug.Log("Setting state:" + newState.name);
+                    resolve();
+                }
+                catch (Exception e)
+                {
+                    reject(e);
+                }
+            });
         }
     }
 }
