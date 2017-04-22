@@ -1,6 +1,7 @@
 ﻿using System;
 using Managers;
 using Model;
+using RSG;
 using UnityEngine;
 using View;
 
@@ -9,10 +10,7 @@ namespace Controller
     public class Game {
         public enum State
         {
-            Title,
-            Attract,
             Pause,
-            Play,
             Critical,
             End,
             Score
@@ -46,7 +44,7 @@ namespace Controller
 
         // Timers for end-game continuation and critical recovery
         private float timer;
-        private float targetTimeScale;
+        private static float _targetTimeScale;
         private int continuesLeft = 1;
 
         #endregion Variables
@@ -57,16 +55,22 @@ namespace Controller
             this.mode = mode;
             this.subMode = subMode;
             this.stateManager = stateManager;
-            targetTimeScale = 1.0f;
+            _targetTimeScale = 1.0f;
             HighScore = Preferences.Instance.GetHighScore().Value;
-            EnterAttractState();
+            stateManager.MoveToState(States.Attract);
             SocialManager.Instance.NewGamePlayed(mode);
         }
 
         #region Game state
 
         public bool IsInPlayState {
-            get { return GameState == State.Attract || GameState == State.Play || GameState == State.Critical; }
+            get { return stateManager.CurrentStateIs(States.Attract, States.Play, States.Critical); }
+        }
+
+        public static IPromise SetTargetTimeScale(float value)
+        {
+            _targetTimeScale = value;
+            return Promise.Resolved();
         }
 
         public void ProcessState()
@@ -80,26 +84,7 @@ namespace Controller
                 ProcessGameLoss();
 
             // Now we smoothly move towards the appropriate timescale
-            Time.timeScale = Mathf.Lerp(Time.timeScale, targetTimeScale, Time.unscaledDeltaTime);
-        }
-
-        /// <summary>
-        /// Change state to Attract and set time scale to 1;
-        /// </summary>
-        public void EnterAttractState()
-        {
-            targetTimeScale = 1.0f;
-            GameState = State.Attract;
-        }
-
-        /// <summary>
-        /// Change state to Pause and set time scale to 1;
-        /// </summary>
-        public void Pause()
-        {
-            targetTimeScale = 0.0f;
-            Time.timeScale = targetTimeScale;
-            GameState = State.Pause;
+            Time.timeScale = Mathf.Lerp(Time.timeScale, _targetTimeScale, Time.unscaledDeltaTime);
         }
 
         /// <summary>
@@ -107,17 +92,8 @@ namespace Controller
         /// </summary>
         public void Unpause()
         {
-            Play();
-            Time.timeScale = targetTimeScale;
-        }
-
-        /// <summary>
-        /// Change state to Play and smoothly move to time scale of 1.0f;
-        /// </summary>
-        public void Play()
-        {
-            targetTimeScale = 1.0f;
-            GameState = State.Play;
+            stateManager.MoveToState(States.Play);
+            Time.timeScale = _targetTimeScale;
         }
 
         /// <summary>
@@ -127,7 +103,7 @@ namespace Controller
         {
             if (state == State.Critical) return;
             timer = 0;
-            targetTimeScale = 1.0f;
+            _targetTimeScale = 1.0f;
             GameState = State.Critical;
         }
 
@@ -136,7 +112,7 @@ namespace Controller
         /// </summary>
         public void End()
         {
-            targetTimeScale = 0.0f;
+            _targetTimeScale = 0.0f;
             GameState = State.End;
         }
 
@@ -145,7 +121,7 @@ namespace Controller
         /// </summary>
         private void EnterScoreState()
         {
-            targetTimeScale = 1.0f;
+            _targetTimeScale = 1.0f;
             GameState = State.Score;
             if (!stateManager.CurrentStateIs(States.Score))
             {
@@ -275,7 +251,7 @@ namespace Controller
 
             if (state == State.Critical)
                 ProcessGameLoss();
-            else if (state == State.Play)
+            else if (stateManager.CurrentStateIs(States.Play))
                 if (MainManager.Instance.TimeAttackMode)
                     MainManager.Instance.GameTimer.AddTimePenalty();
                 else
@@ -292,7 +268,7 @@ namespace Controller
             if(MainManager.Current > 12)
                 SocialManager.UpdateTimesTablesArray(mode, subMode);
 
-            Play();
+            stateManager.MoveToState(States.Play);
             if(MainManager.Instance.TimeAttackMode)
                 MainManager.Instance.GameTimer.AddTimeBonus();
         }

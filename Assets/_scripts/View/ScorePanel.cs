@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Linq;
-using Controller;
 using DG.Tweening;
 using GameData;
-using RSG;
 using UnityEngine;
 using Utility;
 using View;
@@ -21,9 +17,7 @@ namespace GameData
 
 namespace View
 {
-    public class ScorePanel : MonoBehaviour, ITransitionAnimation {
-        [SerializeField] private Path path;
-
+    public class ScorePanel : TransitionAnimatedPanel {
         [Serializable]
         public class ScoreSettings
         {
@@ -31,36 +25,16 @@ namespace View
             public float Speed;
         }
 
-        public IPromise ScreenEnterAnimation()
+        protected override void ScreenEnterAnimation(Action resolve)
         {
-            return new Promise((resolve, reject) => ScreenEnterAnimation(resolve));
-        }
-
-        public IPromise ScreenExitAnimation()
-        {
-            return new Promise((resolve, reject) => ScreenExitAnimation(resolve));
-        }
-
-        private void ScreenEnterAnimation(Action resolve)
-        {
-            ResetMenu();
+            ResetPanel();
 
             AnimatePanel(resolve, 0, Ease.OutBounce);
         }
 
-        private void ScreenExitAnimation(Action resolve)
+        protected override void ScreenExitAnimation(Action resolve)
         {
             AnimatePanel(resolve, 1);
-        }
-
-        private void ResetMenu()
-        {
-            this.rectTransform().localPosition = new Vector2(this.rectTransform().localPosition.x, path.Points.Last().y);
-        }
-
-        public void SetActive(bool value)
-        {
-            gameObject.SetActive(value);
         }
 
         private void AnimatePanel(Action resolve, int pathIndex, Ease ease = Ease.Linear)

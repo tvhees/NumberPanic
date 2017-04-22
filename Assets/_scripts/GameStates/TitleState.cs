@@ -8,10 +8,11 @@ namespace GameStates
     {
         public override IPromise StartState()
         {
+            var animationManager = GetManager<AnimManager>();
             return Promise.Sequence(
-                () => base.StartState(),
-                () => GetManager<AnimManager>().Title.ScreenEnterAnimation(),
-                () => GetManager<AnimManager>().Menu.ScreenEnterAnimation()
+                base.StartState,
+                animationManager.Title.ScreenEnterAnimation,
+                animationManager.Menu.ScreenEnterAnimation
             );
         }
 

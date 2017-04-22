@@ -17,6 +17,7 @@ namespace GameStates
         public override IPromise EndState()
         {
             return Promise.Sequence(
+                GetManager<AnimManager>().Menu.ScreenExitAnimation,
                 GetManager<AnimManager>().Score.ScreenExitAnimation,
                 base.EndState
             );

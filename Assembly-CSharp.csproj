@@ -309,6 +309,7 @@
     <Compile Include="Assets\_scripts\View\SubPanel.cs" />
     <Compile Include="Assets\_scripts\View\TimerDisplay.cs" />
     <Compile Include="Assets\_scripts\View\TitleAnimator.cs" />
+    <Compile Include="Assets\_scripts\View\TransitionAnimatedPanel.cs" />
     <Compile Include="Assets\_scripts\View\TutorialPanel.cs" />
     <Compile Include="Assets\_scripts\View\UiManager.cs" />
     <Compile Include="Assets\thirdparty\SecurePlayerPrefs\ZPlayerPrefs.cs" />

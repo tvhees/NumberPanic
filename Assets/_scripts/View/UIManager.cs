@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Controller;
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
@@ -16,12 +17,10 @@ namespace View
         public MainMode modes;
         public SubMode subModes;
         public GameObject continuePanel;
-        public GameObject menuPanel;
         public TutorialPanel tutorialPanel;
         public GameObject tutorialArrow;
         [SerializeField] private Toggle tutorialToggle;
         [SerializeField] private Toggle shakeToggle;
-        private Game.State gameState;
 
         private float current;
 
@@ -35,8 +34,8 @@ namespace View
         public void Update() {
             if (MainManager.Instance.GameTimer != null)
             {
-                var timerIsRunning = gameState == Game.State.Attract || gameState == Game.State.Pause;
-                var delta = timerIsRunning ? 0 : -Time.unscaledDeltaTime;
+                var timerIsStopped = MainManager.Instance.StateManager.CurrentStateIs(States.Title, States.Attract, States.Pause);
+                var delta = timerIsStopped ? 0 : -Time.unscaledDeltaTime;
                 var timeRemaining = MainManager.Instance.GameTimer.UpdateTimer(delta);
                 UpdateTimer(timeRemaining);
             }
@@ -54,17 +53,9 @@ namespace View
 
         private void OnStateChanged(Game.State state)
         {
-            gameState = state;
             switch (state)
             {
-                case Game.State.Attract:
-                    if (score != null)
-                        score.gameObject.SetActive(true);
-                    continuePanel.SetActive(false);
-                    tutorialPanel.gameObject.SetActive((false));
-                    break;
                 case Game.State.Pause:
-                    menuPanel.SetActive(false);
                     continuePanel.SetActive(false);
                     tutorialPanel.gameObject.SetActive((true));
                     break;
@@ -78,7 +69,6 @@ namespace View
                 default:
                     if (score != null)
                         score.gameObject.SetActive(true);
-                    menuPanel.SetActive(false);
                     tutorialPanel.gameObject.SetActive(false);
                     break;
             }
@@ -89,7 +79,6 @@ namespace View
             Preferences.Instance.Save();
             if (continuePanel.activeSelf)
                 yield return StartCoroutine(AnimationManager.Instance.ContinueButtonPressed(false));
-            menuPanel.SetActive(true);
             settingsButton.TogglePanel();
         }
 

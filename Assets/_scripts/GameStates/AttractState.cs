@@ -1,4 +1,5 @@
-﻿using Managers;
+﻿using System;
+using Managers;
 using RSG;
 
 namespace GameStates
@@ -8,7 +9,9 @@ namespace GameStates
         public override IPromise StartState()
         {
             return Promise.Sequence(() => base.StartState(),
-                () => GetManager<AnimManager>().Loading.ScreenExitAnimation());
+                () => Controller.Game.SetTargetTimeScale(1.0f),
+                () => GetManager<AnimManager>().Loading.ScreenExitAnimation()
+            );
         }
     }
 }

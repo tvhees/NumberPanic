@@ -2,7 +2,6 @@
 using System.Linq;
 using DG.Tweening;
 using GameData;
-using RSG;
 using UnityEngine;
 using UnityEngine.UI;
 using View;
@@ -20,12 +19,9 @@ namespace GameData {
 namespace View
 {
     [RequireComponent(typeof(Path))]
-    public class TitleAnimator : MonoBehaviour, ITransitionAnimation
+    public class TitleAnimator : TransitionAnimatedPanel, ITransitionAnimation
     {
-
-        private bool animating;
-        [SerializeField] private Path touchyPath;
-        [SerializeField] private Path numbersPath;
+        [SerializeField] private Path secondPath;
 
         [Serializable]
         public class TitleSettings
@@ -36,27 +32,24 @@ namespace View
             public float LetterSpeed;
         }
 
-        public IPromise ScreenEnterAnimation()
+        protected override void ScreenEnterAnimation(Action resolve)
         {
-            return new Promise((resolve, reject) =>
-            {
-                ResetTitle();
-                AnimateLetters(resolve, 1, Ease.OutBounce);
-            });
+            ResetPanel();
+            AnimateLetters(resolve, 1, Ease.OutBounce);
         }
 
-        public IPromise ScreenExitAnimation()
+        protected override void ScreenExitAnimation(Action resolve)
         {
-            return new Promise((resolve, reject) => AnimateLetters(resolve, 2));
+            AnimateLetters(resolve, 2);
         }
 
-        private void ResetTitle()
+        protected override void ResetPanel()
         {
             var letters = GetComponentsInChildren<Text>();
             for (var i = 0; i < letters.Length; i++)
             {
                 var l = letters[i];
-                var home = i < 6 ? touchyPath.Points.First() : numbersPath.Points.First();
+                var home = i < 6 ? path.Points.First() : secondPath.Points.First();
                 l.rectTransform.localPosition = new Vector2(l.rectTransform.localPosition.x, home.y);
             }
         }
@@ -73,8 +66,8 @@ namespace View
             for (var i = 0; i < letters.Length; i++)
             {
                 var l = letters[i];
-                var endPoint = i < lettersInFirstWord ? touchyPath.Points[pathIndex]
-                    : numbersPath.Points[pathIndex];
+                var endPoint = i < lettersInFirstWord ? path.Points[pathIndex]
+                    : secondPath.Points[pathIndex];
 
                 sequence.Insert(timePosition,
                     l.rectTransform.DOLocalMoveY(endPoint.y,duration).SetEase(ease));
@@ -90,11 +83,6 @@ namespace View
             {
                 resolve();
             });
-        }
-
-        public void SetActive(bool value)
-        {
-            gameObject.SetActive(value);
         }
     }
 }

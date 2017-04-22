@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Managers;
 using UnityEngine;
 using Utility;
 using View;
@@ -47,7 +48,7 @@ namespace Controller
             {
                 if (MainManager.Instance.GameTimer != null)
                     MainManager.Instance.NewTimer();
-                MainManager.Instance.game.EnterAttractState();
+                MainManager.Instance.StateManager.MoveToState(States.Attract);
             }
             yield return StartCoroutine(continuePanel.Leave(isContinuing));
         }

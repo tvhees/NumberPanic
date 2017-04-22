@@ -34,6 +34,11 @@ namespace Managers
             return current == stateClasses[(int) queryState];
         }
 
+        public bool CurrentStateIs(params States[] queryStates)
+        {
+            return queryStates.Any(s => current == stateClasses[(int) s]);
+        }
+
         public void SetStateObject(State stateObject)
         {
             // Temporary
