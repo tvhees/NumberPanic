@@ -8,63 +8,31 @@ using View;
 namespace Controller
 {
     public class Game {
-        public enum State
-        {
-            Pause,
-            Critical,
-            End,
-            Score
-        }
-        #region Settings
-
-        private readonly Data data;
-        public readonly MainManager.Mode mode;
-        public readonly int subMode;
-        private readonly StateManager stateManager;
-        private const float EndMax = 5.0f;
-        private const float MaximumCriticalTime = 3.0f;
-
-        #endregion Settings
-
-        #region Variables
-
-        private State state;
-        public State GameState
-        {
-            get { return state; }
-            set
-            {
-                if (state == value) return;
-                state = value;
-                EventManager.OnStateChanged.Invoke((value));
-            }
-        }
-
+        public readonly MainManager.Mode Mode;
+        public readonly int SubMode;
         public int HighScore { get; private set; }
 
-        // Timers for end-game continuation and critical recovery
-        private float timer;
+        private readonly StateManager stateManager;
         private static float _targetTimeScale;
+
+        // Timers for end-game continue countdown
+        private const float MaxCountdownTime = 5.0f;
+        private float countdownTimer;
         private int continuesLeft = 1;
 
-        #endregion Variables
-
-        public Game(Data data, MainManager.Mode mode, int subMode, StateManager stateManager)
+        public Game(MainManager.Mode mode, int subMode, StateManager stateManager)
         {
-            this.data = data;
-            this.mode = mode;
-            this.subMode = subMode;
+            this.Mode = mode;
+            this.SubMode = subMode;
             this.stateManager = stateManager;
             _targetTimeScale = 1.0f;
             HighScore = Preferences.Instance.GetHighScore().Value;
-            stateManager.MoveToState(States.Attract);
+            stateManager.MoveTo(States.Attract);
             SocialManager.Instance.NewGamePlayed(mode);
         }
 
-        #region Game state
-
         public bool IsInPlayState {
-            get { return stateManager.CurrentStateIs(States.Attract, States.Play, States.Critical); }
+            get { return stateManager.CurrentStateIs(States.Attract, States.Play); }
         }
 
         public static IPromise SetTargetTimeScale(float value)
@@ -75,36 +43,18 @@ namespace Controller
 
         public void ProcessState()
         {
-            if (state == State.Critical || state == State.End)
-                timer += Time.unscaledDeltaTime;
+            if (stateManager.CurrentStateIs(States.End))
+            {
+                countdownTimer += Time.unscaledDeltaTime;
 
-            if (state == State.End && timer > EndMax)
-                EnterScoreState();
-            else if (state == State.Critical && timer > MaximumCriticalTime)
-                ProcessGameLoss();
+                if (countdownTimer > MaxCountdownTime)
+                {
+                    EnterScoreState();
+                }
+            }
 
             // Now we smoothly move towards the appropriate timescale
             Time.timeScale = Mathf.Lerp(Time.timeScale, _targetTimeScale, Time.unscaledDeltaTime);
-        }
-
-        /// <summary>
-        /// Change state to Play and immediately move time scale to 1.0f
-        /// </summary>
-        public void Unpause()
-        {
-            stateManager.MoveToState(States.Play);
-            Time.timeScale = _targetTimeScale;
-        }
-
-        /// <summary>
-        /// Set the state to Critical and start the timer;
-        /// </summary>
-        public void EnterCriticalState()
-        {
-            if (state == State.Critical) return;
-            timer = 0;
-            _targetTimeScale = 1.0f;
-            GameState = State.Critical;
         }
 
         /// <summary>
@@ -112,8 +62,7 @@ namespace Controller
         /// </summary>
         public void End()
         {
-            _targetTimeScale = 0.0f;
-            GameState = State.End;
+            stateManager.MoveTo(States.End);
         }
 
         /// <summary>
@@ -121,17 +70,8 @@ namespace Controller
         /// </summary>
         private void EnterScoreState()
         {
-            _targetTimeScale = 1.0f;
-            GameState = State.Score;
-            if (!stateManager.CurrentStateIs(States.Score))
-            {
-                stateManager.MoveToState(States.Score);
-            }
+            stateManager.MoveTo(States.Score);
         }
-
-        #endregion Game state
-
-        #region Timers
 
         /// <summary>
         /// Returns the current game timer
@@ -140,8 +80,7 @@ namespace Controller
         {
             get
             {
-                var max = state == State.Critical ? MaximumCriticalTime : EndMax;
-                return Mathf.CeilToInt(Mathf.Max(max - timer, 0));
+                return Mathf.CeilToInt(Mathf.Max(MaxCountdownTime - countdownTimer, 0));
             }
         }
 
@@ -150,20 +89,20 @@ namespace Controller
         /// </summary>
         public void ProcessGameLoss()
         {
-            if (state == State.End) return;
+            if (stateManager.CurrentStateIs(States.End))
+            {
+                return;
+            }
+
             if (continuesLeft > 0)
             {
                 continuesLeft--;
-                timer = 0;
-                End();
+                countdownTimer = 0;
+                stateManager.MoveTo(States.End);
             }
             else
                 EnterScoreState();
         }
-
-        #endregion Timers
-
-        #region Resolving number touches
 
         /// <summary>
         /// Returns the FaceValue struct corresponding to the player's score for the current game mode.
@@ -179,28 +118,28 @@ namespace Controller
         public FaceValue GetFaceValue(int n)
         {
             var fV = new FaceValue();
-            switch (mode)
+            switch (Mode)
             {
                 case MainManager.Mode.Linear:
-                    fV.Value = n * (subMode + 1);
+                    fV.Value = n * (SubMode + 1);
                     fV.Text = fV.Value.ToString();
                     break;
                 case MainManager.Mode.Power:
-                    fV.Value = (int)Mathf.Pow(n, (subMode + 2));
+                    fV.Value = (int)Mathf.Pow(n, (SubMode + 2));
                     fV.Text = fV.Value.ToString();
                     break;
                 case MainManager.Mode.Sequence:
                     int[] seq;
-                    switch (subMode)
+                    switch (SubMode)
                     {
                         case (int) MainManager.Sequence.Primes:
-                            seq = data.Numbers.Primes;
+                            seq = Data.Numbers.Primes;
                             break;
                         case (int) MainManager.Sequence.Fibbonaci:
-                            seq = data.Numbers.Fibbonaci;
+                            seq = Data.Numbers.Fibbonaci;
                             break;
                         case (int) MainManager.Sequence.Pi:
-                            seq = data.Numbers.Pi;
+                            seq = Data.Numbers.Pi;
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -210,16 +149,16 @@ namespace Controller
                     break;
                 case MainManager.Mode.English:
                     string[] words;
-                    switch (subMode)
+                    switch (SubMode)
                     {
                         case (int) MainManager.English.Alphabet:
-                            words = data.Texts.Alphabet;
+                            words = Data.Texts.Alphabet;
                             break;
                         case (int)MainManager.English.CommonWords:
-                            words = data.Texts.EnglishWords;
+                            words = Data.Texts.EnglishWords;
                             break;
                         case (int)MainManager.English.AusAnthem:
-                            words = data.Texts.AusAnthem;
+                            words = Data.Texts.AusAnthem;
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -249,13 +188,8 @@ namespace Controller
             if(Preferences.ShakeCamera)
                 gameCam.GetComponent<Shake>().Punch();
 
-            if (state == State.Critical)
-                ProcessGameLoss();
-            else if (stateManager.CurrentStateIs(States.Play))
-                if (MainManager.Instance.TimeAttackMode)
-                    MainManager.Instance.GameTimer.AddTimePenalty();
-                else
-                    EnterCriticalState(); // In classic mode, mistakes take you straight to critical time
+            if (stateManager.CurrentStateIs(States.Play))
+                MainManager.Instance.GameTimer.AddTimePenalty();
         }
 
         /// <summary>
@@ -266,13 +200,10 @@ namespace Controller
             MainManager.Instance.audioManager.PlayPositiveSound();
             MainManager.Current++;
             if(MainManager.Current > 12)
-                SocialManager.UpdateTimesTablesArray(mode, subMode);
+                SocialManager.UpdateTimesTablesArray(Mode, SubMode);
 
-            stateManager.MoveToState(States.Play);
-            if(MainManager.Instance.TimeAttackMode)
-                MainManager.Instance.GameTimer.AddTimeBonus();
+            stateManager.MoveTo(States.Play);
+            MainManager.Instance.GameTimer.AddTimeBonus();
         }
-
-        #endregion Resolving number touches
     }
 }

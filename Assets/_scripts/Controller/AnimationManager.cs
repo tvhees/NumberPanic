@@ -9,7 +9,6 @@ namespace Controller
     public class AnimationManager : Singleton<AnimationManager> {
 
         [SerializeField] private SubPanel[] subPanels;
-        [SerializeField] private ContinuePanel continuePanel;
         private bool firstGame;
 
         private void Awake()
@@ -47,10 +46,11 @@ namespace Controller
             if (isContinuing)
             {
                 if (MainManager.Instance.GameTimer != null)
-                    MainManager.Instance.NewTimer();
-                MainManager.Instance.StateManager.MoveToState(States.Attract);
+                    MainManager.Instance.GameTimer = new GameTimer();
+                MainManager.Instance.StateManager.MoveTo(States.Attract);
             }
-            yield return StartCoroutine(continuePanel.Leave(isContinuing));
+
+            yield return null;
         }
     }
 }

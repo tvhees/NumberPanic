@@ -60,9 +60,9 @@ namespace Controller
         private void WaitForAusAnthem()
         {
             ausAnthemTimer.WaitUntil(_ => MainManager.Instance.game != null &&
-                                          MainManager.Instance.game.mode == MainManager.Mode.English &&
-                                          MainManager.Instance.game.subMode == (int) MainManager.English.AusAnthem &&
-                                          MainManager.Instance.game.GetFaceValue().Value >= MainManager.Instance.data.Texts.AusAnthem.Length)
+                                          MainManager.Instance.game.Mode == MainManager.Mode.English &&
+                                          MainManager.Instance.game.SubMode == (int) MainManager.English.AusAnthem &&
+                                          MainManager.Instance.game.GetFaceValue().Value >= Data.Texts.AusAnthem.Length)
                 .Done(() => Social.ReportProgress(GPGSIds.achievement_now_you_know_the_second_verse, 100.0f, null));
         }
 

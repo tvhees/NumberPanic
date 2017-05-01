@@ -9,6 +9,11 @@ namespace View
         public Text label;
 
         void Update() {
+            if (MainManager.Instance.game == null)
+            {
+                return;
+            }
+            
             label.text = MainManager.Instance.game.TimeRemaining.ToString();
         }
     }

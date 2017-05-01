@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Managers
 {
-    public enum States { Title, Attract, Pause, Play, Critical, End, Score }
+    public enum States { Title, Attract, Pause, Play, End, Score }
 
     [ManagerAlwaysGlobal]
     [CreateAssetMenu(fileName = "StateManager.asset", menuName = "Manager/State")]
@@ -22,7 +22,6 @@ namespace Managers
             States.Attract,
             States.Pause,
             States.Play,
-            States.Critical,
             States.End,
             States.Score
         };
@@ -41,27 +40,32 @@ namespace Managers
 
         public void SetStateObject(State stateObject)
         {
-            // Temporary
             MainManager.Instance.StateManager = this;
             this.stateObject = stateObject;
             stateClasses = stateObject.GetComponentsInChildren<StateBase>(true);
-            MoveToState(stateClasses.First());
+            MoveTo(stateClasses.First());
         }
 
-        public IPromise MoveToState(States newState)
+        public IPromise MoveTo(States newState, bool force = false)
         {
-            return MoveToState(stateClasses[(int)newState]);
+            return MoveTo(stateClasses[(int)newState]);
         }
 
-        public IPromise MoveToState(GameObject newState)
+        public IPromise MoveTo(GameObject newState, bool force = false)
         {
-            return MoveToState(newState.GetComponent<StateBase>());
+            return MoveTo(newState.GetComponent<StateBase>());
         }
 
-        private IPromise MoveToState(StateBase newState)
+        private IPromise MoveTo(StateBase newState, bool force = false)
         {
+            if (!force && current == newState)
+            {
+                Debug.LogWarning(newState.name + " is already active");
+                return Promise.Resolved();
+            }
+
             return Promise.Sequence(
-                () => current ? current.EndState() : Promise.Resolved(),
+                () => current ? current.FinishState() : Promise.Resolved(),
                 () => SetNewState(newState),
                 () => current.StartState())
                 .Catch(ex => Debug.LogException(ex, this));

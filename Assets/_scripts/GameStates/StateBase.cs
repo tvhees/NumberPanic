@@ -28,7 +28,7 @@ namespace GameStates
             });
         }
 
-        public virtual IPromise EndState()
+        public virtual IPromise FinishState()
         {
             Debug.Log("Ending state:" + name);
             Settings.OnChanged.RemoveListener(RestartThisState);
@@ -38,7 +38,7 @@ namespace GameStates
 
         protected void RestartThisState()
         {
-            StateManager.MoveToState(this.gameObject);
+            StateManager.MoveTo(this.gameObject, force: true);
         }
     }
 }

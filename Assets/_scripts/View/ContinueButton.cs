@@ -1,12 +1,14 @@
 ﻿using Controller;
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace View
 {
-    public class ContinueButton : MonoBehaviour
+    public class ContinueButton : BaseMonoBehaviour
     {
         [SerializeField] private Button button;
+        [SerializeField] private Advertising advertising;
 
         private void OnEnable()
         {
@@ -18,11 +20,11 @@ namespace View
 #if UNITY_ANDROID || UNITY_IOS
             if (Preferences.ShowAdvertisements)
             {
-                MainManager.Instance.adverts.ShowAd();
+                advertising.ShowAd();
                 return;
             }
 #endif
-            StartCoroutine(AnimationManager.Instance.ContinueButtonPressed(true));
+            GetManager<StateManager>().MoveTo(States.Play);
         }
     }
 }

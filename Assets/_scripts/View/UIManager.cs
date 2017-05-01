@@ -26,9 +26,7 @@ namespace View
 
         private void Start()
         {
-            MainManager.Instance.ui = this;
             current = MainManager.Current;
-            EventManager.OnStateChanged.AddListener((OnStateChanged));
         }
 
         public void Update() {
@@ -49,37 +47,6 @@ namespace View
             {
                 current = MainManager.Current;
             }
-        }
-
-        private void OnStateChanged(Game.State state)
-        {
-            switch (state)
-            {
-                case Game.State.Pause:
-                    continuePanel.SetActive(false);
-                    tutorialPanel.gameObject.SetActive((true));
-                    break;
-                case Game.State.End:
-                    continuePanel.SetActive(true);
-                    tutorialPanel.gameObject.SetActive((false));
-                    break;
-                case Game.State.Score:
-                    StartCoroutine(LoadScore());
-                    break;
-                default:
-                    if (score != null)
-                        score.gameObject.SetActive(true);
-                    tutorialPanel.gameObject.SetActive(false);
-                    break;
-            }
-        }
-
-        private IEnumerator LoadScore()
-        {
-            Preferences.Instance.Save();
-            if (continuePanel.activeSelf)
-                yield return StartCoroutine(AnimationManager.Instance.ContinueButtonPressed(false));
-            settingsButton.TogglePanel();
         }
 
         private void UpdateScore()

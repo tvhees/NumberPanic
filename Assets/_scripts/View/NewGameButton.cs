@@ -18,7 +18,7 @@ namespace View
         public void NewGame()
         {
             OnButtonPressed.Invoke();
-            GetManager<StateManager>().MoveToState(States.Attract);
+            GetManager<StateManager>().MoveTo(States.Attract);
         }
     }
 }

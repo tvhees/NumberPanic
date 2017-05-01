@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using Managers;
 using Model;
 using UnityEngine;
@@ -9,30 +10,22 @@ using View;
 
 namespace Controller
 {
-    public class MainManager : Singleton<MainManager> {
+    public class MainManager : Singleton<MainManager>
+    {
 
-        public bool TimeAttackMode;
-        public GameTimer GameTimer { get; private set; }
+        public GameTimer GameTimer;
 
-        [HideInInspector] public UiManager ui;
         [HideInInspector] public AudioManager audioManager;
         [HideInInspector] public Game game;
-        [HideInInspector] public Spawner spawner;
-        [HideInInspector] public Advertising adverts;
-        [HideInInspector] public MainMode modes;
-        [HideInInspector] public Text highScore, title;
-        public NumberPool[] numberPools;
-        [HideInInspector] public static ExplosionPool explosionPool;
+
         public StateManager StateManager;
 
-        // Data holders
-        public readonly Data data = new Data();
+        private IObjectPool[] numberPools;
+        public static IObjectPool ExplosionPool;
 
         // Game state variables
         public static Mode MainMode;
         public static int Current;
-        public bool GameStarted { get { return game != null && game.IsInPlayState; } }
-        public bool GameEnded { get { return game != null && !game.IsInPlayState; } }
 
         // Enums
         // Main modes
@@ -63,10 +56,15 @@ namespace Controller
             NumberOfTypes
         }
 
-        private void Start() {
-            foreach(var pool in numberPools)
+        private void Start()
+        {
+            numberPools = GetComponents<NumberPool>();
+            ExplosionPool = GetComponent<ExplosionPool>();
+
+            foreach (var pool in GetComponents<ObjectPool>())
+            {
                 pool.CreatePool();
-            explosionPool.CreatePool();
+            }
             Preferences.Instance.Load();
             if(Preferences.ShowTutorial)
                 Tutorial.Instance.RunMenuTutorial();
@@ -75,25 +73,29 @@ namespace Controller
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
+            {
                 Application.Quit();
-
-            if(Input.GetKeyDown(KeyCode.T))
-                GameTimer.AddTimePenalty();
+            }
 
             if (game != null)
+            {
                 game.ProcessState();
+            }
         }
 
         public void Restart() {
-            if(SceneManager.GetSceneByName("Game").isLoaded)
+            if (SceneManager.GetSceneByName("Game").isLoaded)
+            {
                 DestroyGame();
+            }
+
             StartCoroutine(LoadGame());
         }
 
-        private IEnumerator LoadGame(bool initializing = false) {
+        private IEnumerator LoadGame() {
             Current = 0;
             audioManager.StopTitleMusic();
-            game = new Game(data, MainMode, SubMode, StateManager);
+            game = new Game(MainMode, SubMode, StateManager);
 
             if (!SceneManager.GetSceneByName("Game").isLoaded)
             {
@@ -104,26 +106,22 @@ namespace Controller
                 }
             }
 
-            if (TimeAttackMode && !initializing)
-                NewTimer();
-        }
-
-        public void NewTimer()
-        {
             GameTimer = new GameTimer();
         }
 
         private void DestroyGame() {
             Time.timeScale = 1f;
             GameTimer = null;
-            foreach(var pool in numberPools)
+            foreach (var pool in numberPools)
+            {
                 pool.Reset();
-            explosionPool.Reset();
-            game.End();
+            }
+            ExplosionPool.Reset();
+            StateManager.MoveTo(States.End);
             SceneManager.UnloadSceneAsync("Game");
         }
 
-        public NumberPool GetPool(int n)
+        public IObjectPool GetPool(int n)
         {
             var index = (int)Mathf.Repeat(n, numberPools.Length);
             return numberPools[index];

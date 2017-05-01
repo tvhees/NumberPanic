@@ -7,9 +7,9 @@ namespace Model
 
         protected override void Init()
         {
-            MainManager.explosionPool = this;
-            poolSize = 30;
-            homePosition = Vector3.zero;
+            MainManager.ExplosionPool = this;
+            PoolSize = 30;
+            HomePosition = Vector3.zero;
         }
 
     }

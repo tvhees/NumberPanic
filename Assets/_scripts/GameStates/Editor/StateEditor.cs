@@ -29,7 +29,7 @@ namespace GameStates
             // we've received a new game object
             if ( newState != state.Current )
             {
-                state.GetManager<StateManager>().MoveToState(newState);
+                state.GetManager<StateManager>().MoveTo(newState);
             }
 
             // Restore the old color so the

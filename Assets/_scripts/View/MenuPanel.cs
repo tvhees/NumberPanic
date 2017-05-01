@@ -17,7 +17,7 @@ namespace GameData
 
 namespace View
 {
-    public class MenuPanel : TransitionAnimatedPanel, ITransitionAnimation
+    public class MenuPanel : TransitionAnimatedPanel
     {
         public static UnityEvent OnFinishedAnimation = new UnityEvent();
 

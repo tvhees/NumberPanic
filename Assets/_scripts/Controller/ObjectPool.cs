@@ -3,60 +3,67 @@ using UnityEngine;
 
 namespace Controller
 {
-    public abstract class ObjectPool : MonoBehaviour {
+    public interface IObjectPool
+    {
+        void CreatePool();
+        GameObject GetObject();
+        void ReturnObject(GameObject obj);
+        void Reset();
+    }
 
-        public GameObject prefab;
-        protected int poolSize;
-        protected Vector3 homePosition;
-        protected List<GameObject> pool, checkedOut;
+    public abstract class ObjectPool : MonoBehaviour, IObjectPool
+    {
+
+        public GameObject ObjectPrefab;
+        protected int PoolSize;
+        protected Vector3 HomePosition;
+        protected List<GameObject> Available, InUse;
 
         private void Awake() {
             Init();
         }
 
-        protected virtual void Init() {
-
-        }
+        protected virtual void Init() {}
 
         public void CreatePool(){
-            pool = new List<GameObject>();
-            checkedOut = new List<GameObject>();
+            Available = new List<GameObject>();
+            InUse = new List<GameObject>();
 
-            for (var i = 0; i < poolSize; i++){
-                var obj = Instantiate(prefab);
+            for (var i = 0; i < PoolSize; i++){
+                var obj = Instantiate(ObjectPrefab);
                 obj.transform.SetParent(transform);
-                obj.transform.position = homePosition;
+                obj.transform.position = HomePosition;
                 obj.SetActive (false);
-                pool.Add(obj);
+                Available.Add(obj);
             }
         }
 
         public GameObject GetObject()
         {
-            if (pool.Count <= 0) return null;
+            if (Available.Count <= 0) return null;
 
-            var obj = pool [0];
-            pool.Remove(obj);
-            checkedOut.Add(obj);
-            poolSize = pool.Count;
+            var obj = Available [0];
+            Available.Remove(obj);
+            InUse.Add(obj);
+            PoolSize = Available.Count;
             obj.SetActive(true);
             return obj;
         }
 
         public void ReturnObject(GameObject obj)
         {
-            pool.Add(obj);
-            checkedOut.Remove(obj);
+            Available.Add(obj);
+            InUse.Remove(obj);
             obj.transform.SetParent(transform);
-            obj.transform.position = homePosition;
+            obj.transform.position = HomePosition;
             obj.transform.localScale = Vector3.one;
             obj.SetActive(false);
         }
 
         public void Reset()
         {
-            while(checkedOut.Count > 0)
-                ReturnObject(checkedOut[0]);
+            while(InUse.Count > 0)
+                ReturnObject(InUse[0]);
         }
     }
 }

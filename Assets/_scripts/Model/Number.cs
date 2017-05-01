@@ -23,10 +23,10 @@ namespace Model
         private ParticleSystem.EmissionModule em;
         private ParticleSystem.ShapeModule sh;
         private Spawner spawner;
-        private NumberPool homePool;
+        private IObjectPool homePool;
         [SerializeField] private FaceValue fV;
 
-        public void Init(int currentIn, float speedIn, Spawner scriptIn, NumberPool homePool)
+        public void Init(int currentIn, float speedIn, Spawner scriptIn, IObjectPool homePool)
         {
             movementModule = GetComponent<MovingObject>();
             game = MainManager.Instance.game;
@@ -42,15 +42,15 @@ namespace Model
             {
                 text.text = fV.Text;
                 text.characterSize = Number.BaseCharacterSize * randomFactor;
-                text.color = homePool.colour;
+                text.color = ((NumberPool)homePool).Colour;
                 boxCollider.size = new Vector2(fV.Text.Length * 0.8f, boxCollider.size.y);
             }
 
             // Spawn from the top of the screen
             // Calculate horizontal bounds for which collider won't be outside camera view.
             var halfWidth = new Vector3(boxCollider.bounds.extents.x, 0f, 0f);
-            var leftBound = spawner.GameCam.ViewportToWorldPoint(new Vector3(0f, 1f, homePool.transform.position.z));
-            var rightBound = spawner.GameCam.ViewportToWorldPoint(new Vector3(1f, 1f, homePool.transform.position.z));
+            var leftBound = spawner.GameCam.ViewportToWorldPoint(new Vector3(0f, 1f, 1f));
+            var rightBound = spawner.GameCam.ViewportToWorldPoint(new Vector3(1f, 1f, 1f));
             var x = Random.value;
             transform.position = (1 - x) * (leftBound + halfWidth) + x * (rightBound - halfWidth);
 
@@ -111,7 +111,7 @@ namespace Model
 
         private void DestroyThis(Color colour)
         {
-            var explosion = MainManager.explosionPool.GetObject();
+            var explosion = MainManager.ExplosionPool.GetObject();
 
             if (explosion != null)
                 explosion.GetComponent<Explosion>().Init(transform.position, movementModule.Speed, colour);

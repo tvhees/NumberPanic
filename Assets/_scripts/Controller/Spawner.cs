@@ -35,7 +35,6 @@ namespace Controller
 
         protected override void Awake() {
             base.Awake();
-            MainManager.Instance.spawner = this;
         }
 
         public void Start()

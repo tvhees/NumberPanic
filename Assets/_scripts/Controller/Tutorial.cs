@@ -103,7 +103,7 @@ namespace Controller
                          " Good luck!" +
                          "\n..."),
                 WaitForInput(InputDelay))
-            .Done(() => MainManager.Instance.StateManager.MoveToState(States.Attract));
+            .Done(() => MainManager.Instance.StateManager.MoveTo(States.Attract));
         }
 
         private void DeactivateTutorial()
@@ -215,7 +215,7 @@ namespace Controller
         {
             return () =>
             {
-                MainManager.Instance.StateManager.MoveToState(States.Pause);
+                MainManager.Instance.StateManager.MoveTo(States.Pause);
                 return Promise.Resolved();
             };
         }

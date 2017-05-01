@@ -1,24 +1,43 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Controller;
+using DG.Tweening;
+using GameData;
 using UnityEngine;
 using UnityEngine.UI;
+using Utility;
+using View;
+
+namespace GameData
+{
+    public partial class Settings
+    {
+        [SerializeField] private ContinuePanel.ContinueSettings continueSettings;
+        public static ContinuePanel.ContinueSettings Continue { get { return instance.continueSettings; } }
+    }
+}
 
 namespace View
 {
-    public class ContinuePanel : MonoBehaviour {
+    public class ContinuePanel : TransitionAnimatedPanel {
 
         public Text continueText;
         public Image continueImage;
-        public Sprite playImage;
-        public Animator anim;
-        private bool animating;
 
-        void OnEnable()
+        [Serializable]
+        public class ContinueSettings
+        {
+            public Sprite PlayImage;
+            [Range(0.1f, 5.0f)]
+            public float Speed;
+        }
+
+        private void SetTextAndImage()
         {
             if (!Preferences.ShowAdvertisements)
             {
                 continueText.text = "continue?";
-                continueImage.overrideSprite = playImage;
+                continueImage.overrideSprite = Settings.Continue.PlayImage;
             }
             else
             {
@@ -27,29 +46,28 @@ namespace View
             }
         }
 
-        public IEnumerator Leave(bool use)
+        protected override void ScreenEnterAnimation(Action resolve)
         {
-            animating = true;
+            SetTextAndImage();
 
-            // Different animations are triggered if the player uses the continue
-            // than if they choose not to
-            if (use)
-                anim.SetTrigger("use");
-            else
-                anim.SetTrigger("drop");
-
-            // Wait for the animation callback to occur
-            // i.e. the animation to finish
-            while (animating)
-                yield return null;
-
-            gameObject.SetActive(false);
+            AnimatePanel(resolve, 0, Ease.OutBounce);
         }
 
-        // Called by animations when they complete
-        public void Callback()
+        protected override void ScreenExitAnimation(Action resolve)
         {
-            animating = false;
+            AnimatePanel(resolve, 1);
+        }
+
+        private void AnimatePanel(Action resolve, int pathIndex, Ease ease = Ease.Linear)
+        {
+            var duration = 1 / Settings.Continue.Speed;
+
+            this.rectTransform().DOLocalMoveY(path.Points[pathIndex].y, duration)
+                .SetEase(ease)
+                .OnComplete(() =>
+                {
+                    resolve();
+                });
         }
     }
 }

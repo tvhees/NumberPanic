@@ -1,6 +1,5 @@
 ﻿using Managers;
 using RSG;
-using UnityEngine;
 
 namespace GameStates
 {
@@ -16,12 +15,12 @@ namespace GameStates
             );
         }
 
-        public override IPromise EndState()
+        public override IPromise FinishState()
         {
             return Promise.Sequence(
                 () => GetManager<AnimManager>().Menu.ScreenExitAnimation(),
                 () => GetManager<AnimManager>().Title.ScreenExitAnimation(),
-                () => base.EndState()
+                () => base.FinishState()
             );
         }
     }
