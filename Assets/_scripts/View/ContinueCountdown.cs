@@ -9,7 +9,12 @@ namespace View
         public Text label;
 
         void Update() {
-            label.text = Manager.Instance.game.TimeRemaining.ToString();
+            if (MainManager.Instance.game == null)
+            {
+                return;
+            }
+            
+            label.text = MainManager.Instance.game.TimeRemaining.ToString();
         }
     }
 }

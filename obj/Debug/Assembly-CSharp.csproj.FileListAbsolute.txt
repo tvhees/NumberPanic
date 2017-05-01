@@ -24,7 +24,6 @@ C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\UnityEn
 C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\obj\Debug\Assembly-CSharp.dll
 C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\obj\Debug\Assembly-CSharp.pdb
 C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\Apple.dll
-C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\Common.dll
 C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\Editor.dll
 C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\Security.dll
 C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\Stores.dll
@@ -44,3 +43,6 @@ C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\nunit.f
 C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\UnityEngine.TestRunner.dll
 C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\UnityEngine.TestRunner.xml
 C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\nunit.framework.xml
+C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\Purchasing.Common.dll
+C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\UnityEditor.Purchasing.dll
+C:\Users\Torbjorn\Documents\HigherLevel\Games\NumberPanic\Temp\bin\Debug\UnityEditor.Purchasing.xml

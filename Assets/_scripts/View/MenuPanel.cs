@@ -1,34 +1,56 @@
-﻿using System.Collections;
-using Controller;
+﻿using System;
+using DG.Tweening;
+using GameData;
 using UnityEngine;
 using UnityEngine.Events;
+using Utility;
+using View;
+
+namespace GameData
+{
+    public partial class Settings
+    {
+        [SerializeField] private MenuPanel.MenuSettings menuSettings;
+        public static MenuPanel.MenuSettings Menu {get { return instance.menuSettings; }}
+    }
+}
 
 namespace View
 {
-    public class MenuPanel : MonoBehaviour
+    public class MenuPanel : TransitionAnimatedPanel
     {
         public static UnityEvent OnFinishedAnimation = new UnityEvent();
-        public bool Animating { get; private set; }
-        [SerializeField] private Animator anim;
 
-        private void Awake()
+        [Serializable]
+        public class MenuSettings
         {
-            Animating = true;
+            [Range(0.1f, 5)]
+            public float Speed;
         }
 
-        public IEnumerator DropMenu()
+        protected override void ScreenEnterAnimation(Action resolve)
         {
-            Animating = true;
-            anim.SetTrigger("drop");
+            ResetPanel();
 
-            while (Animating)
-                yield return null;
+            AnimatePanel(resolve, 0, Ease.OutBounce);
         }
 
-        public void MenuCallback()
+        protected override void ScreenExitAnimation(Action resolve)
         {
-            Animating = false;
-            OnFinishedAnimation.Invoke();
+            AnimatePanel(resolve, 1);
+        }
+
+        private void AnimatePanel(Action resolve, int pathIndex, Ease ease = Ease.Linear)
+        {
+            var duration = 1 / Settings.Menu.Speed;
+
+            this.rectTransform().DOLocalMoveY(path.Points[pathIndex].y, duration)
+                .SetEase(ease)
+                .OnComplete(() =>
+                {
+                    resolve();
+                    OnFinishedAnimation.Invoke();
+                });
         }
     }
 }

@@ -56,7 +56,7 @@ namespace Controller
         }
 
         public FaceValue GetHighScore() {
-            var scoreName = ((Manager.Mode)MainMode).ToString() + "_" + SubMode.ToString();
+            var scoreName = ((MainManager.Mode)MainMode).ToString() + "_" + SubMode.ToString();
             HighScore.Value = PlayerPrefs.GetInt(scoreName + "_value", 0);
             HighScore.Text = PlayerPrefs.GetString(scoreName + "_text", "");
             return HighScore;
@@ -64,7 +64,7 @@ namespace Controller
 
         private static void SaveHighScore()
         {
-            var scoreName = ((Manager.Mode)MainMode).ToString() + "_" + SubMode.ToString();
+            var scoreName = ((MainManager.Mode)MainMode).ToString() + "_" + SubMode.ToString();
             PlayerPrefs.SetInt(scoreName + "_value", HighScore.Value);
             PlayerPrefs.SetString(scoreName + "_text", HighScore.Text);
         }

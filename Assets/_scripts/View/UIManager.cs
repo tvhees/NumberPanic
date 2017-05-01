@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Controller;
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
@@ -16,95 +17,41 @@ namespace View
         public MainMode modes;
         public SubMode subModes;
         public GameObject continuePanel;
-        public GameObject scorePanel;
-        public GameObject menuPanel;
         public TutorialPanel tutorialPanel;
         public GameObject tutorialArrow;
         [SerializeField] private Toggle tutorialToggle;
         [SerializeField] private Toggle shakeToggle;
-        private Game.State gameState;
 
         private float current;
 
         private void Start()
         {
-            Manager.Instance.ui = this;
-            current = Manager.Current;
-            EventManager.OnStateChanged.AddListener((OnStateChanged));
+            current = MainManager.Current;
         }
 
         public void Update() {
-            if (Manager.Instance.GameTimer != null)
+            if (MainManager.Instance.GameTimer != null)
             {
-                var timerIsRunning = gameState == Game.State.Attract || gameState == Game.State.Pause;
-                var delta = timerIsRunning ? 0 : -Time.unscaledDeltaTime;
-                var timeRemaining = Manager.Instance.GameTimer.UpdateTimer(delta);
+                var timerIsStopped = MainManager.Instance.StateManager.CurrentStateIs(States.Title, States.Attract, States.Pause);
+                var delta = timerIsStopped ? 0 : -Time.unscaledDeltaTime;
+                var timeRemaining = MainManager.Instance.GameTimer.UpdateTimer(delta);
                 UpdateTimer(timeRemaining);
             }
 
-            if (Manager.Current > current)
+            if (MainManager.Current > current)
             {
                 UpdateScore();
             }
 
-            if (current > Manager.Current)
+            if (current > MainManager.Current)
             {
-                current = Manager.Current;
+                current = MainManager.Current;
             }
-        }
-
-        private void OnStateChanged(Game.State state)
-        {
-            gameState = state;
-            switch (state)
-            {
-                case Game.State.Title:
-                    menuPanel.SetActive(true);
-                    break;
-                case Game.State.Attract:
-                    if (score != null)
-                        score.gameObject.SetActive(true);
-                    scorePanel.SetActive(false);
-                    menuPanel.SetActive(false);
-                    continuePanel.SetActive(false);
-                    tutorialPanel.gameObject.SetActive((false));
-                    break;
-                case Game.State.Pause:
-                    scorePanel.SetActive(false);
-                    menuPanel.SetActive(false);
-                    continuePanel.SetActive(false);
-                    tutorialPanel.gameObject.SetActive((true));
-                    break;
-                case Game.State.End:
-                    continuePanel.SetActive(true);
-                    tutorialPanel.gameObject.SetActive((false));
-                    break;
-                case Game.State.Score:
-                    StartCoroutine(LoadScore());
-                    break;
-                default:
-                    if (score != null)
-                        score.gameObject.SetActive(true);
-                    scorePanel.SetActive(false);
-                    menuPanel.SetActive(false);
-                    tutorialPanel.gameObject.SetActive(false);
-                    break;
-            }
-        }
-
-        private IEnumerator LoadScore()
-        {
-            Preferences.Instance.Save();
-            if (continuePanel.activeSelf)
-                yield return StartCoroutine(AnimationManager.Instance.ContinueButtonPressed(false));
-            scorePanel.SetActive(true);
-            menuPanel.SetActive(true);
-            settingsButton.TogglePanel();
         }
 
         private void UpdateScore()
         {
-            current = Manager.Current;
+            current = MainManager.Current;
 
             score.Increment();
 

@@ -14,7 +14,7 @@ namespace Controller
 
         public void Awake()
         {
-            Manager.Instance.audioManager = this;
+            MainManager.Instance.audioManager = this;
             titleMusic = Resources.Load<AudioClip>("audio/TitleMusic");
             correctClips = Resources.LoadAll<AudioClip>("audio/correct/");
             incorrectClips = Resources.LoadAll<AudioClip>("audio/incorrect/");

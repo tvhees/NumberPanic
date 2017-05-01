@@ -1,4 +1,5 @@
 ﻿using System;
+using Managers;
 using Model;
 using RSG;
 using UnityEngine;
@@ -102,7 +103,7 @@ namespace Controller
                          " Good luck!" +
                          "\n..."),
                 WaitForInput(InputDelay))
-            .Done(Manager.Instance.game.EnterAttractState);
+            .Done(() => MainManager.Instance.StateManager.MoveTo(States.Attract));
         }
 
         private void DeactivateTutorial()
@@ -214,16 +215,7 @@ namespace Controller
         {
             return () =>
             {
-                Manager.Instance.game.Pause();
-                return Promise.Resolved();
-            };
-        }
-
-        private Func<IPromise> UnpauseGame()
-        {
-            return () =>
-            {
-                Manager.Instance.game.Unpause();
+                MainManager.Instance.StateManager.MoveTo(States.Pause);
                 return Promise.Resolved();
             };
         }

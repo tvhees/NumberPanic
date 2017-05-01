@@ -32,14 +32,14 @@ namespace Controller
         public static void LoadAchievementArrays()
         {
             TimesTables = ExtensionMethods.GetBoolArray("TimesTables", false, 10);
-            Sampler = ExtensionMethods.GetBoolArray("Generalist", false, (int)Manager.Mode.NumberOfTypes);
-            if (Sampler.Length < (int) Manager.Mode.NumberOfTypes)
+            Sampler = ExtensionMethods.GetBoolArray("Generalist", false, (int)MainManager.Mode.NumberOfTypes);
+            if (Sampler.Length < (int) MainManager.Mode.NumberOfTypes)
                 Sampler = GetNewSamplerArray();
         }
 
         private static bool[] GetNewSamplerArray()
         {
-            var newArray = new bool[(int) Manager.Mode.NumberOfTypes];
+            var newArray = new bool[(int) MainManager.Mode.NumberOfTypes];
             Sampler.CopyTo(newArray, 0);
             return newArray;
         }
@@ -52,17 +52,17 @@ namespace Controller
 
         private void WaitForOver9000()
         {
-            over9000Timer.WaitUntil(_ => Manager.Instance.game != null &&
-                                         Manager.Instance.game.GetFaceValue().Value > 9000)
+            over9000Timer.WaitUntil(_ => MainManager.Instance.game != null &&
+                                         MainManager.Instance.game.GetFaceValue().Value > 9000)
                 .Done(() => Social.ReportProgress(GPGSIds.achievement_its_over_9000, 100.0f, null));
         }
 
         private void WaitForAusAnthem()
         {
-            ausAnthemTimer.WaitUntil(_ => Manager.Instance.game != null &&
-                                          Manager.Instance.game.mode == Manager.Mode.English &&
-                                          Manager.Instance.game.subMode == (int) Manager.English.AusAnthem &&
-                                          Manager.Instance.game.GetFaceValue().Value >= Manager.Instance.data.Texts.AusAnthem.Length)
+            ausAnthemTimer.WaitUntil(_ => MainManager.Instance.game != null &&
+                                          MainManager.Instance.game.Mode == MainManager.Mode.English &&
+                                          MainManager.Instance.game.SubMode == (int) MainManager.English.AusAnthem &&
+                                          MainManager.Instance.game.GetFaceValue().Value >= Data.Texts.AusAnthem.Length)
                 .Done(() => Social.ReportProgress(GPGSIds.achievement_now_you_know_the_second_verse, 100.0f, null));
         }
 
@@ -72,7 +72,7 @@ namespace Controller
             ausAnthemTimer.Update(Time.deltaTime);
         }
 
-        public void NewGamePlayed(Manager.Mode mainMode)
+        public void NewGamePlayed(MainManager.Mode mainMode)
         {
             PlayGamesPlatform.Instance.IncrementAchievement(GPGSIds.achievement_dedicated, 1, null);
             UpdateSamplerArray((int)mainMode);
@@ -85,9 +85,9 @@ namespace Controller
             PlayGamesPlatform.Instance.IncrementAchievement(GPGSIds.achievement_sampler, 1, null);
         }
 
-        public static void UpdateTimesTablesArray(Manager.Mode mainMode, int subMode)
+        public static void UpdateTimesTablesArray(MainManager.Mode mainMode, int subMode)
         {
-            if (mainMode != Manager.Mode.Linear)
+            if (mainMode != MainManager.Mode.Linear)
                 return;
 
             if (TimesTables[subMode]) return;

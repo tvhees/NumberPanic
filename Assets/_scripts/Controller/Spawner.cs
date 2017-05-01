@@ -1,38 +1,46 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using Controller;
+using GameData;
+using Managers;
 using Model;
 using UnityEngine;
+using UnityEngine.VR.WSA.Persistence;
+using Random = UnityEngine.Random;
+
+namespace GameData
+{
+    public partial class Settings
+    {
+        [SerializeField] private Spawner.SpawnerSettings spawnerSettings;
+        public static Spawner.SpawnerSettings Spawner {get { return instance.spawnerSettings; }}
+    }
+}
 
 namespace Controller
 {
-    public class Spawner : MonoBehaviour
+    public class Spawner : BaseMonoBehaviour
     {
         public Camera GameCam;
-        [SerializeField] private bool spawn;
 
-        private float padding;
-        private float timeBetweenNumbers;
-        private float numberSpeed;
-        private Game game;
-        private Game.State state = Game.State.Attract;
-
-        private void Awake() {
-            Manager.Instance.spawner = this;
-            EventManager.OnStateChanged.AddListener(OnStateChanged);
+        [Serializable]
+        public class SpawnerSettings
+        {
+            public float DifficultyPadding;
+            public float TimeBetweenNumbers;
+            public float NumberSpeed;
         }
 
-        public void OnStateChanged(Game.State newState)
-        {
-            state = newState;
+        private Game game;
+
+        protected override void Awake() {
+            base.Awake();
         }
 
         public void Start()
         {
-            padding = Manager.Instance.Padding;
-            timeBetweenNumbers = Manager.Instance.TimeBetweenNumbers;
-            numberSpeed = Manager.Instance.NumberSpeed;
             StartCoroutine(RegularSpawn());
-            if(Preferences.ShowTutorial)
-                Tutorial.Instance.RunGameTutorial();
+            if(Preferences.ShowTutorial) { Tutorial.Instance.RunGameTutorial(); }
         }
 
         private IEnumerator RegularSpawn() {
@@ -40,15 +48,19 @@ namespace Controller
             var poolCounter = 0;
             while (true)
             {
-                if (state != Game.State.Title)
+                if (!GetManager<StateManager>().CurrentStateIs(States.Title))
                 {
-                    var waitTime = Mathf.Pow(padding / (Manager.Current + padding), 2f) * timeBetweenNumbers;
+                    var waitTime =
+                        Mathf.Pow(
+                            Settings.Spawner.DifficultyPadding /
+                            (MainManager.Current + Settings.Spawner.DifficultyPadding), 2f) *
+                        Settings.Spawner.TimeBetweenNumbers;
 
                     if (counter == 0)
                     {
                         // Get a new 'true' number from the pool. Reset the counter only if this works.
                         if (SpawnNumber(poolCounter))
-                            counter = Mathf.Min(Random.Range(0, Manager.Current - 1), 8);
+                            counter = Mathf.Min(Random.Range(0, MainManager.Current - 1), 8);
                     }
                     else
                     {
@@ -67,23 +79,24 @@ namespace Controller
 
         private bool SpawnNumber(int poolNum, bool real = true) {
 
-            var pool = Manager.Instance.GetPool(poolNum);
+            var pool = MainManager.Instance.GetPool(poolNum);
             var obj = pool.GetObject();
 
             // Speed to travel downwards, damped increase as numbers increase
-            var speed = (Manager.Current + Manager.Instance.Padding) * numberSpeed / Manager.Instance.Padding;
+            var speed = (MainManager.Current + Settings.Spawner.DifficultyPadding) * Settings.Spawner.NumberSpeed /
+                        Settings.Spawner.DifficultyPadding;
 
             // Default value is the next one player needs to collect
-            var value = Manager.Current;
+            var value = MainManager.Current;
 
             // For 'fake' numbers we want to vary the value a little bit
             if (!real)
             {
                 for (var i = 0; i < 20; i++)
                 {
-                    value = (int)Random.Range(0.3f * Manager.Current, 1.7f * Manager.Current);
+                    value = (int)Random.Range(0.3f * MainManager.Current, 1.7f * MainManager.Current);
 
-                    if (Mathf.Abs(value - Manager.Current) > 1 && value > 0)
+                    if (Mathf.Abs(value - MainManager.Current) > 1 && value > 0)
                         break;
                 }
             }

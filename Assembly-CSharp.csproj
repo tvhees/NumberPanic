@@ -50,6 +50,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\BetterManagers\BaseTypes\BaseMonoBehaviour.cs" />
+    <Compile Include="Assets\BetterManagers\BaseTypes\BaseScriptableObject.cs" />
+    <Compile Include="Assets\BetterManagers\ComponentDependencies\ComponentDependencyAttribute.cs" />
+    <Compile Include="Assets\BetterManagers\ComponentDependencies\ComponentDependencyCache.cs" />
+    <Compile Include="Assets\BetterManagers\Drawer\PopupEditorDrawer.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\Manager.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\ManagerAlwaysGlobalAttribute.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\ManagerAttributeCache.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\ManagerContainer.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\ManagerContainerExecutor.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\ManagerContainer_GetManager.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\ManagerContainer_Sorting.cs" />
+    <Compile Include="Assets\BetterManagers\ManagerContainer\ManagerDependencyAttribute.cs" />
+    <Compile Include="Assets\BetterManagers\Previews\IPreviewModelSource.cs" />
+    <Compile Include="Assets\BetterManagers\Previews\PreviewInstance.cs" />
+    <Compile Include="Assets\BetterManagers\Previews\PreviewModel.cs" />
+    <Compile Include="Assets\BetterManagers\ResourceSingleton\ResourceSingleton.cs" />
+    <Compile Include="Assets\BetterManagers\ScriptExecutionOrder\ScriptExecutionOrder.cs" />
     <Compile Include="Assets\GPGSIds.cs" />
     <Compile Include="Assets\GooglePlayGames\BasicApi\Achievement.cs" />
     <Compile Include="Assets\GooglePlayGames\BasicApi\CommonStatusCodes.cs" />
@@ -236,7 +254,7 @@
     <Compile Include="Assets\_scripts\Controller\FaceValue.cs" />
     <Compile Include="Assets\_scripts\Controller\Game.cs" />
     <Compile Include="Assets\_scripts\Controller\GameTimer.cs" />
-    <Compile Include="Assets\_scripts\Controller\Manager.cs" />
+    <Compile Include="Assets\_scripts\Controller\MainManager.cs" />
     <Compile Include="Assets\_scripts\Controller\MovingObject.cs" />
     <Compile Include="Assets\_scripts\Controller\ObjectPool.cs" />
     <Compile Include="Assets\_scripts\Controller\Preferences.cs" />
@@ -244,12 +262,27 @@
     <Compile Include="Assets\_scripts\Controller\SocialManager.cs" />
     <Compile Include="Assets\_scripts\Controller\Spawner.cs" />
     <Compile Include="Assets\_scripts\Controller\Tutorial.cs" />
+    <Compile Include="Assets\_scripts\GameData\Settings.cs" />
+    <Compile Include="Assets\_scripts\GameStates\AttractState.cs" />
+    <Compile Include="Assets\_scripts\GameStates\CriticalState.cs" />
+    <Compile Include="Assets\_scripts\GameStates\EndState.cs" />
+    <Compile Include="Assets\_scripts\GameStates\PauseState.cs" />
+    <Compile Include="Assets\_scripts\GameStates\PlayState.cs" />
+    <Compile Include="Assets\_scripts\GameStates\ScoreState.cs" />
+    <Compile Include="Assets\_scripts\GameStates\State.cs" />
+    <Compile Include="Assets\_scripts\GameStates\StateBase.cs" />
+    <Compile Include="Assets\_scripts\GameStates\TitleState.cs" />
+    <Compile Include="Assets\_scripts\Managers\AnimManager.cs" />
+    <Compile Include="Assets\_scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\_scripts\Managers\SceneObject.cs" />
+    <Compile Include="Assets\_scripts\Managers\StateManager.cs" />
     <Compile Include="Assets\_scripts\Model\AudioClipObject.cs" />
     <Compile Include="Assets\_scripts\Model\Data.cs" />
     <Compile Include="Assets\_scripts\Model\ExplosionPool.cs" />
     <Compile Include="Assets\_scripts\Model\Number.cs" />
     <Compile Include="Assets\_scripts\Model\NumberPool.cs" />
     <Compile Include="Assets\_scripts\Utility\ExtensionMethods.cs" />
+    <Compile Include="Assets\_scripts\Utility\Path.cs" />
     <Compile Include="Assets\_scripts\Utility\Singleton.cs" />
     <Compile Include="Assets\_scripts\View\AchievementsButton.cs" />
     <Compile Include="Assets\_scripts\View\ContinueButton.cs" />
@@ -257,11 +290,11 @@
     <Compile Include="Assets\_scripts\View\ContinuePanel.cs" />
     <Compile Include="Assets\_scripts\View\Explosion.cs" />
     <Compile Include="Assets\_scripts\View\FinalHighScore.cs" />
-    <Compile Include="Assets\_scripts\View\FinalLetterCallback.cs" />
     <Compile Include="Assets\_scripts\View\FinalScore.cs" />
     <Compile Include="Assets\_scripts\View\Flickering.cs" />
     <Compile Include="Assets\_scripts\View\HighScore.cs" />
     <Compile Include="Assets\_scripts\View\IModeList.cs" />
+    <Compile Include="Assets\_scripts\View\ITransitionAnimation.cs" />
     <Compile Include="Assets\_scripts\View\LoadingCover.cs" />
     <Compile Include="Assets\_scripts\View\MainMode.cs" />
     <Compile Include="Assets\_scripts\View\MenuPanel.cs" />
@@ -276,6 +309,7 @@
     <Compile Include="Assets\_scripts\View\SubPanel.cs" />
     <Compile Include="Assets\_scripts\View\TimerDisplay.cs" />
     <Compile Include="Assets\_scripts\View\TitleAnimator.cs" />
+    <Compile Include="Assets\_scripts\View\TransitionAnimatedPanel.cs" />
     <Compile Include="Assets\_scripts\View\TutorialPanel.cs" />
     <Compile Include="Assets\_scripts\View\UiManager.cs" />
     <Compile Include="Assets\thirdparty\SecurePlayerPrefs\ZPlayerPrefs.cs" />
@@ -317,11 +351,11 @@
     <Reference Include="RSG.Promise">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/packages/RSG.Promise.1.2.0.0/lib/net35/RSG.Promise.dll</HintPath>
     </Reference>
-    <Reference Include="Common">
-      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Common.dll</HintPath>
-    </Reference>
     <Reference Include="Editor">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Purchasing.Common">
+      <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Purchasing.Common.dll</HintPath>
     </Reference>
     <Reference Include="Security">
       <HintPath>C:/Users/Torbjorn/Documents/HigherLevel/Games/NumberPanic/Assets/Plugins/UnityPurchasing/Bin/Security.dll</HintPath>

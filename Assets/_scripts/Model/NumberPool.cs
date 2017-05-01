@@ -5,12 +5,12 @@ namespace Model
 {
     public class NumberPool : ObjectPool
     {
-        public Color colour;
+        public Color Colour;
 
         protected override void Init()
         {
-            poolSize = 20;
-            homePosition = Vector3.zero;
+            PoolSize = 20;
+            HomePosition = Vector3.zero;
         }
     }
 }

@@ -1,33 +1,44 @@
-﻿using UnityEngine;
+﻿using System;
+using Controller;
+using GameData;
+using UnityEngine;
+
+namespace GameData
+{
+    public partial class Settings
+    {
+        [SerializeField] private GameTimer.TimerSettings timerSettings;
+        public static GameTimer.TimerSettings TimerSettings { get { return instance.timerSettings; }}
+    }
+}
 
 namespace Controller
 {
     public class GameTimer 
     {
-        public const float StartingTime = 20.0f;
-        public const float TimeBonus = 3.0f;
-        public const float TimePenalty = 6.0f;
+        [Serializable]
+        public class TimerSettings
+        {
+            public float StartingTime;
+            public float TimeBonus;
+            public float TimePenalty;
+        }
 
         private float remainingTime;
 
         public GameTimer()
         {
-            remainingTime = StartingTime;
+            remainingTime = Settings.TimerSettings.StartingTime;
         }
 
         public void AddTimeBonus()
         {
-            remainingTime += TimeBonus;
-        }
-
-        public void AddTimeBonus(float inputBonus)
-        {
-            remainingTime += inputBonus;
+            remainingTime += Settings.TimerSettings.TimeBonus;
         }
 
         public void AddTimePenalty()
         {
-            remainingTime = Mathf.Max(0f, remainingTime - TimePenalty);
+            remainingTime = Mathf.Max(0f, remainingTime - Settings.TimerSettings.TimePenalty);
         }
 
         public float UpdateTimer(float delta)
@@ -35,9 +46,7 @@ namespace Controller
             remainingTime = Mathf.Max(0f, remainingTime + delta);
 
             if (remainingTime <= Mathf.Epsilon)
-                Manager.Instance.game.ProcessGameLoss();
-            else if (remainingTime <= TimePenalty && !Manager.Instance.TimeAttackMode)
-                Manager.Instance.game.EnterCriticalState();
+                MainManager.Instance.game.ProcessGameLoss();
 
             return remainingTime;
         }

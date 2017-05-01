@@ -1,4 +1,5 @@
 ﻿using Controller;
+using GameData;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,7 +21,7 @@ namespace View
         public void SetRemainingTime(float remainingTime, string remainingTimeString)
         {
             timerText.text = remainingTimeString;
-            timerText.color = Color.Lerp(noTimeColour, lotsOfTimeColour, remainingTime/(GameTimer.StartingTime * 2f));
+            timerText.color = Color.Lerp(noTimeColour, lotsOfTimeColour, remainingTime/(Settings.TimerSettings.StartingTime * 2f));
         }
     }
 }

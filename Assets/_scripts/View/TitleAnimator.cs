@@ -1,51 +1,88 @@
-﻿using System.Collections;
+﻿using System;
+using System.Linq;
+using DG.Tweening;
+using GameData;
 using UnityEngine;
+using UnityEngine.UI;
+using View;
+using Path = Utility.Path;
+
+namespace GameData {
+    public partial class Settings
+    {
+        [SerializeField]
+        private TitleAnimator.TitleSettings title;
+        public static TitleAnimator.TitleSettings Title { get { return instance.title; } }
+    }
+}
 
 namespace View
 {
-    public class TitleAnimator : MonoBehaviour {
+    [RequireComponent(typeof(Path))]
+    public class TitleAnimator : TransitionAnimatedPanel, ITransitionAnimation
+    {
+        [SerializeField] private Path secondPath;
 
-        private bool animating;
-        private Animator[] animators;
-        private const float Delay = 0.05f;
-        private int letters;
-
-        private void Awake()
+        [Serializable]
+        public class TitleSettings
         {
-            animating = false;
-            animators = GetComponentsInChildren<Animator>();
+            public float DelayBetweenLetters;
+            public float DelayBetweenWords;
+            [Range(0.1f, 5)]
+            public float LetterSpeed;
         }
 
-        public IEnumerator DropTitle()
+        protected override void ScreenEnterAnimation(Action resolve)
         {
-            foreach (var animator in animators)
+            ResetPanel();
+            AnimateLetters(resolve, 1, Ease.OutBounce);
+        }
+
+        protected override void ScreenExitAnimation(Action resolve)
+        {
+            AnimateLetters(resolve, 2);
+        }
+
+        protected override void ResetPanel()
+        {
+            var letters = GetComponentsInChildren<Text>();
+            for (var i = 0; i < letters.Length; i++)
             {
-                animator.SetTrigger("drop");
-                yield return new WaitForSeconds(Delay);
+                var l = letters[i];
+                var home = i < 6 ? path.Points.First() : secondPath.Points.First();
+                l.rectTransform.localPosition = new Vector2(l.rectTransform.localPosition.x, home.y);
+            }
+        }
+
+        private void AnimateLetters(Action resolve, int pathIndex, Ease ease = Ease.Linear)
+        {
+            var letters = GetComponentsInChildren<Text>();
+            var sequence = DOTween.Sequence();
+            var timePosition = 0f;
+            var delay = Settings.Title.DelayBetweenLetters;
+            var duration = 1.0f / Settings.Title.LetterSpeed;
+            var delayBetweenWords = Settings.Title.DelayBetweenWords;
+            var lettersInFirstWord = "touchy".Length;
+            for (var i = 0; i < letters.Length; i++)
+            {
+                var l = letters[i];
+                var endPoint = i < lettersInFirstWord ? path.Points[pathIndex]
+                    : secondPath.Points[pathIndex];
+
+                sequence.Insert(timePosition,
+                    l.rectTransform.DOLocalMoveY(endPoint.y,duration).SetEase(ease));
+
+                timePosition += delay;
+                if (i == lettersInFirstWord - 1)
+                {
+                    timePosition += delayBetweenWords;
+                }
             }
 
-            yield return new WaitForSeconds(Delay);
-        }
-
-        public IEnumerator LeaveTitle()
-        {
-            animating = true;
-            letters = animators.Length;
-
-            foreach (var animator in animators)
+            sequence.OnComplete(() =>
             {
-                animator.SetTrigger("drop");
-            }
-
-            while (animating)
-                yield return null;
-        }
-
-        public void Callback()
-        {
-            letters--;
-            if(letters <= 0)
-                animating = false;
+                resolve();
+            });
         }
     }
 }

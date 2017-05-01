@@ -1,11 +1,19 @@
 ﻿using System;
+using Managers;
 using UnityEngine;
 using UnityEngine.Advertisements;
 
 namespace Controller
 {
-    public class Advertising : MonoBehaviour
+    [ManagerDependency(typeof(ManagerContainer))]
+    public class Advertising : BaseMonoBehaviour
     {
+        protected override void Awake()
+        {
+            base.Awake();
+            Advertisement.Initialize(Advertisement.gameId);
+        }
+
         public void ShowAd()
         {
 #if UNITY_IOS || UNITY_ANDROID
@@ -22,21 +30,15 @@ namespace Controller
             {
                 case ShowResult.Finished:
                 case ShowResult.Skipped:
-                    StartCoroutine(AnimationManager.Instance.ContinueButtonPressed(true));
+                    GetManager<StateManager>().MoveTo(States.Play);
                     break;
                 case ShowResult.Failed:
-                    StartCoroutine(AnimationManager.Instance.ContinueButtonPressed(false));
+                    GetManager<StateManager>().MoveTo(States.Score);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("result", result, null);
             }
         }
 #endif
-
-        private void Awake()
-        {
-            Advertisement.Initialize(Advertisement.gameId);
-            Manager.Instance.adverts = this;
-        }
     }
 }

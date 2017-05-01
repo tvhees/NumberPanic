@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using Managers;
 using UnityEngine;
 using Utility;
 using View;
@@ -9,11 +9,6 @@ namespace Controller
     public class AnimationManager : Singleton<AnimationManager> {
 
         [SerializeField] private SubPanel[] subPanels;
-        [SerializeField] private TitleAnimator titleAnimator;
-        [SerializeField] private MenuPanel menuPanel;
-        [SerializeField] private LoadingCover loadingCover;
-        [SerializeField] private ContinuePanel continuePanel;
-        [SerializeField] private ScorePanel scorePanel;
         private bool firstGame;
 
         private void Awake()
@@ -23,30 +18,21 @@ namespace Controller
 
         private void Start()
         {
-            StartCoroutine(titleAnimator.DropTitle());
             firstGame = true;
         }
 
         public IEnumerator NewGame() {
 
-            if (!firstGame)
-            {
-                yield return StartCoroutine(loadingCover.Enter());
-                StartCoroutine(scorePanel.Drop());
-            }
+            yield return null;
 
-            CloseSubPanels();
-            yield return StartCoroutine(menuPanel.DropMenu());
+            /*CloseSubPanels();*/
 
             if (firstGame)
             {
-                yield return StartCoroutine(titleAnimator.LeaveTitle());
                 firstGame = false;
             }
 
-            loadingCover.anim.SetBool("open", false);
-
-            Manager.Instance.Restart();
+            MainManager.Instance.Restart();
         }
 
         public void CloseSubPanels()
@@ -59,11 +45,12 @@ namespace Controller
         {
             if (isContinuing)
             {
-                if (Manager.Instance.GameTimer != null)
-                    Manager.Instance.NewTimer();
-                Manager.Instance.game.EnterAttractState();
+                if (MainManager.Instance.GameTimer != null)
+                    MainManager.Instance.GameTimer = new GameTimer();
+                MainManager.Instance.StateManager.MoveTo(States.Attract);
             }
-            yield return StartCoroutine(continuePanel.Leave(isContinuing));
+
+            yield return null;
         }
     }
 }
