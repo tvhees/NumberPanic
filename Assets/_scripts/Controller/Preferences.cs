@@ -1,15 +1,15 @@
-﻿using System.Linq;
+﻿using Model;
 using thirdparty.SecurePlayerPrefs;
 using UnityEngine;
-using UnityEngine.UI;
 using Utility;
 using View;
 
 namespace Controller
 {
-    public class Preferences : Singleton<Preferences> {
+    public class Preferences : Singleton<Preferences>
+    {
 
-        public static FaceValue HighScore = new FaceValue();
+        public static FaceValue HighScore = FaceValue.Zero();
         public static int MainMode;
         public static int SubMode;
         public static bool ShowAdvertisements;
@@ -57,8 +57,10 @@ namespace Controller
 
         public FaceValue GetHighScore() {
             var scoreName = ((MainManager.Mode)MainMode).ToString() + "_" + SubMode.ToString();
-            HighScore.Value = PlayerPrefs.GetInt(scoreName + "_value", 0);
-            HighScore.Text = PlayerPrefs.GetString(scoreName + "_text", "");
+            HighScore = new FaceValue(
+                PlayerPrefs.GetInt(scoreName + "_value", 0),
+                PlayerPrefs.GetString(scoreName + "_text", "")
+            );
             return HighScore;
         }
 

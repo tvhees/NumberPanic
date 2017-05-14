@@ -1,4 +1,5 @@
 ﻿using Controller;
+using GameStates;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,15 +7,11 @@ namespace View
 {
     public class ContinueCountdown : MonoBehaviour {
 
-        public Text label;
+        [SerializeField] private Text label;
+        [SerializeField] private EndState endState;
 
-        void Update() {
-            if (MainManager.Instance.game == null)
-            {
-                return;
-            }
-            
-            label.text = MainManager.Instance.game.TimeRemaining.ToString();
+        private void Update() {
+            label.text = endState.TimeRemaining.ToString();
         }
     }
 }

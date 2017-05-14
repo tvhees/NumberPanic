@@ -19,13 +19,9 @@ namespace Controller
         protected Vector3 HomePosition;
         protected List<GameObject> Available, InUse;
 
-        private void Awake() {
-            Init();
-        }
+        protected virtual void Awake() {}
 
-        protected virtual void Init() {}
-
-        public void CreatePool(){
+        public void CreatePool() {
             Available = new List<GameObject>();
             InUse = new List<GameObject>();
 

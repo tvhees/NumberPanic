@@ -19,7 +19,7 @@ namespace GameData {
 namespace View
 {
     [RequireComponent(typeof(Path))]
-    public class TitleAnimator : TransitionAnimatedPanel, ITransitionAnimation
+    public class TitleAnimator : TransitionAnimatedPanel
     {
         [SerializeField] private Path secondPath;
 
@@ -35,12 +35,12 @@ namespace View
         protected override void ScreenEnterAnimation(Action resolve)
         {
             ResetPanel();
-            AnimateLetters(resolve, 1, Ease.OutBounce);
+            AnimateLetters(resolve, 1, Ease.InOutQuad);
         }
 
         protected override void ScreenExitAnimation(Action resolve)
         {
-            AnimateLetters(resolve, 2);
+            AnimateLetters(resolve, 2, Ease.InOutQuad);
         }
 
         protected override void ResetPanel()
@@ -68,6 +68,8 @@ namespace View
                 var l = letters[i];
                 var endPoint = i < lettersInFirstWord ? path.Points[pathIndex]
                     : secondPath.Points[pathIndex];
+
+                Debug.Log(endPoint);
 
                 sequence.Insert(timePosition,
                     l.rectTransform.DOLocalMoveY(endPoint.y,duration).SetEase(ease));

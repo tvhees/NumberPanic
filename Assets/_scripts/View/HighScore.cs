@@ -1,4 +1,5 @@
 ﻿using Controller;
+using Model;
 using UnityEngine;
 using UnityEngine.UI;
 

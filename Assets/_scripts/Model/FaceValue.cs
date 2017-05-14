@@ -1,12 +1,27 @@
-using JetBrains.Annotations;
-
-namespace Controller
+namespace Model
 {
     [System.Serializable]
     public class FaceValue
     {
-        public int Value;
-        public string Text;
+        public readonly int Value;
+        public readonly string Text;
+
+        public FaceValue(int value, string text)
+        {
+            Value = value;
+            Text = text;
+        }
+
+        public FaceValue(int value)
+        {
+            Value = value;
+            Text = value.ToString();
+        }
+
+        public static FaceValue Zero()
+        {
+            return new FaceValue(0);
+        }
 
         protected bool Equals(FaceValue other)
         {

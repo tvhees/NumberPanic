@@ -48,27 +48,27 @@ namespace Managers
 
         public IPromise MoveTo(States newState, bool force = false)
         {
-            return MoveTo(stateClasses[(int)newState]);
+            return MoveTo(stateClasses[(int)newState], force);
         }
 
         public IPromise MoveTo(GameObject newState, bool force = false)
         {
-            return MoveTo(newState.GetComponent<StateBase>());
+            return MoveTo(newState.GetComponent<StateBase>(), force);
         }
 
         private IPromise MoveTo(StateBase newState, bool force = false)
         {
-            if (!force && current == newState)
+            if (force || current != newState)
             {
-                Debug.LogWarning(newState.name + " is already active");
-                return Promise.Resolved();
+                return Promise.Sequence(
+                        () => current ? current.FinishState() : Promise.Resolved(),
+                        () => SetNewState(newState),
+                        () => current.StartState())
+                    .Catch(ex => Debug.LogException(ex, this));
             }
 
-            return Promise.Sequence(
-                () => current ? current.FinishState() : Promise.Resolved(),
-                () => SetNewState(newState),
-                () => current.StartState())
-                .Catch(ex => Debug.LogException(ex, this));
+            Debug.LogWarning(newState.name + " is already active");
+            return Promise.Resolved();
         }
 
         private IPromise SetNewState(StateBase newState)

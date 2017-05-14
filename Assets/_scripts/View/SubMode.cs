@@ -28,8 +28,6 @@ namespace View
         // Called on initialisation and every time we choose a new submode
         // or new main mode
         private static void SetSubValue(int value) {
-            EventManager.OnDropDownClicked.Invoke();
-
             // Tell player prefs and manager what submode we're on
             Preferences.SubMode = value;
             MainManager.SubMode = value;
@@ -85,7 +83,6 @@ namespace View
         public override void OnPointerClick(PointerEventData eventData)
         {
             OnClicked.Invoke();
-            EventManager.OnDropDownClicked.Invoke();
             base.OnPointerClick(eventData);
         }
     }

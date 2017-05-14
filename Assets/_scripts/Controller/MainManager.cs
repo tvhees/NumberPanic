@@ -2,6 +2,7 @@
 using System.Linq;
 using Managers;
 using Model;
+using RSG;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -92,6 +93,15 @@ namespace Controller
             StartCoroutine(LoadGame());
         }
 
+        public IPromise NewGameTimer()
+        {
+            return new Promise((resolve, reject) =>
+            {
+                GameTimer = new GameTimer();
+                resolve();
+            });
+        }
+
         private IEnumerator LoadGame() {
             Current = 0;
             audioManager.StopTitleMusic();
@@ -105,8 +115,6 @@ namespace Controller
                     yield return null;
                 }
             }
-
-            GameTimer = new GameTimer();
         }
 
         private void DestroyGame() {
@@ -117,7 +125,6 @@ namespace Controller
                 pool.Reset();
             }
             ExplosionPool.Reset();
-            StateManager.MoveTo(States.End);
             SceneManager.UnloadSceneAsync("Game");
         }
 

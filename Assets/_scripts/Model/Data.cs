@@ -7,7 +7,6 @@ namespace Model
         public static readonly TextArrays Texts = new TextArrays();
     }
 
-    [Serializable]
     public class NumberArrays
     {
         public readonly int[] Primes;
@@ -37,7 +36,6 @@ namespace Model
         }
     }
 
-    [Serializable]
     public class TextArrays
     {
         public readonly string[] Alphabet;

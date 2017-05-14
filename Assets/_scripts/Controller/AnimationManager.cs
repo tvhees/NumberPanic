@@ -9,31 +9,6 @@ namespace Controller
     public class AnimationManager : Singleton<AnimationManager> {
 
         [SerializeField] private SubPanel[] subPanels;
-        private bool firstGame;
-
-        private void Awake()
-        {
-            NewGameButton.OnButtonPressed.AddListener(() => StartCoroutine((NewGame())));
-        }
-
-        private void Start()
-        {
-            firstGame = true;
-        }
-
-        public IEnumerator NewGame() {
-
-            yield return null;
-
-            /*CloseSubPanels();*/
-
-            if (firstGame)
-            {
-                firstGame = false;
-            }
-
-            MainManager.Instance.Restart();
-        }
 
         public void CloseSubPanels()
         {
@@ -45,8 +20,6 @@ namespace Controller
         {
             if (isContinuing)
             {
-                if (MainManager.Instance.GameTimer != null)
-                    MainManager.Instance.GameTimer = new GameTimer();
                 MainManager.Instance.StateManager.MoveTo(States.Attract);
             }
 

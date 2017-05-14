@@ -7,7 +7,7 @@ namespace Model
     {
         public Color Colour;
 
-        protected override void Init()
+        protected override void Awake()
         {
             PoolSize = 20;
             HomePosition = Vector3.zero;

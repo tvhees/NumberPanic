@@ -7,13 +7,7 @@ namespace View
 {
     public class ContinueButton : BaseMonoBehaviour
     {
-        [SerializeField] private Button button;
         [SerializeField] private Advertising advertising;
-
-        private void OnEnable()
-        {
-            button.interactable = true;
-        }
     
         public void ContinueGame()
         {
@@ -24,7 +18,7 @@ namespace View
                 return;
             }
 #endif
-            GetManager<StateManager>().MoveTo(States.Play);
+            GetManager<StateManager>().MoveTo(States.Attract);
         }
     }
 }

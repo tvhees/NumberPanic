@@ -16,8 +16,6 @@ namespace Controller
         private static float _targetTimeScale;
 
         // Timers for end-game continue countdown
-        private const float MaxCountdownTime = 5.0f;
-        private float countdownTimer;
         private int continuesLeft = 1;
 
         public Game(MainManager.Mode mode, int subMode, StateManager stateManager)
@@ -43,16 +41,6 @@ namespace Controller
 
         public void ProcessState()
         {
-            if (stateManager.CurrentStateIs(States.End))
-            {
-                countdownTimer += Time.unscaledDeltaTime;
-
-                if (countdownTimer > MaxCountdownTime)
-                {
-                    EnterScoreState();
-                }
-            }
-
             // Now we smoothly move towards the appropriate timescale
             Time.timeScale = Mathf.Lerp(Time.timeScale, _targetTimeScale, Time.unscaledDeltaTime);
         }
@@ -74,22 +62,11 @@ namespace Controller
         }
 
         /// <summary>
-        /// Returns the current game timer
-        /// </summary>
-        public float TimeRemaining
-        {
-            get
-            {
-                return Mathf.CeilToInt(Mathf.Max(MaxCountdownTime - countdownTimer, 0));
-            }
-        }
-
-        /// <summary>
         /// Removes a continue if the player has any left, otherwise moves the game to the score screen
         /// </summary>
         public void ProcessGameLoss()
         {
-            if (stateManager.CurrentStateIs(States.End))
+            if (!stateManager.CurrentStateIs(States.Play))
             {
                 return;
             }
@@ -97,7 +74,6 @@ namespace Controller
             if (continuesLeft > 0)
             {
                 continuesLeft--;
-                countdownTimer = 0;
                 stateManager.MoveTo(States.End);
             }
             else
@@ -117,17 +93,12 @@ namespace Controller
         /// </summary>
         public FaceValue GetFaceValue(int n)
         {
-            var fV = new FaceValue();
             switch (Mode)
             {
                 case MainManager.Mode.Linear:
-                    fV.Value = n * (SubMode + 1);
-                    fV.Text = fV.Value.ToString();
-                    break;
+                    return new FaceValue(n * (SubMode + 1));
                 case MainManager.Mode.Power:
-                    fV.Value = (int)Mathf.Pow(n, (SubMode + 2));
-                    fV.Text = fV.Value.ToString();
-                    break;
+                    return new FaceValue((int)Mathf.Pow(n, (SubMode + 2)));
                 case MainManager.Mode.Sequence:
                     int[] seq;
                     switch (SubMode)
@@ -144,9 +115,7 @@ namespace Controller
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
-                    fV.Value = seq[(int) Mathf.Repeat(n, seq.Length)];
-                    fV.Text = fV.Value.ToString();
-                    break;
+                    return new FaceValue(seq[(int) Mathf.Repeat(n, seq.Length)]);
                 case MainManager.Mode.English:
                     string[] words;
                     switch (SubMode)
@@ -163,15 +132,12 @@ namespace Controller
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
-                    fV.Value = n;
-                    fV.Text = words[(int)Mathf.Repeat(n, words.Length)];
-                    break;
+                    return new FaceValue(n, words[(int)Mathf.Repeat(n, words.Length)]);
                 case MainManager.Mode.NumberOfTypes:
                     throw new ArgumentOutOfRangeException();
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            return fV;
         }
 
         public void ProcessGameEvent(bool isPositiveEvent, Camera gameCam)

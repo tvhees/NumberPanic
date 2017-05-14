@@ -32,12 +32,12 @@ namespace View
         {
             ResetPanel();
 
-            AnimatePanel(resolve, 0, Ease.OutBounce);
+            AnimatePanel(resolve, 0, Ease.InOutQuad);
         }
 
         protected override void ScreenExitAnimation(Action resolve)
         {
-            AnimatePanel(resolve, 1);
+            AnimatePanel(resolve, 1, Ease.InOutQuad);
         }
 
         private void AnimatePanel(Action resolve, int pathIndex, Ease ease = Ease.Linear)

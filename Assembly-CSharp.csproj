@@ -250,8 +250,6 @@
     <Compile Include="Assets\_scripts\Controller\Advertising.cs" />
     <Compile Include="Assets\_scripts\Controller\AnimationManager.cs" />
     <Compile Include="Assets\_scripts\Controller\AudioManager.cs" />
-    <Compile Include="Assets\_scripts\Controller\EventManager.cs" />
-    <Compile Include="Assets\_scripts\Controller\FaceValue.cs" />
     <Compile Include="Assets\_scripts\Controller\Game.cs" />
     <Compile Include="Assets\_scripts\Controller\GameTimer.cs" />
     <Compile Include="Assets\_scripts\Controller\MainManager.cs" />
@@ -264,7 +262,6 @@
     <Compile Include="Assets\_scripts\Controller\Tutorial.cs" />
     <Compile Include="Assets\_scripts\GameData\Settings.cs" />
     <Compile Include="Assets\_scripts\GameStates\AttractState.cs" />
-    <Compile Include="Assets\_scripts\GameStates\CriticalState.cs" />
     <Compile Include="Assets\_scripts\GameStates\EndState.cs" />
     <Compile Include="Assets\_scripts\GameStates\PauseState.cs" />
     <Compile Include="Assets\_scripts\GameStates\PlayState.cs" />
@@ -276,9 +273,9 @@
     <Compile Include="Assets\_scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\_scripts\Managers\SceneObject.cs" />
     <Compile Include="Assets\_scripts\Managers\StateManager.cs" />
-    <Compile Include="Assets\_scripts\Model\AudioClipObject.cs" />
     <Compile Include="Assets\_scripts\Model\Data.cs" />
     <Compile Include="Assets\_scripts\Model\ExplosionPool.cs" />
+    <Compile Include="Assets\_scripts\Model\FaceValue.cs" />
     <Compile Include="Assets\_scripts\Model\Number.cs" />
     <Compile Include="Assets\_scripts\Model\NumberPool.cs" />
     <Compile Include="Assets\_scripts\Utility\ExtensionMethods.cs" />
@@ -311,7 +308,7 @@
     <Compile Include="Assets\_scripts\View\TitleAnimator.cs" />
     <Compile Include="Assets\_scripts\View\TransitionAnimatedPanel.cs" />
     <Compile Include="Assets\_scripts\View\TutorialPanel.cs" />
-    <Compile Include="Assets\_scripts\View\UiManager.cs" />
+    <Compile Include="Assets\_scripts\View\UIManager.cs" />
     <Compile Include="Assets\thirdparty\SecurePlayerPrefs\ZPlayerPrefs.cs" />
     <None Include="Assets\GooglePlayGames\Editor\template-GameInfo.txt" />
     <None Include="Assets\GooglePlayGames\Editor\template-AndroidManifest.txt" />
