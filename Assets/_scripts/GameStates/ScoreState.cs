@@ -17,11 +17,13 @@ namespace GameStates
 
         public override IPromise FinishState()
         {
-            return Promise.All(
-                GetManager<AnimManager>().Menu.ScreenExitAnimation(),
-                GetManager<AnimManager>().Score.ScreenExitAnimation()
-            )
-                .Then(() => base.FinishState());
+            return GetManager<AnimManager>().SubMenus[0].ScreenExitAnimation()
+            .Then(
+                () => Promise.All(
+                    GetManager<AnimManager>().Menu.ScreenExitAnimation(),
+                    GetManager<AnimManager>().Score.ScreenExitAnimation()
+                ))
+            .Then(() => base.FinishState());
         }
     }
 }

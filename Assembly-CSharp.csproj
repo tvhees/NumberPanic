@@ -248,13 +248,10 @@
     <Compile Include="Assets\GooglePlayGames\Platforms\TokenClient.cs" />
     <Compile Include="Assets\GooglePlayGames\PluginVersion.cs" />
     <Compile Include="Assets\_scripts\Controller\Advertising.cs" />
-    <Compile Include="Assets\_scripts\Controller\AnimationManager.cs" />
     <Compile Include="Assets\_scripts\Controller\AudioManager.cs" />
     <Compile Include="Assets\_scripts\Controller\Game.cs" />
     <Compile Include="Assets\_scripts\Controller\GameTimer.cs" />
     <Compile Include="Assets\_scripts\Controller\MainManager.cs" />
-    <Compile Include="Assets\_scripts\Controller\MovingObject.cs" />
-    <Compile Include="Assets\_scripts\Controller\ObjectPool.cs" />
     <Compile Include="Assets\_scripts\Controller\Preferences.cs" />
     <Compile Include="Assets\_scripts\Controller\Purchaser.cs" />
     <Compile Include="Assets\_scripts\Controller\SocialManager.cs" />
@@ -276,8 +273,10 @@
     <Compile Include="Assets\_scripts\Model\Data.cs" />
     <Compile Include="Assets\_scripts\Model\ExplosionPool.cs" />
     <Compile Include="Assets\_scripts\Model\FaceValue.cs" />
+    <Compile Include="Assets\_scripts\Model\MovingObject.cs" />
     <Compile Include="Assets\_scripts\Model\Number.cs" />
     <Compile Include="Assets\_scripts\Model\NumberPool.cs" />
+    <Compile Include="Assets\_scripts\Model\ObjectPool.cs" />
     <Compile Include="Assets\_scripts\Utility\ExtensionMethods.cs" />
     <Compile Include="Assets\_scripts\Utility\Path.cs" />
     <Compile Include="Assets\_scripts\Utility\Singleton.cs" />
@@ -308,7 +307,7 @@
     <Compile Include="Assets\_scripts\View\TitleAnimator.cs" />
     <Compile Include="Assets\_scripts\View\TransitionAnimatedPanel.cs" />
     <Compile Include="Assets\_scripts\View\TutorialPanel.cs" />
-    <Compile Include="Assets\_scripts\View\UIManager.cs" />
+    <Compile Include="Assets\_scripts\View\UiManager.cs" />
     <Compile Include="Assets\thirdparty\SecurePlayerPrefs\ZPlayerPrefs.cs" />
     <None Include="Assets\GooglePlayGames\Editor\template-GameInfo.txt" />
     <None Include="Assets\GooglePlayGames\Editor\template-AndroidManifest.txt" />

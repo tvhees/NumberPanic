@@ -31,7 +31,6 @@ namespace View
         protected override void ScreenEnterAnimation(Action resolve)
         {
             ResetPanel();
-
             AnimatePanel(resolve, 0, Ease.InOutQuad);
         }
 

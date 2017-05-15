@@ -69,8 +69,6 @@ namespace View
                 var endPoint = i < lettersInFirstWord ? path.Points[pathIndex]
                     : secondPath.Points[pathIndex];
 
-                Debug.Log(endPoint);
-
                 sequence.Insert(timePosition,
                     l.rectTransform.DOLocalMoveY(endPoint.y,duration).SetEase(ease));
 

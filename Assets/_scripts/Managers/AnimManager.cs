@@ -15,11 +15,12 @@ namespace Managers
         public ITransitionAnimation Loading {get { return objects.LoadingCover; }}
         public ITransitionAnimation Score {get { return objects.ScorePanel; }}
         public ITransitionAnimation Continue {get { return objects.ContinuePanel; }}
+        public ITransitionAnimation[] SubMenus {get { return objects.SubMenuPanels; }}
 
         [Serializable]
         public class SceneObjects
         {
-            public SubPanel[] subPanels;
+            public SubPanel[] SubMenuPanels;
             public TitleAnimator TitleAnimator;
             public MenuPanel MenuPanel;
             public LoadingCover LoadingCover;

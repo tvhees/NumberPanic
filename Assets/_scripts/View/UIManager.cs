@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Controller;
+﻿using Controller;
 using Managers;
 using UnityEngine;
 using UnityEngine.UI;
