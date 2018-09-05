@@ -44,7 +44,7 @@ namespace Controller
 
         public void Load()
         {
-            SocialManager.LoadAchievementArrays();
+            // SocialManager.LoadAchievementArrays();
             MainMode = PlayerPrefs.GetInt("mainMode", 0);
             SubMode = PlayerPrefs.GetInt("subMode", 0);
             ShowAdvertisements = ExtensionMethods.GetBool("ShowAdvertisements", true);
@@ -104,7 +104,7 @@ namespace Controller
             ExtensionMethods.SetBool("ShakeCamera", ShakeCamera);
 
             // Save achievement arrays without encryption
-            SocialManager.SaveAchievementArrays();
+            // SocialManager.SaveAchievementArrays();
 
             // Save all preferences
             ZPlayerPrefs.Save ();

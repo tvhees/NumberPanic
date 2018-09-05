@@ -22,7 +22,7 @@ namespace Managers
             States.Attract,
             States.Pause,
             States.Play,
-            States.End,
+            // States.End,
             States.Score
         };
 

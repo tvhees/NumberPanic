@@ -5,7 +5,6 @@ using GameData;
 using Managers;
 using Model;
 using UnityEngine;
-using UnityEngine.VR.WSA.Persistence;
 using Random = UnityEngine.Random;
 
 namespace GameData

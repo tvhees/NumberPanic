@@ -26,7 +26,7 @@ namespace Controller
             _targetTimeScale = 1.0f;
             HighScore = Preferences.Instance.GetHighScore().Value;
             stateManager.MoveTo(States.Attract);
-            SocialManager.Instance.NewGamePlayed(mode);
+            // SocialManager.Instance.NewGamePlayed(mode);
         }
 
         public bool IsInPlayState {
@@ -165,8 +165,8 @@ namespace Controller
         {
             MainManager.Instance.audioManager.PlayPositiveSound();
             MainManager.Current++;
-            if(MainManager.Current > 12)
-                SocialManager.UpdateTimesTablesArray(Mode, SubMode);
+            // if(MainManager.Current > 12)
+            //     SocialManager.UpdateTimesTablesArray(Mode, SubMode);
 
             stateManager.MoveTo(States.Play);
             MainManager.Instance.GameTimer.AddTimeBonus();

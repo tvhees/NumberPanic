@@ -96,7 +96,7 @@ public class PreviewModel : MonoBehaviour
             return true;
         }
 
-        var prefabParent = UnityEditor.PrefabUtility.GetPrefabParent(previewInstance.gameObject);
+        var prefabParent = UnityEditor.PrefabUtility.GetCorrespondingObjectFromSource(previewInstance.gameObject);
         if(previewPrefab==null || prefabParent!=previewPrefab)
         {
             return true;
