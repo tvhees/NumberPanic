@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Managers
 {
-    public enum States { Title, Attract, Pause, Play, End, Score }
+    public enum States { Title, Load, Attract, Pause, Play, End, Score }
 
     [ManagerAlwaysGlobal]
     [CreateAssetMenu(fileName = "StateManager.asset", menuName = "Manager/State")]
@@ -78,7 +78,6 @@ namespace Managers
                 {
                     current = newState;
                     stateObject.Current = newState.gameObject;
-                    Debug.Log("Setting state:" + newState.name);
                     resolve();
                 }
                 catch (Exception e)

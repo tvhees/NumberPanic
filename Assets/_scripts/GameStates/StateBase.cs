@@ -23,14 +23,12 @@ namespace GameStates
             {
                 Settings.OnChanged.AddListener(RestartThisState);
                 gameObject.SetActive(true);
-                Debug.Log("Starting state:" + name);
                 resolve();
             });
         }
 
         public virtual IPromise FinishState()
         {
-            Debug.Log("Ending state:" + name);
             Settings.OnChanged.RemoveListener(RestartThisState);
             gameObject.SetActive(false);
             return Promise.Resolved();

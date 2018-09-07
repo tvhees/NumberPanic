@@ -14,6 +14,7 @@ namespace Controller
         private readonly PromiseTimer gameTimer = new PromiseTimer();
         private readonly PromiseTimer toggleTimer = new PromiseTimer();
         private GameObject tutorialBox;
+        private TutorialPanel tutorialPanel;
 
         public bool IsRunning;
 
@@ -29,13 +30,11 @@ namespace Controller
         {
             get
             {
-#if UNITY_EDITOR || UNITY_STANDALONE
-                return Input.GetMouseButtonDown(0);
-#endif
-
 #if UNITY_ANDROID || UNITY_IOS
                 return Input.touchCount > 0;
 #endif
+
+                return Input.GetMouseButtonDown(0);
             }
         }
         #endregion Waiting Flags
@@ -48,6 +47,7 @@ namespace Controller
             SubMode.OnClicked.AddListener(() => waitingForSubModeButton = false);
             Number.OnCorrectNumberTouch.AddListener(() => waitingForNumberTouch = false);
             tutorialBox = UiManager.Instance.tutorialArrow;
+            tutorialPanel = UiManager.Instance.tutorialPanel;
         }
 
         private void Update()
@@ -55,7 +55,6 @@ namespace Controller
             menuTimer.Update(Time.unscaledDeltaTime);
             gameTimer.Update(Time.unscaledDeltaTime);
             toggleTimer.Update(Time.unscaledDeltaTime);
-
         }
 
         public void RunMenuTutorial()
@@ -64,6 +63,7 @@ namespace Controller
                 return;
             IsRunning = true;
             Random.InitState(1);
+            Debug.Log("Running menu tutorial");
             Promise.Race(MenuTutorial(),
                     toggleTimer.WaitUntil(_ => !Preferences.ShowTutorial))
             .Done(DeactivateTutorial);
@@ -86,7 +86,7 @@ namespace Controller
         public void RunGameTutorial()
         {
             Promise.Sequence(
-                WaitForSeconds(1.5f),
+                WaitForSeconds(2.5f),
                 PauseGame(),
                 ExplainScore(),
                 ExplainTimer(),
@@ -102,7 +102,8 @@ namespace Controller
                 ShowText("The game ends when you run out of time." +
                          " Good luck!" +
                          "\n..."),
-                WaitForInput(InputDelay))
+                WaitForInput(InputDelay),
+                HideText())
             .Done(() => MainManager.Instance.StateManager.MoveTo(States.Attract));
         }
 
@@ -128,6 +129,7 @@ namespace Controller
         {
             return () =>
             {
+                Debug.Log("Waiting for play button");
                 waitingForPlayButton = true;
                 return menuTimer.WaitUntil(_ => !waitingForPlayButton);
             };
@@ -138,6 +140,7 @@ namespace Controller
             return () =>
             {
                 waitingForMenuAnimation = true;
+                Debug.Log("Waiting for menu animation");
                 return menuTimer.WaitUntil(_ => !waitingForMenuAnimation);
             };
         }
@@ -206,7 +209,16 @@ namespace Controller
         {
             return () =>
             {
-                UiManager.Instance.tutorialPanel.Display(textIn);
+                tutorialPanel.Display(textIn);
+                return Promise.Resolved();
+            };
+        }
+
+        private Func<IPromise> HideText()
+        {
+            return () =>
+            {
+                tutorialPanel.gameObject.SetActive(false);
                 return Promise.Resolved();
             };
         }

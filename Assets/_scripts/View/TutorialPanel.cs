@@ -10,6 +10,7 @@ namespace View
 
         public void Display(string textIn)
         {
+            gameObject.SetActive(true);
             words.text = textIn;
         }
     }

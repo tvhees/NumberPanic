@@ -9,11 +9,11 @@ namespace View
         [SerializeField] private AnimationCurve curve;
         [SerializeField] private float flickerTime;
         [SerializeField] private Gradient colourGradient;
-        [SerializeField] private Image img;
+        [SerializeField] private Image target;
 
         private void Update()
         {
-            img.color = GetNewColour(img.color, Time.unscaledTime*FlickerTimeScale);
+            target.color = GetNewColour(target.color, Time.unscaledTime*FlickerTimeScale);
         }
 
         private Color GetNewColour(Color color, float time)

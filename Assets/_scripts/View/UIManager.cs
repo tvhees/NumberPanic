@@ -31,7 +31,7 @@ namespace View
         public void Update() {
             if (MainManager.Instance.GameTimer != null)
             {
-                var timerIsStopped = MainManager.Instance.StateManager.CurrentStateIs(States.Title, States.Attract, States.Pause);
+                var timerIsStopped = MainManager.Instance.StateManager.CurrentStateIs(States.Title, States.Load, States.Attract, States.Pause);
                 var delta = timerIsStopped ? 0 : -Time.unscaledDeltaTime;
                 var timeRemaining = MainManager.Instance.GameTimer.UpdateTimer(delta);
                 UpdateTimer(timeRemaining);

@@ -25,7 +25,7 @@ namespace Controller
             this.stateManager = stateManager;
             _targetTimeScale = 1.0f;
             HighScore = Preferences.Instance.GetHighScore().Value;
-            stateManager.MoveTo(States.Attract);
+            stateManager.MoveTo(States.Load);
             // SocialManager.Instance.NewGamePlayed(mode);
         }
 
